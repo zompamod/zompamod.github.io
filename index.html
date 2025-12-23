@@ -227,7 +227,7 @@ function renderGames(filter="") {
        .forEach((g) => {
     const a = document.createElement("a");
     a.className = "card";
-    a.href = "secondary.html?id=" + encodeURIComponent(g.id);
+    a.href = "game?id=" + encodeURIComponent(g.id);
     a.innerHTML = `
       <img src="${g.image}" alt="${g.title}">
       <h3>${g.title}</h3>
