@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Apkmet.fun - Games</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0f0704;
+  --card:#1a0c06;
+  --accent:#ff8b2c;
+  --accent2:#ffb45c;
+  --gold:#ffd58a;
+  --border:#3d1f12;
+}
+
+*{ box-sizing:border-box; -webkit-text-size-adjust:100%; }
+
+html,body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  background:radial-gradient(circle at top,#2a1409 0%,#120905 45%,#080403 100%);
+  color:#fff;
+  touch-action:manipulation;
+  overscroll-behavior:none;
+}
+
+header{
+  text-align:center;
+  padding:20px 16px;
+}
+
+header img{
+  width:60px;
+  height:60px;
+  border-radius:12px;
+  margin-bottom:8px;
+  transition: transform .3s ease;
+}
+
+header img:hover{
+  transform:rotate(10deg) scale(1.1);
+}
+
+header h1{
+  font-size:20px;
+  color:#e7c8a2;
+  margin:4px 0 0;
+  letter-spacing:.4px;
+}
+
+.wrap{
+  max-width:1200px;
+  margin:20px auto;
+  padding:0 16px;
+}
+
+.search-box{
+  text-align:center;
+  margin-bottom:24px;
+}
+
+.search-box input{
+  width:100%;
+  max-width:420px;
+  padding:14px 18px;
+  border-radius:14px;
+  border:none;
+  background:#1a0c06;
+  color:#fff;
+  font-size:14px;
+  outline:none;
+  transition:.3s;
+}
+
+.search-box input:focus{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#1b0f09;
+  box-shadow:0 0 18px rgba(255,139,44,.45);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:16px;
+}
+
+.card{
+  background:linear-gradient(180deg,#221108,#120805);
+  border-radius:16px;
+  padding:12px;
+  text-decoration:none;
+  color:#fff;
+  text-align:center;
+  display:block;
+  transition: transform .4s ease, box-shadow .4s ease;
+}
+
+.card:hover{
+  transform:translateY(-5px) scale(1.05);
+  box-shadow:0 10px 25px rgba(0,0,0,.6);
+}
+
+.card img{
+  width:100%;
+  max-width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:12px;
+  display:block;
+  margin:auto;
+  transition: transform .3s ease;
+}
+
+.card img:hover{
+  transform:scale(1.05);
+}
+
+.card h3{
+  margin:10px 0 4px;
+  font-size:15px;
+  font-weight:700;
+}
+
+.card .version{
+  font-size:11px;
+  color:#e7c8a2;
+}
+
+.card .stars{
+  font-size:12px;
+  color:var(--gold);
+  margin-top:4px;
+}
+
+.half-star{
+  display:inline-block;
+  position:relative;
+  width:1em;
+}
+
+.half-star::before{
+  content:'★';
+  position:absolute;
+  left:0;
+  width:50%;
+  overflow:hidden;
+  color:var(--gold);
+}
+
+.half-star::after{
+  content:'★';
+  color:#555;
+}
+
+footer{
+  text-align:center;
+  padding:20px;
+  color:#e7c8a2;
+  font-size:13px;
+}
+
+/* منع النسخ وتحديد النص */
+*{
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+}
+
+img{
+  pointer-events:none;
+}
+
+/* أنيميشن للظهور */
+@keyframes fadeInUp{
+  0%{opacity:0; transform:translateY(15px);}
+  100%{opacity:1; transform:translateY(0);}
+}
+
+.card{
+  animation:fadeInUp .6s ease forwards;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <img src="https://i.imgur.com/iOtA0vX.png" alt="Apkmet.fun Logo">
+  <h1>Apkmet.fun — Games</h1>
+</header>
+
+<div class="wrap">
+
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search for a game...">
+  </div>
+
+  <div class="grid" id="gameGrid"></div>
+
+</div>
+
+<footer>© 2025 Apkmet.fun — All rights reserved</footer>
+
+<script>
+// بيانات الألعاب الكاملة
+const GAMES = [
+ {id:"RobloxMod", title:"Roblox Mod APK V2", image:"https://i.imgur.com/Vmlcs1B.jpeg", version:"v2.0", stars:"★★★★★", views:"128,441 reviews"},
+ {id:"MinecraftMod", title:"Minecraft Mod APK", image:"https://i.imgur.com/abc123.jpeg", version:"v1.20.1", stars:"★★★★★", views:"98,221 reviews"},
+ {id:"AmongUsMod", title:"Among Us Mod APK", image:"https://i.imgur.com/xyz789.jpeg", version:"v1.0.5", stars:"★★★★☆", views:"56,123 reviews"},
+ {id:"GTA5Mobile", title:"GTA 5 Mobile", image:"https://www5.0zz0.com/2023/10/15/08/332140079.jpeg", version:"v1.0.3095/1.68", stars:"★★★★☆", views:"45,332 reviews"},
+ {id:"GTAViceCity", title:"GTA Vice City", image:"https://i.postimg.cc/gjzQQ2sb/1680953248-gtavc.png", version:"v3.9.6", stars:"★★★★☆", views:"39,221 reviews"},
+ {id:"AssettoCorsaMobile", title:"Assetto Corsa Mobile", image:"https://i.postimg.cc/3xHVQWW0/Picsart-25-02-25-00-54-38-367-1.jpg", version:"v1.16.4", stars:"★★★★★", views:"28,123 reviews"},
+ {id:"BeamNGdriveMobile", title:"BeamNG.drive Mobile", image:"https://i.postimg.cc/k5skc9J6/Picsart-25-03-08-05-57-01-681.jpg", version:"v0.32.0.0", stars:"★★★★<span class='half-star'></span>", views:"22,112 reviews"},
+ {id:"ForzaHorizon5", title:"Forza Horizon 5", image:"https://sm.ign.com/ign_nordic/cover/f/forza-hori/forza-horizon-5_5jjv.jpg", version:"v1.656.386.0", stars:"★★★★<span class='half-star'></span>", views:"30,221 reviews"},
+ {id:"EuroTruckSimulator2", title:"Euro Truck Simulator 2", image:"https://i.postimg.cc/kXfCsxTX/32aee5919f1c4e81da58627d21d.jpg", version:"v1.0.0", stars:"★★★★☆", views:"18,332 reviews"},
+ {id:"HollowKnight", title:"Hollow Knight: Silksong", image:"https://i.postimg.cc/Mpm2MDqF/Fr-Mkduml-Mozlmzk-APFqq-D1y-Gwo-OJ.webp", version:"v1.8.2", stars:"★★★★★", views:"15,221 reviews"},
+ {id:"ValorantMobile", title:"Valorant Mobile", image:"https://i.postimg.cc/9O0xhxO.jpeg", version:"v1.0.0", stars:"★★★★☆", views:"12,441 reviews"}
+];
+
+const gameGrid = document.getElementById("gameGrid");
+
+function renderGames(filter="") {
+  gameGrid.innerHTML = "";
+  GAMES.filter(g => g.title.toLowerCase().includes(filter.toLowerCase()))
+       .forEach((g) => {
+    const a = document.createElement("a");
+    a.className = "card";
+    a.href = "secondary.html?id=" + encodeURIComponent(g.id);
+    a.innerHTML = `
+      <img src="${g.image}" alt="${g.title}">
+      <h3>${g.title}</h3>
+      <div class="version">${g.version}</div>
+      <div class="stars">${g.stars} ${g.views}</div>
+    `;
+    gameGrid.appendChild(a);
+  });
+}
+
+renderGames();
+
+document.getElementById("searchInput").addEventListener("input", e => {
+  renderGames(e.target.value);
+});
+
+// منع النسخ و السحب و كليك يمين
+document.addEventListener('selectstart', e => e.preventDefault());
+document.addEventListener('copy', e => e.preventDefault());
+document.addEventListener('cut', e => e.preventDefault());
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('dragstart', e => e.preventDefault());
+document.addEventListener('touchstart', e => { if(e.target.tagName==='IMG') e.preventDefault(); }, {passive:false});
+document.addEventListener('keydown', e => {
+  if((e.ctrlKey && ['c','x','v','s','u','p'].includes(e.key.toLowerCase())) || e.key==='F12') e.preventDefault();
+});
+</script>
+
+</body>
+</html>
+
