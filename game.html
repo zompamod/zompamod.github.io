@@ -507,7 +507,21 @@ const popupError = document.getElementById("popupError");
 const popupSuccess = document.getElementById("popupSuccess");
 
 const offerLink = document.getElementById("offerLink");
+const closeNotice = document.getElementById("closeNotice");
 
+window.addEventListener("pageshow", () => {
+  const wentOffer = localStorage.getItem("went_offer");
+  const savedSubid = localStorage.getItem("subid");
+
+  // رجع بدون إكمال التحقق
+  if (wentOffer === "1" && savedSubid) {
+    closeNotice.style.display = "block";
+
+    setTimeout(() => {
+      closeNotice.style.display = "none";
+    }, 4000);
+  }
+});
 /* =============================
    CONFIG
 ============================= */
