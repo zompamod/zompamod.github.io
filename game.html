@@ -478,13 +478,16 @@ Please complete the verification process and the download will be completed auto
 
 /* باقي كودك يبدأ من هنا */
  <script src="games.js"></script>
+<script src="games.js"></script>
 <script>
 const params = new URLSearchParams(location.search);
-if (!params.get("game")) {
+const gameId = params.get("game");
+
+if (!gameId || !GAMES.some(g => g.id === gameId)) {
   location.replace("index.html");
 }
-</script>
-<script>
+
+
 /* =============================
    GET GAME FROM URL
 ============================= */
