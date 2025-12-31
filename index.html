@@ -11,11 +11,9 @@
 :root{
   --bg:#0b0705;
   --card:#1a0f0a;
-  --gold:#b87333;
-  --gold-light:#d9a25f;
-  --text:#f5f5f4;
+  --gold:#d9a25f;
+  --text:#ffffff;
   --muted:#c7b299;
-  --glow:rgba(217,162,95,.45);
 }
 *{box-sizing:border-box}
 body{
@@ -24,20 +22,34 @@ body{
   background:radial-gradient(circle at top,#1a0f0a,#050302);
   color:var(--text);
 }
-header{text-align:center;padding:20px}
+header{
+  text-align:center;
+  padding:20px;
+}
 header img{height:40px}
-header h1{font-size:18px;margin-top:8px;color:var(--gold-light)}
-.wrap{max-width:1200px;margin:auto;padding:0 16px 40px}
-.search-box{max-width:420px;margin:20px auto 30px}
+header h1{
+  margin-top:8px;
+  font-size:18px;
+  color:var(--gold);
+}
+.wrap{
+  max-width:1200px;
+  margin:auto;
+  padding:0 16px 40px;
+}
+.search-box{
+  max-width:420px;
+  margin:20px auto 30px;
+}
 .search-box input{
   width:100%;
-  padding:15px 18px;
-  border-radius:18px;
+  padding:14px 18px;
+  border-radius:16px;
   border:none;
   outline:none;
   background:#0b0705;
-  color:var(--text);
-  box-shadow:0 0 0 1px rgba(217,162,95,.25),0 0 30px rgba(217,162,95,.15)
+  color:#fff;
+  box-shadow:0 0 0 1px rgba(217,162,95,.3);
 }
 .grid{
   display:grid;
@@ -46,31 +58,40 @@ header h1{font-size:18px;margin-top:8px;color:var(--gold-light)}
 }
 .card{
   background:linear-gradient(160deg,#1a0f0a,#0b0705);
-  border-radius:22px;
+  border-radius:20px;
   padding:14px;
   text-align:center;
   cursor:pointer;
-  box-shadow:0 10px 40px rgba(0,0,0,.7),0 0 0 1px rgba(217,162,95,.08);
-  transform:translateY(30px) scale(.95);
-  opacity:0;
-  animation:fadeIn .6s ease forwards;
-  transition:.35s;
+  box-shadow:0 10px 30px rgba(0,0,0,.6);
+  transition:.3s;
 }
 .card:hover{
-  transform:translateY(-6px) scale(1.05);
-  box-shadow:0 0 30px var(--glow),0 0 90px rgba(184,115,51,.35);
+  transform:translateY(-6px) scale(1.04);
 }
 .card img{
-  width:120px;height:120px;object-fit:cover;border-radius:16px;
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:16px;
 }
-.card h3{margin:12px 0 4px;font-size:14px}
-.version{font-size:11px;color:var(--muted)}
-.stars{font-size:12px;color:var(--gold-light)}
-.half-star{display:inline-block;width:1em;position:relative}
-.half-star::before{content:"★";width:50%;overflow:hidden;position:absolute;color:var(--gold-light)}
-.half-star::after{content:"★";color:#5a4630}
-@keyframes fadeIn{to{opacity:1;transform:none}}
-footer{text-align:center;font-size:13px;color:var(--muted);padding:20px}
+.card h3{
+  margin:12px 0 4px;
+  font-size:14px;
+}
+.version{
+  font-size:11px;
+  color:var(--muted);
+}
+.stars{
+  font-size:12px;
+  color:var(--gold);
+}
+footer{
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+  padding:20px;
+}
 </style>
 </head>
 
@@ -90,35 +111,38 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding:20px}
 
 <footer>© 2025 Apkmet.fun — All rights reserved</footer>
 
-<script>
-
+<!-- تحميل الألعاب -->
 <script src="games.js"></script>
 
 <script>
-const grid=document.getElementById("games");
-const search=document.getElementById("search");
+const grid = document.getElementById("games");
+const search = document.getElementById("search");
 
 function render(list){
-  grid.innerHTML="";
-  list.forEach((g,i)=>{
-    const card=document.createElement("div");
-    card.className="card";
-    card.style.animationDelay=`${i*0.06}s`;
-    card.innerHTML=`
-      <img src="${g.image}">
-      <h3>${g.title}</h3>
-      <div class="version">${g.version}</div>
-      <div class="stars">${g.stars}</div>
+  grid.innerHTML = "";
+  list.forEach(game=>{
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <img src="${game.image}">
+      <h3>${game.title}</h3>
+      <div class="version">${game.version}</div>
+      <div class="stars">${game.stars}</div>
     `;
-    card.onclick=()=>location.href=`game.html?game=${g.id}`;
+    card.onclick = () => {
+      window.location.href = `game.html?game=${game.id}`;
+    };
     grid.appendChild(card);
   });
 }
 
-search.oninput=e=>{
-  const v=e.target.value.toLowerCase();
-  render(GAMES.filter(g=>g.title.toLowerCase().includes(v)));
-};
+search.addEventListener("input", e=>{
+  const value = e.target.value.toLowerCase();
+  render(GAMES.filter(g => g.title.toLowerCase().includes(value)));
+});
 
 render(GAMES);
 </script>
+
+</body>
+</html>
