@@ -745,7 +745,22 @@ document.addEventListener("selectstart", function (e) {
   
 });    
   
-  
+  src="games.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const gameId = params.get("game");
+
+  const game = GAMES.find(g => g.id === gameId);
+
+  if(!game){
+    document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
+  } else {
+    document.getElementById("title").innerText = game.title;
+    document.getElementById("image").src = game.image;
+    document.getElementById("androidBtn").href = game.android;
+    document.getElementById("iosBtn").href = game.ios;
+  }
+
   
     
     
