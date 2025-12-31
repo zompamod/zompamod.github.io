@@ -1,20 +1,23 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apkmet.fun - Games</title>
+<title>Apkmet.fun – Games</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#0b0705;
-  --card:#1a0f0a;
+  --bg:#070504;
+  --card:#140d09;
   --gold:#d9a25f;
+  --glow:rgba(217,162,95,.55);
   --text:#f5f5f4;
   --muted:#c7b299;
 }
+
 *{box-sizing:border-box}
 body{
   margin:0;
@@ -22,53 +25,94 @@ body{
   background:radial-gradient(circle at top,#1a0f0a,#050302);
   color:var(--text);
 }
+
+/* ===== HEADER ===== */
 header{
   text-align:center;
-  padding:24px;
+  padding:24px 10px;
+}
+header img{
+  height:44px;
 }
 header h1{
-  margin:8px 0 0;
+  margin:10px 0 0;
+  font-size:18px;
   color:var(--gold);
 }
+
+/* ===== LAYOUT ===== */
 .wrap{
   max-width:1200px;
   margin:auto;
   padding:0 16px 40px;
 }
-.search{
+
+.search-box{
   max-width:420px;
   margin:20px auto 30px;
 }
-.search input{
+.search-box input{
   width:100%;
-  padding:14px 18px;
+  padding:15px 18px;
   border-radius:18px;
   border:none;
   outline:none;
   background:#0b0705;
   color:var(--text);
-  box-shadow:0 0 0 1px rgba(217,162,95,.25);
+  box-shadow:
+    0 0 0 1px rgba(217,162,95,.25),
+    0 0 30px rgba(217,162,95,.15);
 }
+
+/* ===== GRID ===== */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
   gap:18px;
 }
+
+/* ===== CARD ===== */
 .card{
   background:linear-gradient(160deg,#1a0f0a,#0b0705);
   border-radius:22px;
   padding:14px;
   text-align:center;
   cursor:pointer;
-  box-shadow:0 10px 30px rgba(0,0,0,.7);
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 10px 40px rgba(0,0,0,.7);
   transform:translateY(30px) scale(.95);
   opacity:0;
-  animation:show .6s ease forwards;
+  animation:fadeIn .6s ease forwards;
   transition:.35s;
 }
+
 .card:hover{
   transform:translateY(-6px) scale(1.05);
+  box-shadow:
+    0 0 25px var(--glow),
+    0 0 80px rgba(217,162,95,.35);
 }
+
+.card:active{
+  transform:scale(.96);
+  box-shadow:
+    0 0 40px rgba(255,200,120,.9),
+    0 0 120px rgba(217,162,95,.6);
+}
+
+/* Glow layer */
+.card::after{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background:radial-gradient(circle,rgba(255,200,120,.25),transparent 60%);
+  opacity:0;
+  transition:.4s;
+}
+.card:hover::after{opacity:1}
+
+/* ===== CONTENT ===== */
 .card img{
   width:120px;
   height:120px;
@@ -76,8 +120,8 @@ header h1{
   border-radius:16px;
 }
 .card h3{
+  margin:12px 0 4px;
   font-size:14px;
-  margin:10px 0 4px;
 }
 .version{
   font-size:11px;
@@ -87,9 +131,13 @@ header h1{
   font-size:12px;
   color:var(--gold);
 }
-@keyframes show{
+
+/* ===== ANIMATION ===== */
+@keyframes fadeIn{
   to{opacity:1;transform:none}
 }
+
+/* ===== FOOTER ===== */
 footer{
   text-align:center;
   font-size:13px;
@@ -102,20 +150,23 @@ footer{
 <body>
 
 <header>
-  <h1>Apkmet.fun</h1>
-  <div>Premium Mobile Games</div>
+  <img src="https://i.ibb.co/gbsY945Q/Black-and-Green-Illustrative-E-Sports-Gaming-Logo-2-removebg.png">
+  <h1>Apkmet.fun — Games</h1>
 </header>
 
 <div class="wrap">
-  <div class="search">
-    <input id="search" type="text" placeholder="Search games...">
+
+  <div class="search-box">
+    <input type="text" id="search" placeholder="Search games...">
   </div>
+
   <div class="grid" id="games"></div>
+
 </div>
 
-<footer>© 2025 Apkmet.fun</footer>
+<footer>© 2025 Apkmet.fun — All rights reserved</footer>
 
-<!-- تحميل الألعاب -->
+<!-- ملف الألعاب -->
 <script src="games.js"></script>
 
 <script>
