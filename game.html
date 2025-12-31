@@ -647,4 +647,25 @@ downloadBtn2.onclick = () => {
     startVerifyPolling();
   }
 });
+
+ function closePopup() {
+  // إيقاف التحقق
+  clearInterval(verifyInterval);
+  verifyInterval = null;
+
+  // حذف كل بيانات الجلسة
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+  localStorage.removeItem("device");
+
+  // إعادة الواجهة
+  overlay.style.display = "none";
+  popupChecking.style.display = "none";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
+
+  // إعادة زر التحميل للحالة الطبيعية
+  resetDownloader();
+}
 </script>
