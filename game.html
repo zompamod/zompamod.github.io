@@ -583,12 +583,11 @@ localStorage.removeItem("went_offer");
   const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
 
-  if (wentOffer === "1" && savedSubid) {
+  if (wentOffer === "1" && savedSubid && !verifyInterval) {
     overlay.style.display = "flex";
     startVerifyPolling();
   }
 });
-
 /* =============================
    SECURITY FLOW
 ============================= */
