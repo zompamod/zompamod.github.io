@@ -720,12 +720,15 @@ downloadBtn2.onclick = () => {
   const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
 
+  // إذا عاد من العرض بدون تحقق → إعادة ضبط كاملة
   if (wentOffer === "1" && savedSubid) {
+    clearInterval(verifyInterval);
+    verifyInterval = null;
+
+    // نعرض النافذة لكن لا نبدأ polling إلا بعد ضغط جديد
     overlay.style.display = "flex";
-    startVerifyPolling();
-  } else {
-    // لو رجع بدون إكمال → إعادة ضبط كاملة
-    closePopup();
+    popupChecking.style.display = "none";
+    popupError.style.display = "block";
   }
 });
 
