@@ -227,12 +227,13 @@ img{image-rendering:auto;backface-visibility:hidden}
 button{will-change:transform,box-shadow}  
 .hero img,.download-box,.feature{transform:translateZ(0);}  
   
-.popup-lock{  
-  width: 72px;      /* حجم اللوجو */  
-  height: 72px;  
-  display: block;  
-  margin: 0 auto 12px auto; /* يضعه في المنتصف ويضيف مسافة أسفل */  
-  }  
+..popup-lock{
+  width:64px;
+  height:64px;
+  display:block;
+  margin:0 auto 16px;
+  object-fit:contain;
+}
     
 /* ===== SECURE CHECK FLOW ===== */  
 #secureOverlay{  
