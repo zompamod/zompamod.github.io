@@ -422,30 +422,19 @@ const offerLink = document.getElementById("offerLink");
   
     
   // بيانات كل لعبة  
-  const gamesData = {
-  ForzaHorizon5: {
-    title: "Forza Horizon 5",
-    image: "https://i.imgur.com/dexs6tR.jpeg",
-    rating: "★★★★★ 4.9 (128,441 reviews)",
-    description: "Unlock premium features, enhanced gameplay and exclusive mods.",
-    final: {
-      android: "ANDROID_FINAL_LINK_HERE",
-      ios: "IOS_FINAL_LINK_HERE"
-    }
-  },
+  const params = new URLSearchParams(window.location.search);
+const gameId = params.get("game");
 
-  MinecraftMod: {
-    title: "Minecraft Mod APK",
-    image: "https://i.imgur.com/abc123.jpeg",
-    rating: "★★★★★ 4.8 (98,221 reviews)",
-    description: "Enjoy mods and unlimited features.",
+const game = GAMES.find(g => g.id === gameId);
 
-    final: {
-      android: "https://example.com/minecraft-final.apk",
-      ios: "https://example.com/minecraft-ios-final.ipa"
-    }
-  }
-};
+if(!game){
+  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
+}else{
+  document.getElementById("title").innerText = game.title;
+  document.getElementById("image").src = game.image;
+  document.getElementById("androidBtn").href = game.android;
+  document.getElementById("iosBtn").href = game.ios;
+}
   // قراءة معرف اللعبة من الرابط
 const urlParams = new URLSearchParams(window.location.search);
 const gameId = urlParams.get("game") || "ForzaHorizon5";// سيأتي من الرابط: secondary.html?game=ForzaHorizon5  
