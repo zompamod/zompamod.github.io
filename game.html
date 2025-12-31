@@ -493,7 +493,14 @@ const game = GAMES.find(g => g.id === gameId);
 if (!game) {
   location.replace("index.html");
 }
+if (!game) {
+  document.body.innerHTML =
+    "<h2 style='text-align:center'>Game not found</h2>";
+  throw new Error("Game not found");
+}
 
+ document.getElementById("canonicalLink").href =
+  location.origin + "/" + game.id;
 /* =============================
    FILL PAGE CONTENT
 ============================= */
