@@ -473,7 +473,13 @@ complete one simple step to confirme you are not a Robot.<br><br>
 <div id="closeNotice" class="toast-notice">  
 Please complete the verification process and the download will be completed automatically⚠️.  
 </div>  
+<script>
+/* 🔒 حماية الصفحة من الدخول المباشر */
+if (!document.referrer.includes("#")) {
+  location.replace("index.html");
+}
 
+/* باقي كودك يبدأ من هنا */
  <script src="games.js"></script>
 
 <script>
