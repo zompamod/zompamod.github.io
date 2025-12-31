@@ -5,7 +5,7 @@
 <meta charset="UTF-8">    
 <meta name="viewport" content="width=device-width, initial-scale=1.0">    
 <title>Roblox Mod APK V2 – Unlimited Features</title>    
-  
+  <link rel="canonical" id="canonicalLink">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">    
   
 <style>  
@@ -477,7 +477,7 @@ Please complete the verification process and the download will be completed auto
 
 <script src="games.js"></script>
 <script>
-if (!document.referrer.includes(location.origin)) {
+if (!location.search.includes("game=")) {
   location.replace("index.html");
 }
 </script>
@@ -485,31 +485,23 @@ if (!document.referrer.includes(location.origin)) {
 /* =============================
    GET GAME FROM URL
 ============================= */
-const params = new URLSearchParams(window.location.search);
+const params = new URLSearchParams(location.search);
 const gameId = params.get("game");
-
 const game = GAMES.find(g => g.id === gameId);
 
 if (!game) {
   location.replace("index.html");
-}
-if (!game) {
-  document.body.innerHTML =
-    "<h2 style='text-align:center'>Game not found</h2>";
   throw new Error("Game not found");
 }
 
- document.getElementById("canonicalLink").href =
+document.getElementById("canonicalLink").href =
   location.origin + "/" + game.id;
-/* =============================
-   FILL PAGE CONTENT
-============================= */
+
+// تعبئة البيانات
 document.querySelector(".hero h1").textContent = game.title;
 document.querySelector(".hero img").src = game.image;
 document.getElementById("gameRating").textContent = game.rating;
 document.getElementById("gameDescription").textContent = game.description;
-
- 
 /* =============================
    DOM ELEMENTS
 ============================= */
