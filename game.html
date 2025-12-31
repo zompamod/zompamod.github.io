@@ -678,9 +678,15 @@ function startVerifyPolling() {
     }
 
     if (t === "failed" || t === "not_completed") {
-      showError();
-    }
-  }, 2000);
+  showError();
+
+  // 🔔 إشعار بعد تأكيد Worker
+  closeNotice.style.display = "block";
+  setTimeout(() => {
+    closeNotice.style.display = "none";
+  }, 4000);
+
+  clearInterval(verifyInterval);
 }
 
       
