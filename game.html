@@ -561,6 +561,9 @@ function createSubid() {
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
  function markWentOffer() {
+ if (!localStorage.getItem("subid")) {
+  createSubid();
+}
   // ✅ تأكد أن الرابط موجود دائمًا
   if (!offerLink.href || offerLink.href === "" || offerLink.href === "#") {
     createSubid();
