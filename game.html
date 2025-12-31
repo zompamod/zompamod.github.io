@@ -549,14 +549,19 @@ function createSubid() {
  function markWentOffer() {
   localStorage.setItem("went_offer", "1");
 
-  // تعطيل الزر مؤقتًا لمنع النقر المزدوج
+  // إعادة تشغيل التحقق من جديد
+  clearInterval(verifyInterval);
+  verifyInterval = null;
+  startVerifyPolling();
+
+  // منع النقر المزدوج مؤقتًا
   offerLink.style.pointerEvents = "none";
   offerLink.style.opacity = "0.6";
 
   setTimeout(() => {
     offerLink.style.pointerEvents = "auto";
     offerLink.style.opacity = "1";
-  }, 3000);
+  }, 2500);
 }
 
 function isSubidExpired() {
