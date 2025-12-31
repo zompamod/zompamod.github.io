@@ -419,22 +419,7 @@ const popupError = document.getElementById("popupError");
 const popupSuccess = document.getElementById("popupSuccess");
 
 const offerLink = document.getElementById("offerLink");
-  
-  
-    
-  const params = new URLSearchParams(window.location.search);
-  const gameId = params.get("game");
-
-  const game = GAMES.find(g => g.id === gameId);
-
-  if (!game) {
-    document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
-  } else {
-    // العنوان
-    document.querySelector(".hero h1").textContent = game.title;
-
-    // الصورة
-    document.querySelector(".hero img").src = game.image;
+ 
 
     // زر Android
     document.getElementById("downloadBtn").onclick = () => {
@@ -746,39 +731,31 @@ document.addEventListener("selectstart", function (e) {
   }  
   
 });    
-  
-  src="games.js"></script>
+
+ <script src="games.js"></script>
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const gameId = params.get("game");
-
-  const game = GAMES.find(g => g.id === gameId);
-
-  if(!game){
-    document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
-  } else {
-    document.getElementById("title").innerText = game.title;
-    document.getElementById("image").src = game.image;
-    document.getElementById("androidBtn").href = game.android;
-    document.getElementById("iosBtn").href = game.ios;
-  }
-
-  
-
 const params = new URLSearchParams(window.location.search);
 const gameId = params.get("game");
 
 const game = GAMES.find(g => g.id === gameId);
 
 if (!game) {
-  document.body.innerHTML =
-    "<h2 style='text-align:center'>Game not found</h2>";
+  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
 } else {
-  document.getElementById("gameTitle").innerText = game.title;
-  document.getElementById("gameImage").src = game.image;
-  document.getElementById("androidBtn").href = game.android;
-  document.getElementById("iosBtn").href = game.ios;
+  document.querySelector(".hero h1").textContent = game.title;
+  document.querySelector(".hero img").src = game.image;
+
+  document.getElementById("downloadBtn").onclick = () => {
+    localStorage.setItem("device", "android");
+    startFakeDownload();
+  };
+
+  document.getElementById("downloadBtn2").onclick = () => {
+    localStorage.setItem("device", "ios");
+    startFakeDownload();
+  };
 }
+
 
     
     
