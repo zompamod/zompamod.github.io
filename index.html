@@ -17,43 +17,18 @@
   --muted:#c7b299;
   --glow:rgba(217,162,95,.45);
 }
-
 *{box-sizing:border-box}
-
 body{
   margin:0;
   font-family:Inter,Arial,sans-serif;
   background:radial-gradient(circle at top,#1a0f0a,#050302);
   color:var(--text);
 }
-
-header{
-  text-align:center;
-  padding:20px;
-}
-
-header img{
-  height:40px;
-}
-
-header h1{
-  font-size:18px;
-  margin-top:8px;
-  color:var(--gold-light);
-}
-
-.wrap{
-  max-width:1200px;
-  margin:auto;
-  padding:0 16px 40px;
-}
-
-/* SEARCH */
-.search-box{
-  max-width:420px;
-  margin:20px auto 30px;
-}
-
+header{text-align:center;padding:20px}
+header img{height:40px}
+header h1{font-size:18px;margin-top:8px;color:var(--gold-light)}
+.wrap{max-width:1200px;margin:auto;padding:0 16px 40px}
+.search-box{max-width:420px;margin:20px auto 30px}
 .search-box input{
   width:100%;
   padding:15px 18px;
@@ -62,115 +37,40 @@ header h1{
   outline:none;
   background:#0b0705;
   color:var(--text);
-  font-size:14px;
-  box-shadow:
-    0 0 0 1px rgba(217,162,95,.25),
-    0 0 30px rgba(217,162,95,.15);
+  box-shadow:0 0 0 1px rgba(217,162,95,.25),0 0 30px rgba(217,162,95,.15)
 }
-
-.search-box input:focus{
-  box-shadow:
-    0 0 0 1px var(--gold-light),
-    0 0 45px var(--glow);
-}
-
-/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
   gap:18px;
 }
-
-/* CARD */
 .card{
   background:linear-gradient(160deg,#1a0f0a,#0b0705);
   border-radius:22px;
   padding:14px;
   text-align:center;
-  box-shadow:
-    0 10px 40px rgba(0,0,0,.7),
-    0 0 0 1px rgba(217,162,95,.08);
+  cursor:pointer;
+  box-shadow:0 10px 40px rgba(0,0,0,.7),0 0 0 1px rgba(217,162,95,.08);
   transform:translateY(30px) scale(.95);
   opacity:0;
   animation:fadeIn .6s ease forwards;
   transition:.35s;
-  position:relative;
-  overflow:hidden;
 }
-
-.card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:radial-gradient(circle at top,rgba(217,162,95,.18),transparent 60%);
-  opacity:0;
-  transition:.4s;
-}
-
-.card:hover::before{opacity:1}
-
 .card:hover{
   transform:translateY(-6px) scale(1.05);
-  box-shadow:
-    0 0 30px var(--glow),
-    0 0 90px rgba(184,115,51,.35);
+  box-shadow:0 0 30px var(--glow),0 0 90px rgba(184,115,51,.35);
 }
-
 .card img{
-  width:120px;
-  height:120px;
-  object-fit:cover;
-  border-radius:16px;
-  box-shadow:0 0 30px rgba(217,162,95,.35);
+  width:120px;height:120px;object-fit:cover;border-radius:16px;
 }
-
-.card h3{
-  margin:12px 0 4px;
-  font-size:14px;
-}
-
-.version{
-  font-size:11px;
-  color:var(--muted);
-}
-
-.stars{
-  font-size:12px;
-  color:var(--gold-light);
-}
-
-.half-star{
-  display:inline-block;
-  position:relative;
-  width:1em;
-}
-
-.half-star::before{
-  content:"★";
-  position:absolute;
-  width:50%;
-  overflow:hidden;
-  color:var(--gold-light);
-}
-
-.half-star::after{
-  content:"★";
-  color:#5a4630;
-}
-
-@keyframes fadeIn{
-  to{
-    opacity:1;
-    transform:none;
-  }
-}
-
-footer{
-  text-align:center;
-  font-size:13px;
-  color:var(--muted);
-  padding:20px;
-}
+.card h3{margin:12px 0 4px;font-size:14px}
+.version{font-size:11px;color:var(--muted)}
+.stars{font-size:12px;color:var(--gold-light)}
+.half-star{display:inline-block;width:1em;position:relative}
+.half-star::before{content:"★";width:50%;overflow:hidden;position:absolute;color:var(--gold-light)}
+.half-star::after{content:"★";color:#5a4630}
+@keyframes fadeIn{to{opacity:1;transform:none}}
+footer{text-align:center;font-size:13px;color:var(--muted);padding:20px}
 </style>
 </head>
 
@@ -182,56 +82,25 @@ footer{
 </header>
 
 <div class="wrap">
-
   <div class="search-box">
     <input type="text" id="search" placeholder="Search games...">
   </div>
-
   <div class="grid" id="games"></div>
-
 </div>
 
 <footer>© 2025 Apkmet.fun — All rights reserved</footer>
 
 <script>
 const GAMES = [
-  {"id":"GTA5Mobile","title":"GTA 5 Mobile","image":"https://www5.0zz0.com/2023/10/15/08/332140079.jpeg","version":"v1.0.3095/1.68","stars":"★★★★☆"},
-  {"id":"GTAViceCity","title":"GTA Vice City","image":"https://i.postimg.cc/gjzQQ2sb/1680953248-gtavc.png","version":"v3.9.6","stars":"★★★★☆"},
-  {"id":"AssettoCorsaMobile","title":"Assetto Corsa Mobile","image":"https://i.postimg.cc/3xHVQWW0/Picsart-25-02-25-00-54-38-367-1.jpg","version":"v1.16.4","stars":"★★★★★"},
-  {"id":"BeamNGdriveMobile","title":"BeamNG.drive Mobile","image":"https://i.postimg.cc/k5skc9J6/Picsart-25-03-08-05-57-01-681.jpg","version":"v0.32.0.0","stars":"★★★★<span class='half-star'></span>"},
-  {"id":"EuroTruckSimulator2","title":"Euro Truck Simulator 2","image":"https://i.postimg.cc/kXfCsxTX/32aee5919f1c4e81da58627d21b3323a.jpg","version":"v1.0.0","stars":"★★★★☆"},
-  {"id":"ForzaHorizon5","title":"Forza Horizon 5","image":"https://sm.ign.com/ign_nordic/cover/f/forza-hori/forza-horizon-5_5jjv.jpg","version":"v1.656.386.0","stars":"★★★★<span class='half-star'></span>"},
-  {"id":"the crew motorfest mobile","title":"the crew motorfest mobile","image":"https://i.postimg.cc/RVnTsbH8/the-crew-motorfest-download-The-Crew-Motor-Fest-1.avif","version":"v2.4.1","stars":"★★★★☆"},
-  {"id":"Hollow Knight: Silksong","title":"Hollow Knight: Silksong","image":"https://i.postimg.cc/Mpm2MDqF/Fr-Mkduml-Mozlmzk-APFqq-D1y-Gwo-OJ.webp","version":"v1.8.2","stars":"★★★★★"},
-  {"id":"Baseball9Mod","title":"Baseball 9 Mod","image":"https://i.postimg.cc/MpM7RJ8R/baseball9mod.jpg","version":"v2.3.4","stars":"★★★★<span class='half-star'></span>"},
-  {"id":"CarXDriftRacing2MODPACK","title":"CarX Drift Racing 2 MOD PACK","image":"https://i.postimg.cc/XJxx1y6b/CARX-DRIFT-RACING-2-LOGO-VS-MODS.png","version":"v4.21.0","stars":"★★★★☆"},
-  {"id":"RedDeadRedemption2Mobile","title":"Red Dead Redemption 2 Mobile","image":"https://i.postimg.cc/jqkbzjTB/rdr2.jpg","version":"v1.5.2","stars":"★★★★★"},
-  {"id":"FC24Mobile","title":"FC 24 Mobile","image":"https://image.api.playstation.com/vulcan/ap/rnd/202310/0214/c21c0669eaca7f3e02c41cad5e1a20f867aafcf14104f046.png","version":"v17.2.01","stars":"★★★★<span class='half-star'></span>"},
-  {"id":"NarutoUltimateNinjaStormMobile","title":"NARUTO: Ultimate Ninja STORM Mobile","image":"https://i.postimg.cc/4NwpbNjR/nr.png","version":"v3.7.1","stars":"★★★★☆"},
-  {"id":"FiveNightsatFreddys","title":"Five Nights at Freddy's","image":"https://lh3.googleusercontent.com/b8dLwIWegBN_xEi2JS63DMbs5u3T1QVOaT194EiNfvN0IZctc2SLwp916Uqw3ECN9q_l-KPx2Oozee2oPoYiWn7e","version":"v2.0.8","stars":"★★★★★"},
-  {"id":"Rematch","title":"Rematch","image":"https://i.postimg.cc/MKrxqfKR/images-8.jpg","version":"v1.3.5","stars":"★★★★☆"},
-  {"id":"Once Human mobile","title":"Once Human mobile","image":"https://i.postimg.cc/sXrW0ht0/434x0w.webp","version":"v1.2.7","stars":"★★★★<span class='half-star'></span>"},
-  {"id":"TheLastofUsmobile","title":"The Last of Us mobile","image":"https://i.postimg.cc/FzDg1pVj/tlouicon.png","version":"v2.1.4","stars":"★★★★★"},
-  {"id":"SPIDERMANMOBILE","title":"SPIDERMAN MOBILE","image":"https://upload.wikimedia.org/wikipedia/en/a/aa/Spider-Man_Unlimited.png","version":"v4.5.2","stars":"★★★★☆"},
-  {"id":"HitmanSniper","title":"Hitman Sniper","image":"https://lh3.googleusercontent.com/PYlSCwbwrv6JFzp0-KtITrrN2VK4iCdEYK_9yBiADhV_vR5V-cAzrQcdDJu_rUz8BgMxU0aQpgEaypMneKXp","version":"v1.9.3","stars":"★★★★<span class='half-star'></span>"},
-  {"id":"GRANTURISM07","title":"GRAN TURISM 07","image":"https://image.api.playstation.com/vulcan/ap/rnd/202109/1321/yZ7dpmjtHr1olhutHT57IFRh.png","version":"v7.2.1","stars":"★★★★★"},
-  {"id":"Efootball2024","title":"Efootball 2024","image":"https://www.konami.com/img/common/sp_js_img/main_sp_kde_efootball2024_0908.jpg","version":"v3.8.0","stars":"★★★★☆"},
-  {"id":"SnowRunner","title":"SnowRunner","image":"https://i.postimg.cc/C52bdZfM/snow.jpg","version":"v1.6.4","stars":"★★★★<span class='half-star'></span>"},
-  {"id":"GTASANANDREAS","title":"GTA SAN ANDREAS","image":"https://i.postimg.cc/nLw1pcnt/unnamed.webp","version":"v2.0.0","stars":"★★★★☆"},
-  {"id":"DreamLeagueSoccerModApk","title":"Dream League Soccer Mod Apk","image":"https://m.media-amazon.com/images/I/41GZrXhv0BL.jpg","version":"v11.07","stars":"★★★★★"},
-  {"id":"RidersRepublic","title":"Riders Republic","image":"https://image.api.playstation.com/vulcan/img/rnd/202112/2100/7eEv1gTTKw9GA5OWi00yyT3s.png","version":"v1.8.2","stars":"★★★★<span class='half-star'></span>"},
-  {"id":"NBA2K23MOBILE","title":"NBA2K23 MOBILE","image":"https://assets.2k.com/1a6ngf98576c/4oCqsi6G8MfDjHKhjhBtrP/d43164117e00d78c0cf85dfafeb3b906/NBA23-WEBSITE-ATHLETE_HUB-MODULE1-STD_THUMBNAIL-828x828.jpg","version":"v124.0.1","stars":"★★★★☆"},
-  {"id":"ProSoccerOnline","title":"Pro Soccer Online","image":"https://www.mandatory.gg/wp-content/uploads/mandatory-zlan-2022-pro-soccer-online-meta.png","version":"v2.5.1","stars":"★★★★<span class='half-star'></span>"},
-  {"id":"MINECRAFT","title":"MINECRAFT","image":"https://preview.redd.it/avjal33hpqo61.png?width=512&format=png&auto=webp&s=b652d83347448df74c8ba61c17b322e686ee32a4","version":"v1.20.1","stars":"★★★★★"},
-  {"id":"FarmingSimulator23","title":"Farming Simulator 23","image":"https://assets-prd.ignimgs.com/2023/05/01/farmingsim23-1682967114647.jpg","version":"v1.4.2","stars":"★★★★☆"},
-  {"id":"AvatarWorldModApk","title":"Avatar World Mod Apk","image":"https://i.postimg.cc/brjhdg3p/1755341108-1.webp","version":"v1.9.7","stars":"★★★★<span class='half-star'></span>"},
-  {"id":"PS3EmulatorMobile","title":"PS3 Emulator Mobile","image":"https://i.postimg.cc/Y9GBqZ7v/ps3emulator.jpg","version":"v3.2.8","stars":"★★★★☆"},
-  {"id":"VeryLittleNightmares","title":"Very Little Nightmares","image":"https://apkvision.org/wp-content/uploads/2020/01/Very-Little-Nightmares-2-140x140.png","version":"v1.5.3","stars":"★★★★★"},
-  {"id":"PoppyPlaytimeMobile","title":"Poppy Playtime Mobile","image":"https://cdn.now.gg/apps-content/com.MOBGames.PoppyMobileChap1/icon/poppy-playtime.png","version":"v2.1.6","stars":"★★★★<span class='half-star'></span>"}
+  {id:"GTA5Mobile",title:"GTA 5 Mobile",image:"https://www5.0zz0.com/2023/10/15/08/332140079.jpeg",version:"v1.0.3095/1.68",stars:"★★★★☆"},
+  {id:"GTAViceCity",title:"GTA Vice City",image:"https://i.postimg.cc/gjzQQ2sb/1680953248-gtavc.png",version:"v3.9.6",stars:"★★★★☆"},
+  {id:"ForzaHorizon5",title:"Forza Horizon 5",image:"https://sm.ign.com/ign_nordic/cover/f/forza-hori/forza-horizon-5_5jjv.jpg",version:"v1.656.386.0",stars:"★★★★<span class='half-star'></span>"},
+  {id:"TheCrewMotorfestMobile",title:"The Crew Motorfest Mobile",image:"https://i.postimg.cc/RVnTsbH8/the-crew-motorfest-download-The-Crew-Motor-Fest-1.avif",version:"v2.4.1",stars:"★★★★☆"},
+  {id:"Minecraft",title:"Minecraft",image:"https://preview.redd.it/avjal33hpqo61.png",version:"v1.20.1",stars:"★★★★★"}
 ];
 
-const grid = document.getElementById("games");
-const search = document.getElementById("search");
+const grid=document.getElementById("games");
+const search=document.getElementById("search");
 
 function render(list){
   grid.innerHTML="";
@@ -245,15 +114,14 @@ function render(list){
       <div class="version">${g.version}</div>
       <div class="stars">${g.stars}</div>
     `;
+    card.onclick=()=>location.href=`game.html?game=${g.id}`;
     grid.appendChild(card);
   });
 }
-
-search.addEventListener("input",e=>{
+search.oninput=e=>{
   const v=e.target.value.toLowerCase();
   render(GAMES.filter(g=>g.title.toLowerCase().includes(v)));
-});
-
+};
 render(GAMES);
 </script>
 
