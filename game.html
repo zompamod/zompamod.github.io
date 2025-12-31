@@ -765,7 +765,7 @@ downloadBtn2.onclick = () => {
   offerLink.style.pointerEvents = "auto";
   offerLink.dataset.locked = "0";
   offerLink.style.opacity = "1";
-
+  offerLink.removeAttribute("href");
   // إعادة التحميل الوهمي للحالة الابتدائية
   resetDownloader();
 }
