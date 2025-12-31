@@ -286,22 +286,3 @@ const GAMES = [
     ios:"#"
   }
 ];
-<script>
-const HASH_TO_GAME = {};
-
-GAMES.forEach(g => {
-  HASH_TO_GAME[g.id.toLowerCase()] = g.id;
-});
-
-function redirectFromHash() {
-  const hash = location.hash.replace("#", "").toLowerCase();
-  if (!hash) return;
-
-  if (HASH_TO_GAME[hash]) {
-    location.replace("game.html?game=" + HASH_TO_GAME[hash]);
-  }
-}
-
-redirectFromHash();
-window.addEventListener("hashchange", redirectFromHash);
-</script>
