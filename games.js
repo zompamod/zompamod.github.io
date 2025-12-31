@@ -167,7 +167,7 @@ const GAMES = [
   {
     id:"Minecraft",
     title:"Minecraft",
-    image:"https://preview.redd.it/avjal33hpqo61.png",
+    image:"https://i.imgur.com/VkL6g46.png",
     version:"v1.20.1",
     stars:"★★★★★",
     rating:"★★★★★ 5.0 (5,812,442 reviews)",
