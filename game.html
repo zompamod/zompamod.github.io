@@ -477,6 +477,9 @@ function createSubid() {
   }));
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
+ function markWentOffer() {
+  localStorage.setItem("went_offer", "1");
+ }
 
 function isSubidExpired() {
   const raw = localStorage.getItem("subid_payload");
