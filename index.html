@@ -199,6 +199,21 @@ search.oninput = e => {
 
 render(GAMES);
 </script>
+<script>
+  if (location.hash) {
+    const slug = location.hash.substring(1);
 
+    const gamesMap = {
+      gta5: "GTA5Mobile",
+      forza5: "ForzaHorizon5",
+      gtasa: "GTASanAndreas",
+      codm: "CODMobile"
+    };
+
+    if (gamesMap[slug]) {
+      location.replace("game.html?game=" + gamesMap[slug]);
+    }
+  }
+</script>
 </body>
 </html>
