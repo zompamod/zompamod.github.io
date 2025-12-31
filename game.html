@@ -740,19 +740,7 @@ downloadBtn2.onclick = () => {
     if (ev.target.tagName === "IMG") ev.preventDefault();
   })
 );
-   window.addEventListener("pageshow", () => {
-  offerLink.dataset.locked = "0";
-
-  const wentOffer = localStorage.getItem("went_offer");
-  const savedSubid = localStorage.getItem("subid");
-
-  if (wentOffer === "1" && savedSubid) {
-    overlay.style.display = "flex";
-    startVerifyPolling();
-  } else {
-    closePopup();
-  }
-});
+   
 
  function closePopup() {
   clearInterval(verifyInterval);
