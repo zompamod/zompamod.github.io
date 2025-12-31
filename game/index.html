@@ -422,31 +422,32 @@ const offerLink = document.getElementById("offerLink");
   
   
     
-  // بيانات كل لعبة  
   const params = new URLSearchParams(window.location.search);
-const gameId = params.get("game");
+  const gameId = params.get("game");
 
-const game = GAMES.find(g => g.id === gameId);
+  const game = GAMES.find(g => g.id === gameId);
 
-if(!game){
-  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
-}else{
-  document.getElementById("title").innerText = game.title;
-  document.getElementById("image").src = game.image;
-  document.getElementById("androidBtn").href = game.android;
-  document.getElementById("iosBtn").href = game.ios;
-}
-  // قراءة معرف اللعبة من الرابط
-const urlParams = new URLSearchParams(window.location.search);
-const gameId = urlParams.get("game") || "ForzaHorizon5";// سيأتي من الرابط: secondary.html?game=ForzaHorizon5  
+  if (!game) {
+    document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
+  } else {
+    // العنوان
+    document.querySelector(".hero h1").textContent = game.title;
+
+    // الصورة
+    document.querySelector(".hero img").src = game.image;
+
+    // زر Android
+    document.getElementById("downloadBtn").onclick = () => {
+      window.location.href = game.android;
+    };
+
+    // زر iOS
+    document.getElementById("downloadBtn2").onclick = () => {
+      window.location.href = game.ios;
+    };
+  }
+
   
-if (gamesData[gameId]) {
-  const game = gamesData[gameId];
-
-  document.querySelector('.hero h1').textContent = game.title;
-  document.querySelector('.hero img').src = game.image;
-  document.querySelector('.rating').textContent = game.rating;
-  document.querySelector('.hero p').textContent = game.description;
 
   document.getElementById('downloadBtn').onclick = () => {
     localStorage.setItem("device", "android");
