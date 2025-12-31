@@ -753,7 +753,7 @@ downloadBtn2.onclick = () => {
 });
 
  function closePopup() {
-  // إيقاف أي تحقق نشط
+  // إيقاف أي عمليات نشطة
   if (verifyInterval) {
     clearInterval(verifyInterval);
     verifyInterval = null;
@@ -764,7 +764,7 @@ downloadBtn2.onclick = () => {
     timer = null;
   }
 
-  // حذف كل بيانات الجلسة
+  // حذف بيانات الجلسة القديمة
   [
     "subid",
     "subid_payload",
@@ -772,18 +772,21 @@ downloadBtn2.onclick = () => {
     "device"
   ].forEach(k => localStorage.removeItem(k));
 
+  // 🔑 إنشاء subid جديد (المكان الصحيح)
+  createSubid();
+
   // إعادة الواجهة
   overlay.style.display = "none";
   popupChecking.style.display = "none";
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
-  // إعادة تمكين زر Verify
+  // إعادة تفعيل زر Verify
   offerLink.style.pointerEvents = "auto";
   offerLink.dataset.locked = "0";
   offerLink.style.opacity = "1";
-  offerLink.removeAttribute("href");
-  // إعادة التحميل الوهمي للحالة الابتدائية
+
+  // إعادة تعيين حالة التحميل
   resetDownloader();
 }
  const closeNotice = document.getElementById("closeNotice");
