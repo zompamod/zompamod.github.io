@@ -772,6 +772,11 @@ downloadBtn2.onclick = () => {
   // إعادة التحميل الوهمي للحالة الابتدائية
   resetDownloader();
 }
+ const closeNotice = document.getElementById("closeNotice");
+closeNotice.style.display = "block";
+setTimeout(() => {
+  closeNotice.style.display = "none";
+}, 4000);
  function goHome(){
   location.href = "index.html";
 }
