@@ -662,17 +662,21 @@ function startVerifyPolling() {
     const t = (await r.text()).trim();
 
     if (t === "verified") {
+  if (t === "verified") {
   clearInterval(verifyInterval);
   showSuccess();
 
   FINAL = getFinalLink();
-  if (!FINAL) {
-    alert("Download link not available");
-    return;
-  }
-     if (t === "failed" || t === "not_completed") {
+  if (!FINAL) return;
+
+  localStorage.clear();
+
+  setTimeout(() => location.href = FINAL, 1200);
+}
+
+if (t === "failed" || t === "not_completed") {
   showError();
- }
+}
 
   localStorage.removeItem("device");
   localStorage.removeItem("subid");
