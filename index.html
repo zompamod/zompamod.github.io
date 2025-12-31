@@ -219,5 +219,22 @@ function redirectFromHash() {
 redirectFromHash();
 window.addEventListener("hashchange", redirectFromHash);
 </script>
+  <script>
+const canonical = document.getElementById("canonicalLink");
+
+function updateCanonical() {
+  if (!canonical) return;
+
+  const hash = location.hash.replace("#", "");
+  if (hash) {
+    canonical.href = location.origin + "/game.html?game=" + hash;
+  } else {
+    canonical.href = location.origin + "/";
+  }
+}
+
+updateCanonical();
+window.addEventListener("hashchange", updateCanonical);
+</script>
 </body>
 </html>
