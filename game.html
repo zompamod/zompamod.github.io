@@ -547,21 +547,16 @@ function createSubid() {
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
  function markWentOffer() {
+  // منع النقر المزدوج فقط
+  if (offerLink.dataset.locked === "1") return;
+
+  offerLink.dataset.locked = "1";
   localStorage.setItem("went_offer", "1");
 
-  // إعادة تشغيل التحقق من جديد
-  clearInterval(verifyInterval);
-  verifyInterval = null;
-  startVerifyPolling();
-
-  // منع النقر المزدوج مؤقتًا
-  offerLink.style.pointerEvents = "none";
-  offerLink.style.opacity = "0.6";
-
+  // فتح الرابط بشكل طبيعي
   setTimeout(() => {
-    offerLink.style.pointerEvents = "auto";
-    offerLink.style.opacity = "1";
-  }, 2500);
+    offerLink.dataset.locked = "0";
+  }, 1500);
 }
 
 function isSubidExpired() {
