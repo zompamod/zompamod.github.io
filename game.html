@@ -718,15 +718,24 @@ downloadBtn2.onclick = () => {
 });
 
  function closePopup() {
-  // إيقاف التحقق
-  clearInterval(verifyInterval);
-  verifyInterval = null;
+  // إيقاف أي تحقق نشط
+  if (verifyInterval) {
+    clearInterval(verifyInterval);
+    verifyInterval = null;
+  }
+
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
 
   // حذف كل بيانات الجلسة
-  localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
-  localStorage.removeItem("device");
+  [
+    "subid",
+    "subid_payload",
+    "went_offer",
+    "device"
+  ].forEach(k => localStorage.removeItem(k));
 
   // إعادة الواجهة
   overlay.style.display = "none";
@@ -734,7 +743,11 @@ downloadBtn2.onclick = () => {
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
-  // إعادة زر التحميل للحالة الطبيعية
+  // إعادة تمكين زر Verify
+  offerLink.style.pointerEvents = "auto";
+  offerLink.style.opacity = "1";
+
+  // إعادة التحميل الوهمي للحالة الابتدائية
   resetDownloader();
 }
  function goHome(){
