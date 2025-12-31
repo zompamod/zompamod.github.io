@@ -411,11 +411,8 @@ if (!game) {
 ============================= */
 document.querySelector(".hero h1").textContent = game.title;
 document.querySelector(".hero img").src = game.image;
-document.getElementById("gameRating").textContent =
-  game.rating || "★★★★★ 4.8 (25,000+ reviews)";
-
-document.getElementById("gameDescription").textContent =
-  game.description || "Unlock premium features, enhanced gameplay and exclusive mods.";
+document.getElementById("gameRating").textContent = game.rating;
+document.getElementById("gameDescription").textContent = game.description;
 /* =============================
    DOM ELEMENTS
 ============================= */
