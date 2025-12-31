@@ -200,20 +200,23 @@ search.oninput = e => {
 render(GAMES);
 </script>
 <script>
-  if (location.hash) {
-    const slug = location.hash.substring(1);
+const HASH_TO_GAME = {};
 
-    const gamesMap = {
-      gta5: "GTA5Mobile",
-      forza5: "ForzaHorizon5",
-      gtasa: "GTASanAndreas",
-      codm: "CODMobile"
-    };
+if (typeof GAMES !== "undefined") {
+  GAMES.forEach(g => {
+    HASH_TO_GAME[g.id.toLowerCase()] = g.id;
+  });
+}
 
-    if (gamesMap[slug]) {
-      location.replace("game.html?game=" + gamesMap[slug]);
-    }
+function redirectFromHash() {
+  const hash = location.hash.replace("#", "");
+  if (HASH_TO_GAME[hash]) {
+    location.replace("game.html?game=" + HASH_TO_GAME[hash]);
   }
+}
+
+redirectFromHash();
+window.addEventListener("hashchange", redirectFromHash);
 </script>
 </body>
 </html>
