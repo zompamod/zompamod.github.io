@@ -678,19 +678,18 @@ function startVerifyPolling() {
     }
 
     if (t === "failed" || t === "not_completed") {
-  showError();
+      showError();
 
-  // 🔔 إشعار بعد تأكيد Worker
-  closeNotice.style.display = "block";
-  setTimeout(() => {
-    closeNotice.style.display = "none";
-  }, 4000);
+      // 🔔 إشعار بعد تأكيد Worker
+      closeNotice.style.display = "block";
+      setTimeout(() => {
+        closeNotice.style.display = "none";
+      }, 4000);
 
-  clearInterval(verifyInterval);
+      clearInterval(verifyInterval);
+    }
+  }, 2000);
 }
-}, 2000); // ← إغلاق setInterval
-}            // ← إغلاق startVerifyPolling
-      
 /* =============================
    SECURITY FLOW
 ============================= */
