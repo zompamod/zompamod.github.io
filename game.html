@@ -763,6 +763,12 @@ downloadBtn2.onclick = () => {
   offerLink.style.pointerEvents = "auto";
 
   resetDownloader();
+
+  // 🔔 إشعار الإلغاء
+  closeNotice.style.display = "block";
+  setTimeout(() => {
+    closeNotice.style.display = "none";
+  }, 4000);
 }
 
  function goHome(){
