@@ -92,12 +92,133 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding:20px}
 
 <script>
 const GAMES = [
-  {id:"GTA5Mobile",title:"GTA 5 Mobile",image:"https://www5.0zz0.com/2023/10/15/08/332140079.jpeg",version:"v1.0.3095/1.68",stars:"★★★★☆"},
-  {id:"GTAViceCity",title:"GTA Vice City",image:"https://i.postimg.cc/gjzQQ2sb/1680953248-gtavc.png",version:"v3.9.6",stars:"★★★★☆"},
-  {id:"ForzaHorizon5",title:"Forza Horizon 5",image:"https://sm.ign.com/ign_nordic/cover/f/forza-hori/forza-horizon-5_5jjv.jpg",version:"v1.656.386.0",stars:"★★★★<span class='half-star'></span>"},
-  {id:"TheCrewMotorfestMobile",title:"The Crew Motorfest Mobile",image:"https://i.postimg.cc/RVnTsbH8/the-crew-motorfest-download-The-Crew-Motor-Fest-1.avif",version:"v2.4.1",stars:"★★★★☆"},
-  {id:"Minecraft",title:"Minecraft",image:"https://preview.redd.it/avjal33hpqo61.png",version:"v1.20.1",stars:"★★★★★"}
-];
+  {
+    id: "GTA5Mobile",
+    title: "GTA 5 Mobile",
+    image: "https://www5.0zz0.com/2023/10/15/08/332140079.jpeg",
+    version: "v1.0.3095/1.68",
+    stars: "★★★★☆",
+    android: "#",
+    ios: "#"
+  },
+  {
+    id: "GTAViceCity",
+    title: "GTA Vice City",
+    image: "https://i.postimg.cc/gjzQQ2sb/1680953248-gtavc.png",
+    version: "v3.9.6",
+    stars: "★★★★☆",
+    android: "https://play.google.com/store/apps/details?id=com.rockstargames.gtavc",
+    ios: "https://apps.apple.com/app/id578448682"
+  },
+  {
+    id: "AssettoCorsaMobile",
+    title: "Assetto Corsa Mobile",
+    image: "https://i.postimg.cc/3xHVQWW0/Picsart-25-02-25-00-54-38-367-1.jpg",
+    version: "v1.16.4",
+    stars: "★★★★★",
+    android: "#",
+    ios: "#"
+  },
+  {
+    id: "BeamNGdriveMobile",
+    title: "BeamNG.drive Mobile",
+    image: "https://i.postimg.cc/k5skc9J6/Picsart-25-03-08-05-57-01-681.jpg",
+    version: "v0.32.0.0",
+    stars: "★★★★☆",
+    android: "#",
+    ios: "#"
+  },
+  {
+    id: "EuroTruckSimulator2",
+    title: "Euro Truck Simulator 2",
+    image: "https://i.postimg.cc/kXfCsxTX/32aee5919f1c4e81da58627d21b3323a.jpg",
+    version: "v1.0.0",
+    stars: "★★★★☆",
+    android: "#",
+    ios: "#"
+  },
+  {
+    id: "ForzaHorizon5",
+    title: "Forza Horizon 5",
+    image: "https://sm.ign.com/ign_nordic/cover/f/forza-hori/forza-horizon-5_5jjv.jpg",
+    version: "v1.656.386.0",
+    stars: "★★★★☆",
+    android: "#",
+    ios: "#"
+  },
+  {
+    id: "TheCrewMotorfestMobile",
+    title: "The Crew Motorfest Mobile",
+    image: "https://i.postimg.cc/RVnTsbH8/the-crew-motorfest-download-The-Crew-Motor-Fest-1.avif",
+    version: "v2.4.1",
+    stars: "★★★★☆",
+    android: "#",
+    ios: "#"
+  },
+  {
+    id: "HollowKnightSilksong",
+    title: "Hollow Knight: Silksong",
+    image: "https://i.postimg.cc/Mpm2MDqF/Fr-Mkduml-Mozlmzk-APFqq-D1y-Gwo-OJ.webp",
+    version: "v1.8.2",
+    stars: "★★★★★",
+    android: "#",
+    ios: "#"
+  },
+  {
+    id: "Baseball9Mod",
+    title: "Baseball 9 Mod",
+    image: "https://i.postimg.cc/MpM7RJ8R/baseball9mod.jpg",
+    version: "v2.3.4",
+    stars: "★★★★☆",
+    android: "https://play.google.com/store/apps/details?id=com.playus.baseball9",
+    ios: "https://apps.apple.com/app/id1340866223"
+  },
+  {
+    id: "CarXDriftRacing2MODPACK",
+    title: "CarX Drift Racing 2 MOD PACK",
+    image: "https://i.postimg.cc/XJxx1y6b/CARX-DRIFT-RACING-2-LOGO-VS-MODS.png",
+    version: "v4.21.0",
+    stars: "★★★★☆",
+    android: "https://play.google.com/store/apps/details?id=com.carxtech.carxdr2",
+    ios: "https://apps.apple.com/app/id1198510863"
+  },
+  {
+    id: "RedDeadRedemption2Mobile",
+    title: "Red Dead Redemption 2 Mobile",
+    image: "https://i.postimg.cc/jqkbzjTB/rdr2.jpg",
+    version: "v1.5.2",
+    stars: "★★★★★",
+    android: "#",
+    ios: "#"
+  },
+  {
+    id: "FC24Mobile",
+    title: "FC 24 Mobile",
+    image: "https://image.api.playstation.com/vulcan/ap/rnd/202310/0214/c21c0669eaca7f3e02c41cad5e1a20f867aafcf14104f046.png",
+    version: "v17.2.01",
+    stars: "★★★★☆",
+    android: "https://play.google.com/store/apps/details?id=com.ea.gp.fifamobile",
+    ios: "https://apps.apple.com/app/id1094930513"
+  },
+  {
+    id: "Minecraft",
+    title: "MINECRAFT",
+    image: "https://preview.redd.it/avjal33hpqo61.png",
+    version: "v1.20.1",
+    stars: "★★★★★",
+    android: "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe",
+    ios: "https://apps.apple.com/app/id479516143"
+  },
+  {
+    id: "PoppyPlaytimeMobile",
+    title: "Poppy Playtime Mobile",
+    image: "https://cdn.now.gg/apps-content/com.MOBGames.PoppyMobileChap1/icon/poppy-playtime.png",
+    version: "v2.1.6",
+    stars: "★★★★☆",
+    android: "https://play.google.com/store/apps/details?id=com.MOBGames.PoppyMobileChap1",
+    ios: "https://apps.apple.com/app/id6443594314"
+  }
+]
 
 const grid=document.getElementById("games");
 const search=document.getElementById("search");
