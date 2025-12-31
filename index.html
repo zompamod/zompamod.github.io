@@ -202,39 +202,22 @@ render(GAMES);
 <script>
 const HASH_TO_GAME = {};
 
-if (typeof GAMES !== "undefined") {
-  GAMES.forEach(g => {
-    HASH_TO_GAME[g.id.toLowerCase()] = g.id;
-  });
-}
+GAMES.forEach(g => {
+  HASH_TO_GAME[g.id.toLowerCase()] = g.id;
+});
 
-
-/* 🔗 ربط الـ hash باللعبة */
-const HASH_TO_GAME = {
-  gta5: "GTA5Mobile",
-  forza: "ForzaHorizon5",
-  fifa: "FIFAMobile"
-};
-
-/* 🔄 تحويل من الرابط القصير */
 function redirectFromHash() {
-  const hash = location.hash.replace("#", "");
-
+  const hash = location.hash.replace("#", "").toLowerCase();
   if (!hash) return;
 
   if (HASH_TO_GAME[hash]) {
     location.replace("game.html?game=" + HASH_TO_GAME[hash]);
-  } else {
-    alert("Game not found");
-    location.replace("index.html");
   }
 }
 
-/* ▶ تشغيل تلقائي عند فتح الصفحة */
 redirectFromHash();
-
-/* ▶ تشغيل عند تغيير الهاش */
 window.addEventListener("hashchange", redirectFromHash);
+</script>
 
 </script>
 </body>
