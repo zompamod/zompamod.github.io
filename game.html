@@ -571,13 +571,11 @@ function startVerifyPolling() {
         return;
       }
 
-      localStorage.clear();
-      setTimeout(() => location.href = FINAL, 1200);
-    } else {
-      if (localStorage.getItem("went_offer") === "1") {
-        showError();
-      }
-    }
+      
+      localStorage.removeItem("device");
+localStorage.removeItem("subid");
+localStorage.removeItem("subid_payload");
+localStorage.removeItem("went_offer");
   }, 2000);
 }
 
