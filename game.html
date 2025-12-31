@@ -507,13 +507,14 @@ const popupError = document.getElementById("popupError");
 const popupSuccess = document.getElementById("popupSuccess");
 
 const offerLink = document.getElementById("offerLink");
+const offerLink = document.getElementById("offerLink");
 const closeNotice = document.getElementById("closeNotice");
 
+/* 🔔 إشعار الرجوع بدون إكمال التحقق */
 window.addEventListener("pageshow", () => {
   const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
 
-  // رجع بدون إكمال التحقق
   if (wentOffer === "1" && savedSubid) {
     closeNotice.style.display = "block";
 
