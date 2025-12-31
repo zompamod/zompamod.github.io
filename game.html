@@ -486,8 +486,13 @@ if (!location.search.includes("game=")) {
 /* =============================
    GET GAME FROM URL
 ============================= */
+<script>
+/* =============================
+   GET GAME FROM URL
+============================= */
 const params = new URLSearchParams(window.location.search);
 const gameId = params.get("game");
+
 const game = GAMES.find(g => g.id === gameId);
 
 if (!game) {
@@ -495,9 +500,10 @@ if (!game) {
   throw new Error("Game not found");
 }
 
-/* ===== SEO TITLE & DESCRIPTION ===== */
-document.title =
-  game.title + " Mod APK Latest Version | Modnext";
+/* =============================
+   SEO (TITLE & DESCRIPTION)
+============================= */
+document.title = game.title + " Mod APK Latest Version | Modnext";
 
 let metaDesc = document.querySelector("meta[name='description']");
 if (!metaDesc) {
@@ -506,6 +512,29 @@ if (!metaDesc) {
   document.head.appendChild(metaDesc);
 }
 metaDesc.content = game.description;
+
+/* =============================
+   FILL PAGE CONTENT
+============================= */
+
+// Title
+const titleEl = document.querySelector(".hero h1");
+if (titleEl) titleEl.textContent = game.title;
+
+// Image
+const imgEl = document.querySelector(".hero img");
+if (imgEl) imgEl.src = game.image;
+
+// Rating ✅
+const ratingEl = document.getElementById("gameRating");
+if (ratingEl && game.rating) {
+  ratingEl.textContent = game.rating;
+}
+
+// Description ✅
+const descEl = document.getElementById("gameDescription");
+if (descEl) descEl.textContent = game.description;
+
 /* =============================
    DOM ELEMENTS
 ============================= */
