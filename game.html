@@ -512,15 +512,17 @@ const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
 window.addEventListener("pageshow", () => {
+  offerLink.dataset.locked = "0";
+
   const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
 
   if (wentOffer === "1" && savedSubid) {
-    closeNotice.style.display = "block";
+    overlay.style.display = "flex";
+    startVerifyPolling();
 
-    setTimeout(() => {
-      closeNotice.style.display = "none";
-    }, 4000);
+    closeNotice.style.display = "block";
+    setTimeout(() => closeNotice.style.display = "none", 4000);
   }
 });
 /* =============================
