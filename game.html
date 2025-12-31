@@ -303,40 +303,54 @@ button{will-change:transform,box-shadow}
   padding:16px 22px;
   display:flex;
   align-items:center;
-  gap:12px;
+  justify-content:space-between;
   border-bottom:1px solid var(--border);
 }
 
-/* زر الرجوع */
-.back-btn{
-  width:38px;
-  height:38px;
-  border-radius:50%;
-  border:1px solid var(--border);
-  background:linear-gradient(180deg,#2a1409,#140a05);
-  color:var(--gold);
-  font-size:20px;
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.header-left img{
+  width:36px;
+}
+
+.header-left span{
   font-weight:800;
-  cursor:pointer;
+  font-size:20px;
+}
+
+/* زر الرجوع الاحترافي */
+.back-btn{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  border:1px solid rgba(255,180,90,.35);
+  background:linear-gradient(180deg,#231107,#120805);
+  color:var(--gold);
   display:flex;
   align-items:center;
   justify-content:center;
-  transition:.25s;
-}
-
-/* دفع الزر لليمين */
-.back-btn.right{
-  margin-left:auto;
+  cursor:pointer;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    background .2s ease;
 }
 
 .back-btn:hover{
-  transform:scale(1.1);
-  box-shadow:0 0 18px rgba(255,180,90,.6);
+  background:linear-gradient(180deg,#2f170b,#1a0c06);
+  box-shadow:
+    0 0 0 1px rgba(255,180,90,.4),
+    0 0 30px rgba(255,180,90,.35);
+  transform:translateX(-2px);
 }
 
 .back-btn:active{
   transform:scale(.95);
-} 
+}
   
 </style>  
 </head>  
