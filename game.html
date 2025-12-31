@@ -486,23 +486,26 @@ if (!location.search.includes("game=")) {
 /* =============================
    GET GAME FROM URL
 ============================= */
-const params = new URLSearchParams(location.search);
+const params = new URLSearchParams(window.location.search);
 const gameId = params.get("game");
 const game = GAMES.find(g => g.id === gameId);
 
 if (!game) {
-  location.replace("index.html");
+  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
   throw new Error("Game not found");
 }
 
-document.getElementById("canonicalLink").href =
-  location.origin + "/" + game.id;
+/* ===== SEO TITLE & DESCRIPTION ===== */
+document.title =
+  game.title + " Mod APK Latest Version | Modnext";
 
-// تعبئة البيانات
-document.querySelector(".hero h1").textContent = game.title;
-document.querySelector(".hero img").src = game.image;
-document.getElementById("gameRating").textContent = game.rating;
-document.getElementById("gameDescription").textContent = game.description;
+let metaDesc = document.querySelector("meta[name='description']");
+if (!metaDesc) {
+  metaDesc = document.createElement("meta");
+  metaDesc.name = "description";
+  document.head.appendChild(metaDesc);
+}
+metaDesc.content = game.description;
 /* =============================
    DOM ELEMENTS
 ============================= */
