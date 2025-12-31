@@ -656,39 +656,34 @@ function showSuccess() {
 
 function startVerifyPolling() {
   clearInterval(verifyInterval);
+
   verifyInterval = setInterval(async () => {
-    subid = subid || localStorage.getItem("subid");
-    if (!subid) return;
+    const sid = localStorage.getItem("subid");
+    if (!sid) return;
 
     showChecking();
-    const r = await fetch(WORKER + "/verify?subid=" + subid);
+
+    const r = await fetch(WORKER + "/verify?subid=" + sid);
     const t = (await r.text()).trim();
 
     if (t === "verified") {
-  if (t === "verified") {
-  clearInterval(verifyInterval);
-  showSuccess();
+      clearInterval(verifyInterval);
+      showSuccess();
 
-  FINAL = getFinalLink();
-  if (!FINAL) return;
+      const FINAL = getFinalLink();
+      if (!FINAL) return;
 
-  localStorage.clear();
+      localStorage.clear();
 
-  setTimeout(() => location.href = FINAL, 1200);
-}
+      setTimeout(() => {
+        location.href = FINAL;
+      }, 1200);
+    }
 
-if (t === "failed" || t === "not_completed") {
-  showError();
-}
-
-  localStorage.removeItem("device");
-  localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
-
-  setTimeout(() => location.href = FINAL, 1200);
-}
-   }, 2000);
+    if (t === "failed" || t === "not_completed") {
+      showError();
+    }
+  }, 2000);
 }
 
       
