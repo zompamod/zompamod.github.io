@@ -656,6 +656,9 @@ function startVerifyPolling() {
     alert("Download link not available");
     return;
   }
+     if (t === "failed" || t === "not_completed") {
+  showError();
+ }
 
   localStorage.removeItem("device");
   localStorage.removeItem("subid");
