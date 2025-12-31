@@ -476,26 +476,20 @@ Please complete the verification process and the download will be completed auto
 
 
 <script src="games.js"></script>
+
 <script>
-const params = new URLSearchParams(location.search);
-const gameId = params.get("game");
-
-if (!gameId || !GAMES.some(g => g.id === gameId)) {
-  location.replace("index.html");
-}
-
-
 /* =============================
-   GET GAME FROM URL
+   GET GAME FROM URL (ONE TIME)
 ============================= */
 const params = new URLSearchParams(window.location.search);
 const gameId = params.get("game");
+
 const game = GAMES.find(g => g.id === gameId);
 
 if (!game) {
-  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
-  throw new Error("Game not found");
+  location.replace("index.html");
 }
+</script>
 
 /* =============================
    FILL PAGE CONTENT
