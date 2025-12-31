@@ -757,40 +757,22 @@ downloadBtn2.onclick = () => {
 });
 
  function closePopup() {
-  // إيقاف أي عمليات نشطة
-  if (verifyInterval) {
-    clearInterval(verifyInterval);
-    verifyInterval = null;
-  }
+  if (verifyInterval) clearInterval(verifyInterval);
+  if (timer) clearInterval(timer);
 
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
-  }
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+  localStorage.removeItem("device");
 
-  // حذف بيانات الجلسة القديمة
-  [
-    "subid",
-    "subid_payload",
-    "went_offer",
-    "device"
-  ].forEach(k => localStorage.removeItem(k));
-
-  // 🔑 إنشاء subid جديد (المكان الصحيح)
-  createSubid();
-
-  // إعادة الواجهة
   overlay.style.display = "none";
   popupChecking.style.display = "none";
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
-  // إعادة تفعيل زر Verify
-  offerLink.style.pointerEvents = "auto";
   offerLink.dataset.locked = "0";
-  offerLink.style.opacity = "1";
+  offerLink.style.pointerEvents = "auto";
 
-  // إعادة تعيين حالة التحميل
   resetDownloader();
 }
  const closeNotice = document.getElementById("closeNotice");
