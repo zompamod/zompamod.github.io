@@ -91,135 +91,43 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding:20px}
 <footer>© 2025 Apkmet.fun — All rights reserved</footer>
 
 <script>
-const GAMES = [
-  {
-    id: "GTA5Mobile",
-    title: "GTA 5 Mobile",
-    image: "https://www5.0zz0.com/2023/10/15/08/332140079.jpeg",
-    version: "v1.0.3095/1.68",
-    stars: "★★★★☆",
-    android: "#",
-    ios: "#"
-  },
-  {
-    id: "GTAViceCity",
-    title: "GTA Vice City",
-    image: "https://i.postimg.cc/gjzQQ2sb/1680953248-gtavc.png",
-    version: "v3.9.6",
-    stars: "★★★★☆",
-    android: "https://play.google.com/store/apps/details?id=com.rockstargames.gtavc",
-    ios: "https://apps.apple.com/app/id578448682"
-  },
-  {
-    id: "AssettoCorsaMobile",
-    title: "Assetto Corsa Mobile",
-    image: "https://i.postimg.cc/3xHVQWW0/Picsart-25-02-25-00-54-38-367-1.jpg",
-    version: "v1.16.4",
-    stars: "★★★★★",
-    android: "#",
-    ios: "#"
-  },
-  {
-    id: "BeamNGdriveMobile",
-    title: "BeamNG.drive Mobile",
-    image: "https://i.postimg.cc/k5skc9J6/Picsart-25-03-08-05-57-01-681.jpg",
-    version: "v0.32.0.0",
-    stars: "★★★★☆",
-    android: "#",
-    ios: "#"
-  },
-  {
-    id: "EuroTruckSimulator2",
-    title: "Euro Truck Simulator 2",
-    image: "https://i.postimg.cc/kXfCsxTX/32aee5919f1c4e81da58627d21b3323a.jpg",
-    version: "v1.0.0",
-    stars: "★★★★☆",
-    android: "#",
-    ios: "#"
-  },
-  {
-    id: "ForzaHorizon5",
-    title: "Forza Horizon 5",
-    image: "https://sm.ign.com/ign_nordic/cover/f/forza-hori/forza-horizon-5_5jjv.jpg",
-    version: "v1.656.386.0",
-    stars: "★★★★☆",
-    android: "#",
-    ios: "#"
-  },
-  {
-    id: "TheCrewMotorfestMobile",
-    title: "The Crew Motorfest Mobile",
-    image: "https://i.postimg.cc/RVnTsbH8/the-crew-motorfest-download-The-Crew-Motor-Fest-1.avif",
-    version: "v2.4.1",
-    stars: "★★★★☆",
-    android: "#",
-    ios: "#"
-  },
-  {
-    id: "HollowKnightSilksong",
-    title: "Hollow Knight: Silksong",
-    image: "https://i.postimg.cc/Mpm2MDqF/Fr-Mkduml-Mozlmzk-APFqq-D1y-Gwo-OJ.webp",
-    version: "v1.8.2",
-    stars: "★★★★★",
-    android: "#",
-    ios: "#"
-  },
-  {
-    id: "Baseball9Mod",
-    title: "Baseball 9 Mod",
-    image: "https://i.postimg.cc/MpM7RJ8R/baseball9mod.jpg",
-    version: "v2.3.4",
-    stars: "★★★★☆",
-    android: "https://play.google.com/store/apps/details?id=com.playus.baseball9",
-    ios: "https://apps.apple.com/app/id1340866223"
-  },
-  {
-    id: "CarXDriftRacing2MODPACK",
-    title: "CarX Drift Racing 2 MOD PACK",
-    image: "https://i.postimg.cc/XJxx1y6b/CARX-DRIFT-RACING-2-LOGO-VS-MODS.png",
-    version: "v4.21.0",
-    stars: "★★★★☆",
-    android: "https://play.google.com/store/apps/details?id=com.carxtech.carxdr2",
-    ios: "https://apps.apple.com/app/id1198510863"
-  },
-  {
-    id: "RedDeadRedemption2Mobile",
-    title: "Red Dead Redemption 2 Mobile",
-    image: "https://i.postimg.cc/jqkbzjTB/rdr2.jpg",
-    version: "v1.5.2",
-    stars: "★★★★★",
-    android: "#",
-    ios: "#"
-  },
-  {
-    id: "FC24Mobile",
-    title: "FC 24 Mobile",
-    image: "https://image.api.playstation.com/vulcan/ap/rnd/202310/0214/c21c0669eaca7f3e02c41cad5e1a20f867aafcf14104f046.png",
-    version: "v17.2.01",
-    stars: "★★★★☆",
-    android: "https://play.google.com/store/apps/details?id=com.ea.gp.fifamobile",
-    ios: "https://apps.apple.com/app/id1094930513"
-  },
-  {
-    id: "Minecraft",
-    title: "MINECRAFT",
-    image: "https://preview.redd.it/avjal33hpqo61.png",
-    version: "v1.20.1",
-    stars: "★★★★★",
-    android: "https://play.google.com/store/apps/details?id=com.mojang.minecraftpe",
-    ios: "https://apps.apple.com/app/id479516143"
-  },
-  {
-    id: "PoppyPlaytimeMobile",
-    title: "Poppy Playtime Mobile",
-    image: "https://cdn.now.gg/apps-content/com.MOBGames.PoppyMobileChap1/icon/poppy-playtime.png",
-    version: "v2.1.6",
-    stars: "★★★★☆",
-    android: "https://play.google.com/store/apps/details?id=com.MOBGames.PoppyMobileChap1",
-    ios: "https://apps.apple.com/app/id6443594314"
-  }
-]
 
+    
+const GAMES = [
+  {id:"GTA5Mobile",title:"GTA 5 Mobile",image:"https://www5.0zz0.com/2023/10/15/08/332140079.jpeg",version:"v1.0.3095/1.68",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"GTAViceCity",title:"GTA Vice City",image:"https://i.postimg.cc/gjzQQ2sb/1680953248-gtavc.png",version:"v3.9.6",stars:"★★★★☆",android:"https://play.google.com/store/apps/details?id=com.rockstargames.gtavc",ios:"https://apps.apple.com/app/id578448682"},
+  {id:"AssettoCorsaMobile",title:"Assetto Corsa Mobile",image:"https://i.postimg.cc/3xHVQWW0/Picsart-25-02-25-00-54-38-367-1.jpg",version:"v1.16.4",stars:"★★★★★",android:"#",ios:"#"},
+  {id:"BeamNGdriveMobile",title:"BeamNG.drive Mobile",image:"https://i.postimg.cc/k5skc9J6/Picsart-25-03-08-05-57-01-681.jpg",version:"v0.32.0.0",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"EuroTruckSimulator2",title:"Euro Truck Simulator 2",image:"https://i.postimg.cc/kXfCsxTX/32aee5919f1c4e81da58627d21b3323a.jpg",version:"v1.0.0",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"ForzaHorizon5",title:"Forza Horizon 5",image:"https://sm.ign.com/ign_nordic/cover/f/forza-hori/forza-horizon-5_5jjv.jpg",version:"v1.656.386.0",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"TheCrewMotorfestMobile",title:"The Crew Motorfest Mobile",image:"https://i.postimg.cc/RVnTsbH8/the-crew-motorfest-download-The-Crew-Motor-Fest-1.avif",version:"v2.4.1",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"HollowKnightSilksong",title:"Hollow Knight: Silksong",image:"https://i.postimg.cc/Mpm2MDqF/Fr-Mkduml-Mozlmzk-APFqq-D1y-Gwo-OJ.webp",version:"v1.8.2",stars:"★★★★★",android:"#",ios:"#"},
+  {id:"Baseball9Mod",title:"Baseball 9 Mod",image:"https://i.postimg.cc/MpM7RJ8R/baseball9mod.jpg",version:"v2.3.4",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"CarXDriftRacing2MODPACK",title:"CarX Drift Racing 2 MOD PACK",image:"https://i.postimg.cc/XJxx1y6b/CARX-DRIFT-RACING-2-LOGO-VS-MODS.png",version:"v4.21.0",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"RedDeadRedemption2Mobile",title:"Red Dead Redemption 2 Mobile",image:"https://i.postimg.cc/jqkbzjTB/rdr2.jpg",version:"v1.5.2",stars:"★★★★★",android:"#",ios:"#"},
+  {id:"FC24Mobile",title:"FC 24 Mobile",image:"https://image.api.playstation.com/vulcan/ap/rnd/202310/0214/c21c0669eaca7f3e02c41cad5e1a20f867aafcf14104f046.png",version:"v17.2.01",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"NarutoUltimateNinjaStormMobile",title:"NARUTO: Ultimate Ninja STORM Mobile",image:"https://i.postimg.cc/4NwpbNjR/nr.png",version:"v3.7.1",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"FiveNightsAtFreddys",title:"Five Nights at Freddy's",image:"https://lh3.googleusercontent.com/b8dLwIWegBN_xEi2JS63DMbs5u3T1QVOaT194EiNfvN0IZctc2SLwp916Uqw3ECN9q_l-KPx2Oozee2oPoYiWn7e",version:"v2.0.8",stars:"★★★★★",android:"#",ios:"#"},
+  {id:"Rematch",title:"Rematch",image:"https://i.postimg.cc/MKrxqfKR/images-8.jpg",version:"v1.3.5",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"OnceHumanMobile",title:"Once Human Mobile",image:"https://i.postimg.cc/sXrW0ht0/434x0w.webp",version:"v1.2.7",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"TheLastOfUsMobile",title:"The Last of Us Mobile",image:"https://i.postimg.cc/FzDg1pVj/tlouicon.png",version:"v2.1.4",stars:"★★★★★",android:"#",ios:"#"},
+  {id:"SpiderManMobile",title:"SPIDERMAN MOBILE",image:"https://upload.wikimedia.org/wikipedia/en/a/aa/Spider-Man_Unlimited.png",version:"v4.5.2",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"HitmanSniper",title:"Hitman Sniper",image:"https://lh3.googleusercontent.com/PYlSCwbwrv6JFzp0-KtITrrN2VK4iCdEYK_9yBiADhV_vR5V-cAzrQcdDJu_rUz8BgMxU0aQpgEaypMneKXp",version:"v1.9.3",stars:"★★★★☆",android:"https://play.google.com/store/apps/details?id=com.squareenixmontreal.hitmansniperandroid",ios:"https://apps.apple.com/app/id904278510"},
+  {id:"GranTurismo07",title:"GRAN TURISMO 07",image:"https://image.api.playstation.com/vulcan/ap/rnd/202109/1321/yZ7dpmjtHr1olhutHT57IFRh.png",version:"v7.2.1",stars:"★★★★★",android:"#",ios:"#"},
+  {id:"Efootball2024",title:"Efootball 2024",image:"https://www.konami.com/img/common/sp_js_img/main_sp_kde_efootball2024_0908.jpg",version:"v3.8.0",stars:"★★★★☆",android:"https://play.google.com/store/apps/details?id=jp.konami.pesam",ios:"https://apps.apple.com/app/id1117270703"},
+  {id:"SnowRunner",title:"SnowRunner",image:"https://i.postimg.cc/C52bdZfM/snow.jpg",version:"v1.6.4",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"GTASanAndreas",title:"GTA SAN ANDREAS",image:"https://i.postimg.cc/nLw1pcnt/unnamed.webp",version:"v2.0.0",stars:"★★★★☆",android:"https://play.google.com/store/apps/details?id=com.rockstargames.gtasa",ios:"https://apps.apple.com/app/id763692274"},
+  {id:"DreamLeagueSoccer",title:"Dream League Soccer",image:"https://m.media-amazon.com/images/I/41GZrXhv0BL.jpg",version:"v11.07",stars:"★★★★★",android:"https://play.google.com/store/apps/details?id=com.firsttouchgames.dls7",ios:"https://apps.apple.com/app/id1462911602"},
+  {id:"RidersRepublic",title:"Riders Republic",image:"https://image.api.playstation.com/vulcan/img/rnd/202112/2100/7eEv1gTTKw9GA5OWi00yyT3s.png",version:"v1.8.2",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"NBA2K23Mobile",title:"NBA2K23 MOBILE",image:"https://assets.2k.com/1a6ngf98576c/4oCqsi6G8MfDjHKhjhBtrP/d43164117e00d78c0cf85dfafeb3b906/NBA23-WEBSITE-ATHLETE_HUB-MODULE1-STD_THUMBNAIL-828x828.jpg",version:"v124.0.1",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"ProSoccerOnline",title:"Pro Soccer Online",image:"https://www.mandatory.gg/wp-content/uploads/mandatory-zlan-2022-pro-soccer-online-meta.png",version:"v2.5.1",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"Minecraft",title:"MINECRAFT",image:"https://preview.redd.it/avjal33hpqo61.png",version:"v1.20.1",stars:"★★★★★",android:"https://play.google.com/store/apps/details?id=com.mojang.minecraftpe",ios:"https://apps.apple.com/app/id479516143"},
+  {id:"FarmingSimulator23",title:"Farming Simulator 23",image:"https://assets-prd.ignimgs.com/2023/05/01/farmingsim23-1682967114647.jpg",version:"v1.4.2",stars:"★★★★☆",android:"https://play.google.com/store/apps/details?id=com.giantssoftware.fs23.google",ios:"https://apps.apple.com/app/id1618613474"},
+  {id:"AvatarWorld",title:"Avatar World",image:"https://i.postimg.cc/brjhdg3p/1755341108-1.webp",version:"v1.9.7",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"PS3EmulatorMobile",title:"PS3 Emulator Mobile",image:"https://i.postimg.cc/Y9GBqZ7v/ps3emulator.jpg",version:"v3.2.8",stars:"★★★★☆",android:"#",ios:"#"},
+  {id:"VeryLittleNightmares",title:"Very Little Nightmares",image:"https://apkvision.org/wp-content/uploads/2020/01/Very-Little-Nightmares-2-140x140.png",version:"v1.5.3",stars:"★★★★★",android:"https://play.google.com/store/apps/details?id=eu.bandainamcoent.verylittlenightmares",ios:"https://apps.apple.com/app/id1435140814"},
+  {id:"PoppyPlaytimeMobile",title:"Poppy Playtime Mobile",image:"https://cdn.now.gg/apps-content/com.MOBGames.PoppyMobileChap1/icon/poppy-playtime.png",version:"v2.1.6",stars:"★★★★☆",android:"https://play.google.com/store/apps/details?id=com.MOBGames.PoppyMobileChap1",ios:"https://apps.apple.com/app/id1617275876"}
+];
 const grid=document.getElementById("games");
 const search=document.getElementById("search");
 
