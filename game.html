@@ -583,17 +583,6 @@ function startVerifyPolling() {
 }
 
       
-   
-
- window.addEventListener("pageshow", () => {
-  const wentOffer = localStorage.getItem("went_offer");
-  const savedSubid = localStorage.getItem("subid");
-
-  if (wentOffer === "1" && savedSubid && !verifyInterval) {
-    overlay.style.display = "flex";
-    startVerifyPolling();
-  }
-});
 /* =============================
    SECURITY FLOW
 ============================= */
@@ -647,4 +636,13 @@ downloadBtn2.onclick = () => {
     if (ev.target.tagName === "IMG") ev.preventDefault();
   })
 );
+   window.addEventListener("pageshow", () => {
+  const wentOffer = localStorage.getItem("went_offer");
+  const savedSubid = localStorage.getItem("subid");
+
+  if (wentOffer === "1" && savedSubid && !verifyInterval) {
+    overlay.style.display = "flex";
+    startVerifyPolling();
+  }
+});
 </script>
