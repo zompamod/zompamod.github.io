@@ -717,18 +717,16 @@ downloadBtn2.onclick = () => {
   })
 );
    window.addEventListener("pageshow", () => {
+  offerLink.dataset.locked = "0";
+
   const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
 
-  // إذا عاد من العرض بدون تحقق → إعادة ضبط كاملة
   if (wentOffer === "1" && savedSubid) {
-    clearInterval(verifyInterval);
-    verifyInterval = null;
-
-    // نعرض النافذة لكن لا نبدأ polling إلا بعد ضغط جديد
     overlay.style.display = "flex";
-    popupChecking.style.display = "none";
-    popupError.style.display = "block";
+    startVerifyPolling();
+  } else {
+    closePopup();
   }
 });
 
