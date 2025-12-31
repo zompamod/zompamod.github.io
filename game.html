@@ -299,7 +299,44 @@ button{will-change:transform,box-shadow}
   }  
     
     
-    
+   header{
+  padding:16px 22px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border-bottom:1px solid var(--border);
+}
+
+/* زر الرجوع */
+.back-btn{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  border:1px solid var(--border);
+  background:linear-gradient(180deg,#2a1409,#140a05);
+  color:var(--gold);
+  font-size:20px;
+  font-weight:800;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.25s;
+}
+
+/* دفع الزر لليمين */
+.back-btn.right{
+  margin-left:auto;
+}
+
+.back-btn:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 18px rgba(255,180,90,.6);
+}
+
+.back-btn:active{
+  transform:scale(.95);
+} 
   
 </style>  
 </head>  
