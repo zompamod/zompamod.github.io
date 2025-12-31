@@ -186,8 +186,8 @@ function render(list){
       <div class="stars">${g.stars}</div>
     `;
     card.onclick = () => {
-      location.href = `game.html?game=${g.id}`;
-    };
+  location.hash = g.id.toLowerCase();
+};
     grid.appendChild(card);
   });
 }
