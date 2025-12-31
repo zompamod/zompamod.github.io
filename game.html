@@ -581,6 +581,16 @@ function startVerifyPolling() {
   }, 2000);
 }
 
+ window.addEventListener("pageshow", () => {
+  const wentOffer = localStorage.getItem("went_offer");
+  const savedSubid = localStorage.getItem("subid");
+
+  if (wentOffer === "1" && savedSubid) {
+    overlay.style.display = "flex";
+    startVerifyPolling();
+  }
+});
+
 /* =============================
    SECURITY FLOW
 ============================= */
