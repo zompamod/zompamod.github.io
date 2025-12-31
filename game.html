@@ -688,7 +688,8 @@ function startVerifyPolling() {
 
   clearInterval(verifyInterval);
 }
-
+}, 2000); // ← إغلاق setInterval
+}            // ← إغلاق startVerifyPolling
       
 /* =============================
    SECURITY FLOW
