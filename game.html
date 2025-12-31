@@ -755,8 +755,8 @@ downloadBtn2.onclick = () => {
 });
 
  function closePopup() {
-  if (verifyInterval) clearInterval(verifyInterval);
-  if (timer) clearInterval(timer);
+  clearInterval(verifyInterval);
+  clearInterval(timer);
 
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
