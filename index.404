@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Redirecting...</title>
+
+<script src="games.js"></script>
+
+<script>
+(function () {
+  const slug = location.pathname.replace("/", "").toLowerCase();
+
+  if (!slug) {
+    location.replace("index.html");
+    return;
+  }
+
+  const game = GAMES.find(g => g.id.toLowerCase() === slug);
+
+  if (game) {
+    location.replace("game.html?game=" + game.id);
+  } else {
+    location.replace("index.html");
+  }
+})();
+</script>
+</head>
+<body></body>
+</html>
