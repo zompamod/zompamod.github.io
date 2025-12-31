@@ -711,9 +711,12 @@ downloadBtn2.onclick = () => {
   const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
 
-  if (wentOffer === "1" && savedSubid && !verifyInterval) {
+  if (wentOffer === "1" && savedSubid) {
     overlay.style.display = "flex";
     startVerifyPolling();
+  } else {
+    // لو رجع بدون إكمال → إعادة ضبط كاملة
+    closePopup();
   }
 });
 
