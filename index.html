@@ -12,7 +12,7 @@
   --bg:#0b0705;
   --card:#1a0f0a;
   --gold:#d9a25f;
-  --text:#ffffff;
+  --text:#f5f5f4;
   --muted:#c7b299;
 }
 *{box-sizing:border-box}
@@ -24,12 +24,10 @@ body{
 }
 header{
   text-align:center;
-  padding:20px;
+  padding:24px;
 }
-header img{height:40px}
 header h1{
-  margin-top:8px;
-  font-size:18px;
+  margin:8px 0 0;
   color:var(--gold);
 }
 .wrap{
@@ -37,19 +35,19 @@ header h1{
   margin:auto;
   padding:0 16px 40px;
 }
-.search-box{
+.search{
   max-width:420px;
   margin:20px auto 30px;
 }
-.search-box input{
+.search input{
   width:100%;
   padding:14px 18px;
-  border-radius:16px;
+  border-radius:18px;
   border:none;
   outline:none;
   background:#0b0705;
-  color:#fff;
-  box-shadow:0 0 0 1px rgba(217,162,95,.3);
+  color:var(--text);
+  box-shadow:0 0 0 1px rgba(217,162,95,.25);
 }
 .grid{
   display:grid;
@@ -58,15 +56,18 @@ header h1{
 }
 .card{
   background:linear-gradient(160deg,#1a0f0a,#0b0705);
-  border-radius:20px;
+  border-radius:22px;
   padding:14px;
   text-align:center;
   cursor:pointer;
-  box-shadow:0 10px 30px rgba(0,0,0,.6);
-  transition:.3s;
+  box-shadow:0 10px 30px rgba(0,0,0,.7);
+  transform:translateY(30px) scale(.95);
+  opacity:0;
+  animation:show .6s ease forwards;
+  transition:.35s;
 }
 .card:hover{
-  transform:translateY(-6px) scale(1.04);
+  transform:translateY(-6px) scale(1.05);
 }
 .card img{
   width:120px;
@@ -75,8 +76,8 @@ header h1{
   border-radius:16px;
 }
 .card h3{
-  margin:12px 0 4px;
   font-size:14px;
+  margin:10px 0 4px;
 }
 .version{
   font-size:11px;
@@ -85,6 +86,9 @@ header h1{
 .stars{
   font-size:12px;
   color:var(--gold);
+}
+@keyframes show{
+  to{opacity:1;transform:none}
 }
 footer{
   text-align:center;
@@ -98,18 +102,18 @@ footer{
 <body>
 
 <header>
-  <img src="https://i.ibb.co/gbsY945Q/Black-and-Green-Illustrative-E-Sports-Gaming-Logo-2-removebg.png">
-  <h1>Apkmet.fun — Games</h1>
+  <h1>Apkmet.fun</h1>
+  <div>Premium Mobile Games</div>
 </header>
 
 <div class="wrap">
-  <div class="search-box">
-    <input type="text" id="search" placeholder="Search games...">
+  <div class="search">
+    <input id="search" type="text" placeholder="Search games...">
   </div>
   <div class="grid" id="games"></div>
 </div>
 
-<footer>© 2025 Apkmet.fun — All rights reserved</footer>
+<footer>© 2025 Apkmet.fun</footer>
 
 <!-- تحميل الألعاب -->
 <script src="games.js"></script>
@@ -120,26 +124,27 @@ const search = document.getElementById("search");
 
 function render(list){
   grid.innerHTML = "";
-  list.forEach(game=>{
+  list.forEach((g,i)=>{
     const card = document.createElement("div");
     card.className = "card";
+    card.style.animationDelay = `${i*0.05}s`;
     card.innerHTML = `
-      <img src="${game.image}">
-      <h3>${game.title}</h3>
-      <div class="version">${game.version}</div>
-      <div class="stars">${game.stars}</div>
+      <img src="${g.image}">
+      <h3>${g.title}</h3>
+      <div class="version">${g.version}</div>
+      <div class="stars">${g.stars}</div>
     `;
     card.onclick = () => {
-      window.location.href = `game.html?game=${game.id}`;
+      location.href = `game.html?game=${g.id}`;
     };
     grid.appendChild(card);
   });
 }
 
-search.addEventListener("input", e=>{
-  const value = e.target.value.toLowerCase();
-  render(GAMES.filter(g => g.title.toLowerCase().includes(value)));
-});
+search.oninput = e => {
+  const v = e.target.value.toLowerCase();
+  render(GAMES.filter(g => g.title.toLowerCase().includes(v)));
+};
 
 render(GAMES);
 </script>
