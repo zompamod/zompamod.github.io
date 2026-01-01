@@ -719,36 +719,40 @@ function startVerifyPolling() {
     const r = await fetch(WORKER + "/verify?subid=" + sid);
     const t = (await r.text()).trim();
 
+    // ✅ حالة النجاح
     if (t === "verified") {
       clearInterval(verifyInterval);
       showSuccess();
 
       const FINAL = getFinalLink();
-if (!FINAL) {
-  showError();
-  return;
-}
+      if (!FINAL) {
+        showError();
+        return;
+      }
 
-// احذف فقط ما يلزم وليس الكل
-localStorage.removeItem("subid");
-localStorage.removeItem("subid_payload");
-localStorage.removeItem("went_offer");
+      // نحذف فقط ما يخص التحقق
+      localStorage.removeItem("subid");
+      localStorage.removeItem("subid_payload");
+      localStorage.removeItem("went_offer");
 
-setTimeout(() => {
-  location.href = FINAL;
-}, 1200);
+      setTimeout(() => {
+        location.href = FINAL;
+      }, 1200);
 
+      return;
+    }
+
+    // ❌ حالة الفشل
     if (t === "failed" || t === "not_completed") {
+      clearInterval(verifyInterval);
       showError();
 
-      // 🔔 إشعار بعد تأكيد Worker
       closeNotice.style.display = "block";
       setTimeout(() => {
         closeNotice.style.display = "none";
       }, 4000);
-
-      clearInterval(verifyInterval);
     }
+
   }, 2000);
 }
 /* =============================
