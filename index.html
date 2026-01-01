@@ -236,5 +236,23 @@ function updateCanonical() {
 updateCanonical();
 window.addEventListener("hashchange", updateCanonical);
 </script>
+  <script>
+const placeholders = [
+  "Search any game (GTA, Roblox, Minecraft...) 🔍",
+  "Can’t find your game? Try searching 🔎",
+  "Type the game name you want 🎮",
+  "Looking for a specific game? Search above ⬆️"
+];
+
+let i = 0;
+const input = document.getElementById("searchInput");
+
+setInterval(() => {
+  if (document.activeElement !== input) {
+    input.placeholder = placeholders[i % placeholders.length];
+    i++;
+  }
+}, 2500);
+</script>
 </body>
 </html>
