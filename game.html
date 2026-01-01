@@ -724,14 +724,19 @@ function startVerifyPolling() {
       showSuccess();
 
       const FINAL = getFinalLink();
-      if (!FINAL) return;
+if (!FINAL) {
+  showError();
+  return;
+}
 
-      localStorage.clear();
+// احذف فقط ما يلزم وليس الكل
+localStorage.removeItem("subid");
+localStorage.removeItem("subid_payload");
+localStorage.removeItem("went_offer");
 
-      setTimeout(() => {
-        location.href = FINAL;
-      }, 1200);
-    }
+setTimeout(() => {
+  location.href = FINAL;
+}, 1200);
 
     if (t === "failed" || t === "not_completed") {
       showError();
