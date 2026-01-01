@@ -614,7 +614,6 @@ function createSubid() {
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
  function markWentOffer() {
-  // منع النقر المتكرر السريع فقط
   if (offerLink.dataset.locked === "1") return;
 
   offerLink.dataset.locked = "1";
@@ -622,7 +621,7 @@ function createSubid() {
 
   localStorage.setItem("went_offer", "1");
 
-  // فتح القفل بعد وقت قصير
+  // نعيد فتح الزر بعد لحظة
   setTimeout(() => {
     offerLink.dataset.locked = "0";
     offerLink.style.pointerEvents = "auto";
@@ -752,18 +751,17 @@ function startVerifyPolling() {
 
   return;
 }
-    // ❌ FAILED
     if (t === "failed" || t === "not_completed") {
-      clearInterval(verifyInterval);
-      showError();
+  clearInterval(verifyInterval);
 
-      closeNotice.style.display = "block";
-      setTimeout(() => {
-        closeNotice.style.display = "none";
-      }, 4000);
-    }
+  showError();        // رسالة الخطأ
+  setVerifyAgain();  // 🔥 تغيير الزر تلقائيًا
 
-  }, 2000);
+  // إشعار اختياري
+  closeNotice.style.display = "block";
+  setTimeout(() => {
+    closeNotice.style.display = "none";
+  }, 4000);
 }
 /* =============================
    SECURITY FLOW
@@ -856,5 +854,23 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
+function setVerifyAgain() {
+  offerLink.textContent = "Verify Again";
+  offerLink.style.background =
+    "linear-gradient(90deg,#ef4444,#f97316)";
+  offerLink.dataset.locked = "0";
+  offerLink.style.pointerEvents = "auto";
+}
 
+function resetVerifyText() {
+  offerLink.textContent = "Verify & Continue";
+  offerLink.style.background =
+    "linear-gradient(90deg,var(--accent),var(--accent2))";
+}
+   window.addEventListener("pageshow", () => {
+  // لو كان ذهب للعرض ولم يتحقق
+  if (localStorage.getItem("went_offer") === "1") {
+    setVerifyAgain();
+  }
+});
 </script>
