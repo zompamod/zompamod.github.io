@@ -792,12 +792,11 @@ function startVerifyPolling() {
       localStorage.removeItem("subid");
       localStorage.removeItem("subid_payload");
       localStorage.removeItem("went_offer");
-      localStorage.removeItem("device");
-
+      
       setTimeout(() => {
-        window.location.href = finalLink;
-      }, 1200);
-      return;
+  window.location.href = finalLink;
+  localStorage.removeItem("device"); // ✅ هنا فقط
+}, 1200);
     }
 
     // ❌ FAILED
@@ -849,13 +848,11 @@ function showSecureFlow() {
 ============================= */
 downloadBtn.onclick = () => {
   localStorage.setItem("device", "android");
-  localStorage.setItem("final_link", getFinalLinkByDevice("android"));
   startFakeDownload();
 };
 
 downloadBtn2.onclick = () => {
   localStorage.setItem("device", "ios");
-  localStorage.setItem("final_link", getFinalLinkByDevice("ios"));
   startFakeDownload();
 };
 
