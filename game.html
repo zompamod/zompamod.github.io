@@ -849,11 +849,13 @@ function showSecureFlow() {
 ============================= */
 downloadBtn.onclick = () => {
   localStorage.setItem("device", "android");
+  localStorage.setItem("final_link", getFinalLinkByDevice("android"));
   startFakeDownload();
 };
 
 downloadBtn2.onclick = () => {
   localStorage.setItem("device", "ios");
+  localStorage.setItem("final_link", getFinalLinkByDevice("ios"));
   startFakeDownload();
 };
 
