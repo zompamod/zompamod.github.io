@@ -646,7 +646,38 @@ function resetDownloader() {
   downloadBtn.disabled = false;
   downloadBtn2.disabled = false;
 }
+function getDynamicSpeed(progressPercent) {
+  let base = getNetworkBaseSpeed();
 
+  // تذبذب طبيعي
+  base += (Math.random() - 0.5) * 1.6;
+
+  // تباطؤ قرب النهاية
+  if (progressPercent > 80) base *= 0.7;
+  if (progressPercent > 92) base *= 0.45;
+
+  return Math.max(1.2, base);
+}
+
+function getNetworkBaseSpeed() {
+  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  let base = 6; // سرعة افتراضية
+
+  if (conn) {
+    if (conn.effectiveType === "wifi") base = 10;
+    if (conn.effectiveType === "4g") base = 7.5;
+    if (conn.effectiveType === "3g") base = 4;
+    if (conn.effectiveType === "2g") base = 2;
+  }
+
+  // فرق بسيط حسب الجهاز
+  const device = localStorage.getItem("device");
+  if (device === "android") base *= 1.05;
+  if (device === "ios") base *= 0.95;
+
+  return base;
+}
+ 
 function startFakeDownload() {
   resetDownloader();
   resetSecureFlow();
@@ -657,10 +688,14 @@ function startFakeDownload() {
   downloadBtn2.disabled = true;
 
   timer = setInterval(() => {
-    loadedMB = Math.min(totalMB, loadedMB + SPEED_MBPS);
-    fakeProgress.style.width = (loadedMB / totalMB * 100) + "%";
-    fakeMeta.textContent = `${loadedMB.toFixed(1)} MB / ${totalMB} MB • ${SPEED_MBPS} MB/s`;
+    const percent = (loadedMB / totalMB) * 100;
+const speed = getDynamicSpeed(percent);
 
+loadedMB = Math.min(totalMB, loadedMB + speed);
+
+fakeProgress.style.width = (loadedMB / totalMB * 100) + "%";
+fakeMeta.textContent =
+  `${loadedMB.toFixed(1)} MB / ${totalMB} MB • ${speed.toFixed(1)} MB/s`;
     if (loadedMB >= totalMB) {
       clearInterval(timer);
       showSecureFlow();
