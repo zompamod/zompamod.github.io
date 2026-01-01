@@ -614,17 +614,11 @@ function createSubid() {
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
  function markWentOffer() {
-  if (!offerLink || offerLink.dataset.locked === "1") return;
+  if (offerLink.dataset.locked === "1") return;
 
-  // تأكيد وجود subid صالح
-  if (!localStorage.getItem("subid")) {
-    createSubid();
-  }
-
+  createSubid(); // دائمًا subid جديد
   offerLink.dataset.locked = "1";
   localStorage.setItem("went_offer", "1");
-
-  // لا نمنع pointerEvents (مهم)
 }
 
 function isSubidExpired() {
@@ -753,8 +747,8 @@ function startVerifyPolling() {
     // ❌ FAILED
     if (t === "failed" || t === "not_completed") {
   clearInterval(verifyInterval);
-  showError();
-  setVerifyAgain(); // 👈 هذا الآن يعيد subid جديد
+  handleVerifyAgain();
+}
 
   closeNotice.style.display = "block";
   setTimeout(() => {
@@ -873,5 +867,29 @@ function resetVerifyText() {
   offerLink.style.background =
     "linear-gradient(90deg,var(--accent),var(--accent2))";
 }
-   
+   function handleVerifyAgain() {
+  // إيقاف أي عمليات
+  clearInterval(verifyInterval);
+  clearInterval(timer);
+
+  // تنظيف الحالة القديمة
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+
+  // إعادة تهيئة الزر
+  offerLink.textContent = "Verify Again";
+  offerLink.dataset.locked = "0";
+  offerLink.style.pointerEvents = "auto";
+  offerLink.style.background =
+    "linear-gradient(90deg,#ef4444,#f97316)";
+
+  // إخفاء الحالات
+  popupChecking.style.display = "none";
+  popupSuccess.style.display = "none";
+  popupError.style.display = "block";
+
+  // إيقاف polling تمامًا
+  verifyInterval = null;
+}
 </script>
