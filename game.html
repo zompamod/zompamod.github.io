@@ -614,15 +614,19 @@ function createSubid() {
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
  function markWentOffer() {
-  // منع النقر المزدوج فقط
+  // منع النقر المتكرر السريع فقط
   if (offerLink.dataset.locked === "1") return;
 
   offerLink.dataset.locked = "1";
+  offerLink.style.pointerEvents = "none";
+
   localStorage.setItem("went_offer", "1");
 
+  // فتح القفل بعد وقت قصير
   setTimeout(() => {
     offerLink.dataset.locked = "0";
-  }, 1500);
+    offerLink.style.pointerEvents = "auto";
+  }, 1200);
 }
 
 function isSubidExpired() {
