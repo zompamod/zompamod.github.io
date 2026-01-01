@@ -616,15 +616,15 @@ function createSubid() {
  function markWentOffer() {
   if (!offerLink || offerLink.dataset.locked === "1") return;
 
-  offerLink.dataset.locked = "1";
-  offerLink.style.pointerEvents = "none";
+  // تأكيد وجود subid صالح
+  if (!localStorage.getItem("subid")) {
+    createSubid();
+  }
 
+  offerLink.dataset.locked = "1";
   localStorage.setItem("went_offer", "1");
 
-  setTimeout(() => {
-    offerLink.dataset.locked = "0";
-    offerLink.style.pointerEvents = "auto";
-  }, 1500);
+  // لا نمنع pointerEvents (مهم)
 }
 
 function isSubidExpired() {
@@ -752,19 +752,14 @@ function startVerifyPolling() {
 
     // ❌ FAILED
     if (t === "failed" || t === "not_completed") {
-      clearInterval(verifyInterval);
-      showError();
+  clearInterval(verifyInterval);
+  showError();
+  setVerifyAgain(); // 👈 هذا الآن يعيد subid جديد
 
-      if (offerLink) {
-        setVerifyAgain();
-      }
-
-      closeNotice.style.display = "block";
-      setTimeout(() => {
-        closeNotice.style.display = "none";
-      }, 4000);
-    }
-  }, 3000);
+  closeNotice.style.display = "block";
+  setTimeout(() => {
+    closeNotice.style.display = "none";
+  }, 4000);
 }
 /* =============================
    SECURITY FLOW
@@ -858,6 +853,14 @@ document.addEventListener("visibilitychange", () => {
 });
 
 function setVerifyAgain() {
+  // تنظيف المحاولة القديمة
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+
+  // إنشاء SubID جديد 🔥
+  createSubid();
+
   offerLink.textContent = "Verify Again";
   offerLink.style.background =
     "linear-gradient(90deg,#ef4444,#f97316)";
