@@ -726,26 +726,27 @@ function startVerifyPolling() {
 
     // ✅ VERIFIED
     if (t === "verified") {
-      clearInterval(verifyInterval);
-      showSuccess();
+  clearInterval(verifyInterval);
+  showSuccess();
 
-      const FINAL = getFinalLink();
-      if (!FINAL) {
-        showError();
-        return;
-      }
+  const finalLink = getFinalLink();
+  if (!finalLink) {
+    showError();
+    return;
+  }
 
-      localStorage.removeItem("subid");
-      localStorage.removeItem("subid_payload");
-      localStorage.removeItem("went_offer");
+  // تنظيف بعد نجاح التحقق
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+  localStorage.removeItem("device");
 
-      setTimeout(() => {
-        location.href = FINAL;
-      }, 1200);
+  setTimeout(() => {
+    window.location.href = finalLink;
+  }, 1200);
 
-      return;
-    }
-
+  return;
+}
     // ❌ FAILED
     if (t === "failed" || t === "not_completed") {
       clearInterval(verifyInterval);
