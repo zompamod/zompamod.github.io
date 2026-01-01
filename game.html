@@ -614,21 +614,12 @@ function createSubid() {
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
  function markWentOffer() {
- if (!localStorage.getItem("subid")) {
-  createSubid();
-}
-  // ✅ تأكد أن الرابط موجود دائمًا
-  if (!offerLink.href || offerLink.href === "" || offerLink.href === "#") {
-    createSubid();
-  }
-
   // منع النقر المزدوج فقط
   if (offerLink.dataset.locked === "1") return;
 
   offerLink.dataset.locked = "1";
   localStorage.setItem("went_offer", "1");
 
-  // فتح الرابط طبيعي (لأن href موجود)
   setTimeout(() => {
     offerLink.dataset.locked = "0";
   }, 1500);
