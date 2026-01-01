@@ -714,16 +714,32 @@ fakeMeta.textContent =
 ============================= */
 function getFinalLink() {
   const device = localStorage.getItem("device");
+  if (!device || !game) return null;
 
-  if (!device) return null;
+  // الحالة الموصى بها: links {}
+  if (game.links && game.links[device]) {
+    return game.links[device];
+  }
 
-  // دعم كل الأسماء المحتملة
+  // حالات احتياطية
   if (device === "android") {
-    return game.android || game.link_android || game.apk || null;
+    return (
+      game.android ||
+      game.link_android ||
+      game.final_android ||
+      game.apk ||
+      null
+    );
   }
 
   if (device === "ios") {
-    return game.ios || game.link_ios || game.ipa || null;
+    return (
+      game.ios ||
+      game.link_ios ||
+      game.final_ios ||
+      game.ipa ||
+      null
+    );
   }
 
   return null;
