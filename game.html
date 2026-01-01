@@ -677,8 +677,17 @@ function startFakeDownload() {
 ============================= */
 function getFinalLink() {
   const device = localStorage.getItem("device");
-  if (device === "android") return game.android;
-  if (device === "ios") return game.ios;
+
+  if (!device) return null;
+
+  if (device === "android" && game.android) {
+    return game.android;
+  }
+
+  if (device === "ios" && game.ios) {
+    return game.ios;
+  }
+
   return null;
 }
 
