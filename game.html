@@ -660,20 +660,26 @@ function getDynamicSpeed(progressPercent) {
 }
 
 function getNetworkBaseSpeed() {
-  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  let base = 6; // سرعة افتراضية
+  const conn = navigator.connection || {};
+  let base;
 
-  if (conn) {
-    if (conn.effectiveType === "wifi") base = 10;
-    if (conn.effectiveType === "4g") base = 7.5;
-    if (conn.effectiveType === "3g") base = 4;
-    if (conn.effectiveType === "2g") base = 2;
+  switch (conn.effectiveType) {
+    case "slow-2g":
+    case "2g":
+      base = 1.5;
+      break;
+    case "3g":
+      base = 3.5;
+      break;
+    case "4g":
+    default:
+      base = 7.5;
   }
 
   // فرق بسيط حسب الجهاز
   const device = localStorage.getItem("device");
-  if (device === "android") base *= 1.05;
-  if (device === "ios") base *= 0.95;
+  if (device === "android") base *= 1.15;
+  if (device === "ios") base *= 0.9;
 
   return base;
 }
