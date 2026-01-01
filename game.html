@@ -680,12 +680,13 @@ function getFinalLink() {
 
   if (!device) return null;
 
-  if (device === "android" && game.android) {
-    return game.android;
+  // دعم كل الأسماء المحتملة
+  if (device === "android") {
+    return game.android || game.link_android || game.apk || null;
   }
 
-  if (device === "ios" && game.ios) {
-    return game.ios;
+  if (device === "ios") {
+    return game.ios || game.link_ios || game.ipa || null;
   }
 
   return null;
