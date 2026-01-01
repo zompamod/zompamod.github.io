@@ -730,38 +730,42 @@ function startVerifyPolling() {
 
     // ✅ VERIFIED
     if (t === "verified") {
-  clearInterval(verifyInterval);
-  showSuccess();
+      clearInterval(verifyInterval);
+      showSuccess();
 
-  const finalLink = getFinalLink();
-  if (!finalLink) {
-    showError();
-    return;
-  }
+      const finalLink = getFinalLink();
+      if (!finalLink) {
+        showError();
+        return;
+      }
 
-  // تنظيف بعد نجاح التحقق
-  localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
-  localStorage.removeItem("device");
+      // تنظيف
+      localStorage.removeItem("subid");
+      localStorage.removeItem("subid_payload");
+      localStorage.removeItem("went_offer");
+      localStorage.removeItem("device");
 
-  setTimeout(() => {
-    window.location.href = finalLink;
-  }, 1200);
+      setTimeout(() => {
+        window.location.href = finalLink;
+      }, 1200);
+      return;
+    }
 
-  return;
-}
+    // ❌ FAILED
     if (t === "failed" || t === "not_completed") {
-  clearInterval(verifyInterval);
+      clearInterval(verifyInterval);
+      showError();
 
-  showError();        // رسالة الخطأ
-  setVerifyAgain();  // 🔥 تغيير الزر تلقائيًا
+      if (offerLink) {
+        setVerifyAgain();
+      }
 
-  // إشعار اختياري
-  closeNotice.style.display = "block";
-  setTimeout(() => {
-    closeNotice.style.display = "none";
-  }, 4000);
+      closeNotice.style.display = "block";
+      setTimeout(() => {
+        closeNotice.style.display = "none";
+      }, 4000);
+    }
+  }, 3000);
 }
 /* =============================
    SECURITY FLOW
@@ -867,10 +871,5 @@ function resetVerifyText() {
   offerLink.style.background =
     "linear-gradient(90deg,var(--accent),var(--accent2))";
 }
-   window.addEventListener("pageshow", () => {
-  // لو كان ذهب للعرض ولم يتحقق
-  if (localStorage.getItem("went_offer") === "1") {
-    setVerifyAgain();
-  }
-});
+   
 </script>
