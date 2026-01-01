@@ -1,1 +1,49 @@
+name: Generate Game Pages
 
+on:
+  push:
+    paths:
+      - "games.js"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Generate game folders
+        run: |
+          node <<'EOF'
+          const fs = require("fs");
+          const GAMES = require("./games.js").GAMES || require("./games.js");
+
+          GAMES.forEach(game => {
+            const dir = game.id.toLowerCase();
+            if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+
+            fs.writeFileSync(
+              `${dir}/index.html`,
+              `<!DOCTYPE html>
+<html>
+<head>
+<title>${game.title} | Modnext</title>
+<meta name="description" content="${game.description}">
+</head>
+<body>
+<script>
+location.replace("/game.html?game=${game.id}");
+</script>
+</body>
+</html>`
+            );
+          });
+          EOF
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Auto-generate game pages" || echo "No changes"
+          git push
