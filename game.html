@@ -649,14 +649,14 @@ function resetDownloader() {
 function getDynamicSpeed(progressPercent) {
   let base = getNetworkBaseSpeed();
 
-  // تذبذب طبيعي
-  base += (Math.random() - 0.5) * 1.6;
+  // تذبذب واضح
+  base += (Math.random() - 0.5) * 3; // ⬅️ أكبر
 
-  // تباطؤ قرب النهاية
+  // تباطؤ طبيعي قرب النهاية
   if (progressPercent > 80) base *= 0.7;
   if (progressPercent > 92) base *= 0.45;
 
-  return Math.max(1.2, base);
+  return Math.max(1.1, base);
 }
 
 function getNetworkBaseSpeed() {
