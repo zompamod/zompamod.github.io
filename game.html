@@ -732,7 +732,6 @@ function startVerifyPolling() {
         return;
       }
 
-      // تنظيف
       localStorage.removeItem("subid");
       localStorage.removeItem("subid_payload");
       localStorage.removeItem("went_offer");
@@ -746,14 +745,15 @@ function startVerifyPolling() {
 
     // ❌ FAILED
     if (t === "failed" || t === "not_completed") {
-  clearInterval(verifyInterval);
-  handleVerifyAgain();
-}
+      clearInterval(verifyInterval);
+      handleVerifyAgain();
 
-  closeNotice.style.display = "block";
-  setTimeout(() => {
-    closeNotice.style.display = "none";
-  }, 4000);
+      closeNotice.style.display = "block";
+      setTimeout(() => {
+        closeNotice.style.display = "none";
+      }, 4000);
+    }
+  }, 2000);
 }
 /* =============================
    SECURITY FLOW
