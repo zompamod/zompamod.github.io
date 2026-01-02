@@ -638,22 +638,21 @@ function createSubid() {
 
   // ✅ verify_start (مرة واحدة فقط)
   if (!localStorage.getItem("verify_started")) {
-    gtag("event", "verify_start", {
-      game_id: gameId,
-      device: localStorage.getItem("device") || "unknown"
-    });
-    localStorage.setItem("verify_started", "1");
-  }
-
-  // 📊 offer_click
-  gtag("event", "offer_click", {
+  gtag("event", "verify_start", {
     game_id: gameId,
     device: localStorage.getItem("device") || "unknown"
   });
-console.log("offer_click fired", gameId);
-  // منطق الزر
-  markWentOffer();
+  localStorage.setItem("verify_started", "1");
 }
+
+  // 📊 offer_click
+  gtag("event", "offer_click", {
+  game_id: gameId,
+  device: localStorage.getItem("device") || "unknown",
+  event_callback: () => {
+    markWentOffer(); // لا يبدأ المنطق إلا بعد تسجيل الحدث
+  }
+});
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
 
