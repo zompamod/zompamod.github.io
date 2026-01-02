@@ -641,9 +641,18 @@ function createSubid() {
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
 
-  createSubid(); // دائمًا subid جديد
+  createSubid(); // إنشاء subid
   offerLink.dataset.locked = "1";
   localStorage.setItem("went_offer", "1");
+
+  // 🔥 GOOGLE ANALYTICS EVENT
+  if (typeof gtag === "function") {
+    gtag("event", "offer_click", {
+      game_id: gameId,
+      device: localStorage.getItem("device"),
+      subid: localStorage.getItem("subid")
+    });
+  }
 }
 
 function isSubidExpired() {
