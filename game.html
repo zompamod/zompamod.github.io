@@ -799,33 +799,35 @@ function startVerifyPolling() {
     }
 
     // ✅ VERIFIED
-    if (t === "verified") {
+   if (t === "verified") {
   clearInterval(verifyInterval);
   showSuccess();
 
+  // ✅ احفظ القيم مبكرًا
+  const device = localStorage.getItem("device");
   const finalLink = getFinalLink();
-  if (!finalLink) {
+
+  if (!finalLink || !device) {
     showError();
     return;
   }
 
-  // 🔹 أرسل Analytics أولاً
+  // 📊 Analytics
   if (typeof gtag === "function") {
     gtag("event", "download_success", {
       game_id: gameId,
-      device: localStorage.getItem("device")
+      device: device
     });
   }
 
-  // 🔹 نظّف بعد الإرسال
+  // 🧹 تنظيف
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
+  localStorage.removeItem("device");
 
-  // 🔹 انتظر قليلًا ثم التحويل
+  // ⏳ تحويل آمن
   setTimeout(() => {
-    const d = localStorage.getItem("device"); // احفظه مؤقتًا
-    localStorage.removeItem("device");
     window.location.href = finalLink;
   }, 1500);
 }
