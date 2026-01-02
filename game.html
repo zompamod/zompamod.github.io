@@ -641,17 +641,24 @@ function createSubid() {
  function trackOfferClick() {
   if (offerLink.dataset.locked === "1") return;
 
-  // 📊 Google Analytics (مرة واحدة فقط)
-  if (typeof gtag === "function") {
-    gtag("event", "offer_click", {
+  // ✅ verify_start (مرة واحدة فقط)
+  if (!localStorage.getItem("verify_started")) {
+    gtag("event", "verify_start", {
       game_id: gameId,
       device: localStorage.getItem("device") || "unknown"
     });
+    localStorage.setItem("verify_started", "1");
   }
+
+  // 📊 offer_click
+  gtag("event", "offer_click", {
+    game_id: gameId,
+    device: localStorage.getItem("device") || "unknown"
+  });
+
   // منطق الزر
   markWentOffer();
- }
-
+}
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
 
