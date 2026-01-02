@@ -199,6 +199,13 @@ function render(list){
       <div class="stars">${g.stars}</div>
     `;
     card.onclick = () => {
+
+  if (typeof gtag === "function") {
+    gtag("event", "open_game", {
+      game_id: g.id
+    });
+  }
+
   location.hash = g.id.toLowerCase();
 };
     grid.appendChild(card);
@@ -207,6 +214,13 @@ function render(list){
 
 search.oninput = e => {
   const v = e.target.value.toLowerCase();
+
+  if (v.length >= 3 && typeof gtag === "function") {
+    gtag("event", "search_game", {
+      query: v
+    });
+  }
+
   render(GAMES.filter(g => g.title.toLowerCase().includes(v)));
 };
 
@@ -267,6 +281,11 @@ setInterval(() => {
   }
 }, 2500);
 </script>
+  <script>
+if (typeof gtag === "function") {
+  gtag("event", "home_view");
+}
+  </script>
   
 </body>
 </html>
