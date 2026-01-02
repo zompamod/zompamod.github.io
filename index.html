@@ -2,8 +2,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <head>
+<head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Modnext.com – Games</title>
 
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-RYXLFC2ER8"></script>
@@ -11,16 +14,12 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-RYXLFC2ER8');
+    gtag('config', 'G-RYXLFC2ER8', {
+      page_path: location.pathname + location.search
+    });
   </script>
 
-</head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Modnext.com– Games</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#070504;
@@ -282,10 +281,11 @@ setInterval(() => {
 }, 2500);
 </script>
   <script>
-if (typeof gtag === "function") {
+if (typeof gtag === "function" && !sessionStorage.getItem("home_viewed")) {
   gtag("event", "home_view");
+  sessionStorage.setItem("home_viewed", "1");
 }
-  </script>
+</script>
   
 </body>
 </html>
