@@ -801,6 +801,7 @@ function showSuccess() {
   popupSuccess.style.display = "block";
 }
 
+
 function startVerifyPolling() {
   clearInterval(verifyInterval);
 
@@ -818,42 +819,50 @@ function startVerifyPolling() {
       return;
     }
 
-    // ✅ VERIFIED
-   if (t === "verified") {
-  clearInterval(verifyInterval);
-  showSuccess();
+    /* ======================
+       ✅ VERIFIED
+    ====================== */
+    if (t === "verified") {
+      clearInterval(verifyInterval);
+      showSuccess();
 
-  // ✅ احفظ القيم مبكرًا
-  const device = localStorage.getItem("device");
-  const finalLink = getFinalLink();
+      const device = localStorage.getItem("device");
+      const finalLink = getFinalLink();
 
-  if (!finalLink || !device) {
-    showError();
-    return;
-  }
+      if (!finalLink || !device) {
+        showError();
+        return;
+      }
 
-  // 📊 Analytics
-  if (typeof gtag === "function") {
-    gtag("event", "download_success", {
-      game_id: gameId,
-      device: device
-    });
-  }
+      // 📊 GA4 – download_success (مضمون)
+      if (typeof gtag === "function") {
+        gtag("event", "download_success", {
+          game_id: gameId,
+          device: device,
+          event_callback: () => {
+            setTimeout(() => {
+              window.location.href = finalLink;
+            }, 500);
+          }
+        });
+      } else {
+        // احتياط في حال GA غير جاهز
+        window.location.href = finalLink;
+      }
 
-  // 🧹 تنظيف
-  localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
-  localStorage.removeItem("verify_started");
-  localStorage.removeItem("device");
+      // 🧹 تنظيف بعد إرسال الحدث
+      localStorage.removeItem("subid");
+      localStorage.removeItem("subid_payload");
+      localStorage.removeItem("went_offer");
+      localStorage.removeItem("verify_started");
+      localStorage.removeItem("device");
 
-  // ⏳ تحويل آمن
-  setTimeout(() => {
-    window.location.href = finalLink;
-  }, 1500);
-}
+      return;
+    }
 
-    // ❌ FAILED
+    /* ======================
+       ❌ FAILED / NOT COMPLETED
+    ====================== */
     if (t === "failed" || t === "not_completed") {
       clearInterval(verifyInterval);
       handleVerifyAgain();
@@ -863,8 +872,9 @@ function startVerifyPolling() {
         closeNotice.style.display = "none";
       }, 4000);
     }
+
   }, 2000);
-}
+ }
 /* =============================
    SECURITY FLOW
 ============================= */
