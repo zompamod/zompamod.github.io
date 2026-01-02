@@ -13,6 +13,11 @@
   gtag('config', 'G-RYXLFC2ER8', {
     page_path: location.pathname + location.search
   });
+ gtag('event', 'page_view', {
+  page_title: document.title,
+  page_location: location.href,
+  page_path: location.pathname + location.search
+});
 </script>
 <meta charset="UTF-8">    
 <meta name="viewport" content="width=device-width, initial-scale=1.0">    
