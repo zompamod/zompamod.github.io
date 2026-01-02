@@ -872,12 +872,13 @@ function resetSecureFlow() {
 }
 
 function showSecureFlow() {
-  if (typeof gtag === "function") {
+  // 📊 Analytics: verify start
+if (typeof gtag === "function") {
   gtag("event", "verify_start", {
     game_id: gameId,
-    device: localStorage.getItem("device")
+    device: localStorage.getItem("device") || "unknown"
   });
- }
+}
  
  secureOverlay.style.display = "flex";
   const steps = [
