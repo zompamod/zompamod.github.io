@@ -3,13 +3,17 @@
 <html lang="en">  
 <head>
  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RYXLFC2ER8"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-RYXLFC2ER8');
-  </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RYXLFC2ER8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  // تسجيل الصفحة مع query ?game=
+  gtag('config', 'G-RYXLFC2ER8', {
+    page_path: location.pathname + location.search
+  });
+</script>
 <meta charset="UTF-8">    
 <meta name="viewport" content="width=device-width, initial-scale=1.0">    
 <title>Roblox Mod APK V2 – Unlimited Features</title>    
@@ -500,7 +504,15 @@ if (!location.search.includes("game=")) {
 ============================= */
 const params = new URLSearchParams(window.location.search);
 const gameId = params.get("game");
-
+/* =============================
+   GOOGLE ANALYTICS – VIEW GAME
+============================= */
+if (typeof gtag === "function" && gameId) {
+  gtag("event", "view_game", {
+    game_id: gameId,
+    page_location: location.href
+  });
+}
 const game = GAMES.find(g => g.id === gameId);
 
 if (!game) {
@@ -802,7 +814,15 @@ function startVerifyPolling() {
       localStorage.removeItem("went_offer");
       
       setTimeout(() => {
-  window.location.href = finalLink;
+ 
+       if (typeof gtag === "function") {
+  gtag("event", "download_success", {
+    game_id: gameId,
+    device: localStorage.getItem("device")
+  });
+ }
+      
+       window.location.href = finalLink;
   localStorage.removeItem("device"); // ✅ هنا فقط
 }, 1200);
     }
@@ -856,11 +876,27 @@ function showSecureFlow() {
 ============================= */
 downloadBtn.onclick = () => {
   localStorage.setItem("device", "android");
+
+  if (typeof gtag === "function") {
+    gtag("event", "download_click", {
+      game_id: gameId,
+      device: "android"
+    });
+  }
+
   startFakeDownload();
 };
 
 downloadBtn2.onclick = () => {
   localStorage.setItem("device", "ios");
+
+  if (typeof gtag === "function") {
+    gtag("event", "download_click", {
+      game_id: gameId,
+      device: "ios"
+    });
+  }
+
   startFakeDownload();
 };
 
