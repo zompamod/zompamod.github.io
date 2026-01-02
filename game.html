@@ -880,15 +880,7 @@ function resetSecureFlow() {
 }
 
 function showSecureFlow() {
-  // 📊 Analytics: verify start
-if (typeof gtag === "function") {
-  gtag("event", "verify_start", {
-    game_id: gameId,
-    device: localStorage.getItem("device") || "unknown"
-  });
-}
- 
- secureOverlay.style.display = "flex";
+secureOverlay.style.display = "flex";
   const steps = [
     { el: step1, bar: 25, delay: 1500 },
     { el: step2, bar: 50, delay: 1000 },
