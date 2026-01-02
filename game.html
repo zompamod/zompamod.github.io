@@ -611,27 +611,26 @@ function createSubid() {
 }
 
  function trackOfferClick() {
-  console.log("verify_start fired");
   if (offerLink.dataset.locked === "1") return;
 
-  // ✅ verify_start (مرة واحدة فقط)
+  // 🔥 أنشئ الرابط فورًا (بدون انتظار)
+  markWentOffer();
+
+  // ✅ verify_start (مرة واحدة)
   if (!localStorage.getItem("verify_started")) {
-  gtag("event", "verify_start", {
+    gtag("event", "verify_start", {
+      game_id: gameId,
+      device: localStorage.getItem("device") || "unknown"
+    });
+    localStorage.setItem("verify_started", "1");
+  }
+
+  // 📊 offer_click (خلفية فقط)
+  gtag("event", "offer_click", {
     game_id: gameId,
     device: localStorage.getItem("device") || "unknown"
   });
-  localStorage.setItem("verify_started", "1");
 }
-
-  // 📊 offer_click
-  gtag("event", "offer_click", {
-  game_id: gameId,
-  device: localStorage.getItem("device") || "unknown",
-  event_callback: () => {
-    markWentOffer(); // لا يبدأ المنطق إلا بعد تسجيل الحدث
-  }
-});
- }
   // ✅ دالة مستقلة
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
