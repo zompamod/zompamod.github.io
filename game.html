@@ -1,5 +1,4 @@
-
- <!DOCTYPE html>  
+<!DOCTYPE html>  
 <html lang="en">  
 <head>
  <!-- Google Analytics -->
@@ -638,6 +637,20 @@ function createSubid() {
   }));
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
+
+ function trackOfferClick() {
+
+  if (typeof gtag === "function") {
+    gtag("event", "offer_click", {
+      game_id: gameId,
+      device: localStorage.getItem("device")
+    });
+  }
+
+  setTimeout(() => {
+    markWentOffer();
+  }, 200);
+ }
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
 
