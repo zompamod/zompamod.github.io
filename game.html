@@ -497,9 +497,7 @@ if (!location.search.includes("game=")) {
    GET GAME FROM URL
 ============================= */
 
-/* =============================
-   GET GAME FROM URL
-============================= */
+
 const params = new URLSearchParams(window.location.search);
 const gameId = params.get("game");
 /* =============================
@@ -531,27 +529,7 @@ if (!metaDesc) {
 }
 metaDesc.content = game.description;
 
-/* =============================
-   FILL PAGE CONTENT
-============================= */
 
-// Title
-const titleEl = document.querySelector(".hero h1");
-if (titleEl) titleEl.textContent = game.title;
-
-// Image
-const imgEl = document.querySelector(".hero img");
-if (imgEl) imgEl.src = game.image;
-
-// Rating ✅
-const ratingEl = document.getElementById("gameRating");
-if (ratingEl && game.rating) {
-  ratingEl.textContent = game.rating;
-}
-
-// Description ✅
-const descEl = document.getElementById("gameDescription");
-if (descEl) descEl.textContent = game.description;
 
 /* =============================
    DOM ELEMENTS
@@ -1035,4 +1013,28 @@ function resetVerifyText() {
   // إيقاف polling تمامًا
   verifyInterval = null;
 }
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+  // Title
+  const titleEl = document.querySelector(".hero h1");
+  if (titleEl) titleEl.textContent = game.title;
+
+  // Image
+  const imgEl = document.querySelector(".hero img");
+  if (imgEl) imgEl.src = game.image;
+
+  // Rating
+  const ratingEl = document.getElementById("gameRating");
+  if (ratingEl && game.rating) {
+    ratingEl.textContent = game.rating;
+  }
+
+  // Description
+  const descEl = document.getElementById("gameDescription");
+  if (descEl && game.description) {
+    descEl.textContent = game.description;
+  }
+
+});
 </script>
