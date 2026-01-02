@@ -863,8 +863,15 @@ function showSecureFlow() {
   function run() {
     if (i >= steps.length) {
       secureOverlay.style.display = "none";
-      overlay.style.display = "flex";
-      startVerifyPolling();
+overlay.style.display = "flex";
+
+// ✅ أظهر checking فورًا
+showChecking();
+
+// ⏳ انتظر قليلًا لضمان وجود subid
+setTimeout(() => {
+  startVerifyPolling();
+}, 300);
       return;
     }
     steps[i].el.classList.add("active");
