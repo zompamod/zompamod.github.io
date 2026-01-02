@@ -800,32 +800,35 @@ function startVerifyPolling() {
 
     // ✅ VERIFIED
     if (t === "verified") {
-      clearInterval(verifyInterval);
-      showSuccess();
+  clearInterval(verifyInterval);
+  showSuccess();
 
-      const finalLink = getFinalLink();
-      if (!finalLink) {
-        showError();
-        return;
-      }
+  const finalLink = getFinalLink();
+  if (!finalLink) {
+    showError();
+    return;
+  }
 
-      localStorage.removeItem("subid");
-      localStorage.removeItem("subid_payload");
-      localStorage.removeItem("went_offer");
-      
-      setTimeout(() => {
- 
-       if (typeof gtag === "function") {
-  gtag("event", "download_success", {
-    game_id: gameId,
-    device: localStorage.getItem("device")
-  });
- }
-      
-       window.location.href = finalLink;
-  localStorage.removeItem("device"); // ✅ هنا فقط
-}, 1200);
-    }
+  // 🔹 أرسل Analytics أولاً
+  if (typeof gtag === "function") {
+    gtag("event", "download_success", {
+      game_id: gameId,
+      device: localStorage.getItem("device")
+    });
+  }
+
+  // 🔹 نظّف بعد الإرسال
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+
+  // 🔹 انتظر قليلًا ثم التحويل
+  setTimeout(() => {
+    const d = localStorage.getItem("device"); // احفظه مؤقتًا
+    localStorage.removeItem("device");
+    window.location.href = finalLink;
+  }, 1500);
+}
 
     // ❌ FAILED
     if (t === "failed" || t === "not_completed") {
