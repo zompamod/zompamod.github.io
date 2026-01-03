@@ -418,7 +418,7 @@ button{will-change:transform,box-shadow}
   
   <div id="fakeLoader">    
     <div id="fakeBar"><div id="fakeProgress"></div></div>    
-    <div id="fakeText">Preparing APK…</div>    
+    <div id="fakeText">Preparing your file…</div>    
     <div id="fakeMeta">0 MB / 154.27 MB • 0 MB/s</div>    
   </div>    
 </div>    
@@ -665,7 +665,7 @@ function resetDownloader() {
   clearInterval(verifyInterval);
   fakeLoader.style.display = "none";
   fakeProgress.style.width = "0%";
-  fakeText.textContent = "Preparing download…";
+  fakeText.textContent = "Preparing your file…";
   fakeMeta.textContent = `0 MB / ${totalMB} MB • 0 MB/s`;
   loadedMB = 0;
   downloadBtn.disabled = false;
