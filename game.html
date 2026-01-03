@@ -939,6 +939,15 @@ downloadBtn2.onclick = () => {
    
 
  function closePopup() {
+  // 📊 GA4 – cancel_verification
+  if (typeof gtag === "function") {
+    gtag("event", "verify_cancel", {
+      game_id: gameId,
+      device: localStorage.getItem("device") || "unknown",
+      reason: "user_closed_popup"
+    });
+  }
+  
   clearInterval(verifyInterval);
   clearInterval(timer);
 
