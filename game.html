@@ -613,10 +613,7 @@ function createSubid() {
  function trackOfferClick() {
   if (offerLink.dataset.locked === "1") return;
 
-  // 🔥 أنشئ الرابط فورًا (بدون انتظار)
-  markWentOffer();
-
-  // ✅ verify_start (مرة واحدة)
+  // 1️⃣ verify_start (مرة واحدة)
   if (!localStorage.getItem("verify_started")) {
     gtag("event", "verify_start", {
       game_id: gameId,
@@ -625,11 +622,20 @@ function createSubid() {
     localStorage.setItem("verify_started", "1");
   }
 
-  // 📊 offer_click (خلفية فقط)
+  // 2️⃣ إنشاء subid فورًا
+  createSubid();
+  localStorage.setItem("went_offer", "1");
+  offerLink.dataset.locked = "1";
+
+  // 3️⃣ إرسال offer_click (غير معطل للتنقل)
   gtag("event", "offer_click", {
     game_id: gameId,
-    device: localStorage.getItem("device") || "unknown"
+    device: localStorage.getItem("device") || "unknown",
+    transport_type: "beacon" // 🚀 لا ينتظر
   });
+
+  // 4️⃣ فتح الرابط فورًا (أقصى سرعة)
+  window.open(offerLink.href, "_blank");
 }
   // ✅ دالة مستقلة
  function markWentOffer() {
