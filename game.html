@@ -963,7 +963,7 @@ downloadBtn2.onclick = () => {
       game_id: gameId
     });
   }
-
+localStorage.removeItem("verify_attempts");
   // 💰 Monetag عند الإلغاء
   loadMonetag();
 
