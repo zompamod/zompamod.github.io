@@ -808,43 +808,52 @@ function startVerifyPolling() {
        ✅ VERIFIED
     ====================== */
     if (t === "verified") {
-      clearInterval(verifyInterval);
-      showSuccess();
+  clearInterval(verifyInterval);
+  showSuccess();
 
-      const device = localStorage.getItem("device");
-      const finalLink = getFinalLink();
+  const device =
+    localStorage.getItem("device") ||
+    sessionStorage.getItem("device");
 
-      if (!finalLink || !device) {
-        showError();
-        return;
+  const finalLink = getFinalLink();
+
+  if (!finalLink) {
+    console.error("FINAL LINK NULL", game);
+    showError();
+    return;
+  }
+
+  let redirected = false;
+
+  if (typeof gtag === "function") {
+    gtag("event", "download_success", {
+      game_id: gameId,
+      device: device,
+      event_callback: () => {
+        redirected = true;
+        window.location.assign(finalLink);
       }
+    });
+  }
 
-      // 📊 GA4 – download_success (مضمون)
-      if (typeof gtag === "function") {
-        gtag("event", "download_success", {
-          game_id: gameId,
-          device: device,
-          event_callback: () => {
-            setTimeout(() => {
-              window.location.href = finalLink;
-            }, 500);
-          }
-        });
-      } else {
-        // احتياط في حال GA غير جاهز
-        window.location.href = finalLink;
-      }
-
-      // 🧹 تنظيف بعد إرسال الحدث
-      localStorage.removeItem("verify_attempts");
-      localStorage.removeItem("subid");
-      localStorage.removeItem("subid_payload");
-      localStorage.removeItem("went_offer");
-      localStorage.removeItem("verify_started");
-      localStorage.removeItem("device");
-
-      return;
+  // ⛑️ تحويل إجباري (حل TikTok / Adblock)
+  setTimeout(() => {
+    if (!redirected) {
+      window.location.assign(finalLink);
     }
+  }, 1200);
+
+  // 🧹 تنظيف
+  localStorage.removeItem("verify_attempts");
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+  localStorage.removeItem("verify_started");
+  localStorage.removeItem("device");
+  sessionStorage.removeItem("device");
+
+  return;
+}
 
     /* ======================
        ❌ FAILED / NOT COMPLETED
@@ -1053,7 +1062,7 @@ if (attempts >= 2) {
   // إيقاف polling تمامًا
   verifyInterval = null;
 }
-
+<script>
   document.addEventListener("DOMContentLoaded", () => {
 
   // Title
@@ -1084,7 +1093,7 @@ if (imgEl && game.image) {
   }
 
 });
-
+</script>
  <script>
 function loadMonetag() {
   if (window.monetagLoaded) return; // منع التكرار
