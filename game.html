@@ -893,19 +893,6 @@ secureOverlay.style.display = "flex";
       secureOverlay.style.display = "none";
 overlay.style.display = "flex";
 
-// ✅ أظهر checking فورًا
-showChecking();
-     if (!localStorage.getItem("verify_started")) {
-  gtag("event", "verify_start", {
-    game_id: gameId,
-    device:
-      localStorage.getItem("device") ||
-      sessionStorage.getItem("device") ||
-      "unknown"
-  });
-  localStorage.setItem("verify_started", "1");
- }
-
 // ⏳ انتظر قليلًا لضمان وجود subid
 setTimeout(() => {
   startVerifyPolling();
