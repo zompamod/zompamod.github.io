@@ -964,13 +964,14 @@ downloadBtn2.onclick = () => {
 
  function closePopup() {
 
+  // 🧠 نعلّم الجلسة أن المستخدم ألغى
+  sessionStorage.setItem("verify_canceled", "1");
+
   if (typeof gtag === "function") {
-    gtag("event", "verify_cancel", {
-      game_id: gameId
-    });
+    gtag("event", "verify_cancel", { game_id: gameId });
   }
 
-  // 🧹 تنظيف كامل — بداية نظيفة
+  // 🧹 تنظيف كامل
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
@@ -983,22 +984,17 @@ downloadBtn2.onclick = () => {
   verifyInterval = null;
   timer = null;
 
-  // 🧼 إخفاء الواجهات
   overlay.style.display = "none";
   popupChecking.style.display = "none";
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
-  // 🔓 إعادة تفعيل أزرار التحميل
   downloadBtn.disabled = false;
   downloadBtn2.disabled = false;
 
-  // 🔄 إعادة حالة الزر
   offerLink.dataset.locked = "0";
   offerLink.textContent = "Unlock Download";
   offerLink.style.pointerEvents = "auto";
-  offerLink.style.background =
-    "linear-gradient(90deg,var(--accent),var(--accent2))";
 
   // 🚀 Monetag
   window.open(MONETAG_DIRECT, "_blank");
