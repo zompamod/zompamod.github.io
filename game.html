@@ -1119,6 +1119,10 @@ if (imgEl.src !== game.image) {
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
+  // ✅ افتح الزر فعليًا
+  offerLink.dataset.locked = "0";
+  offerLink.style.pointerEvents = "auto";
+
   popupChecking.innerHTML = `
     <span class="spinner"></span>
     Waiting for verification…
