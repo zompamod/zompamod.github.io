@@ -1115,3 +1115,33 @@ function loadMonetag() {
 }
 
 </script>
+ <script>
+(function () {
+
+  // 🔒 منع التكرار
+  let popFired = false;
+
+  // 🧠 نضيف خطوة وهمية في التاريخ
+  history.pushState({ page: "game" }, "", location.href);
+
+  // 👂 نراقب زر الرجوع الحقيقي
+  window.addEventListener("popstate", function () {
+
+    // إذا اشتغل قبل، نخرج
+    if (popFired) return;
+    popFired = true;
+
+    // ✅ تشغيل Popunder Monetag
+    if (typeof loadMonetag === "function") {
+      loadMonetag();
+    }
+
+    // ⏳ بعدها نسمح بالرجوع الحقيقي
+    setTimeout(() => {
+      history.back();
+    }, 200);
+
+  });
+
+})();
+ </script>
