@@ -895,6 +895,13 @@ overlay.style.display = "flex";
 
 // ⏳ انتظر قليلًا لضمان وجود subid
 setTimeout(() => {
+  // ✅ أنشئ subid فورًا
+  if (!localStorage.getItem("subid")) {
+    createSubid();
+    localStorage.setItem("went_offer", "1");
+  }
+
+  // ✅ ابدأ التحقق
   startVerifyPolling();
 }, 300);
       return;
