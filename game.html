@@ -985,16 +985,23 @@ localStorage.removeItem("verify_attempts");
 }
 
 function goHome() {
+
+  // 📊 تتبع Analytics
   if (typeof gtag === "function") {
     gtag("event", "back_clicked", {
       game_id: gameId
     });
   }
 
-  // رجوع طبيعي (سيتم التقاطه بالـ popstate)
-  history.back();
-}
+  // 🔥 تشغيل Popunder في تفاعل المستخدم
+  loadMonetag();  
 
+  // ⏳ تأخير بسيط قبل الرجوع حتى يكون Popunder معتبرًا
+  setTimeout(() => {
+    // رجوع إلى الصفحة الرئيسية أو صفحة سابقة
+    window.location.assign("index.html");
+  }, 300); 
+}
 function setVerifyAgain() {
   // تنظيف المحاولة القديمة
   localStorage.removeItem("subid");
