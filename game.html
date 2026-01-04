@@ -173,3 +173,423 @@ footer{padding:20px;text-align:center;color:#c4a27a;font-size:13px}
 }
 </style>
 </head>
+  
+<body>
+
+<header>
+  <div class="header-left">
+    <img src="https://i.imgur.com/x5uKfGJ.png">
+    <span>Modnext</span>
+  </div>
+
+  <button class="back-btn" onclick="goHome()" aria-label="Back">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+      <path d="M15 18l-6-6 6-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+    </svg>
+  </button>
+</header>
+
+<section class="hero">
+  <img id="gameImage" src="">
+  <h1 id="gameTitle"></h1>
+  <div id="gameRating" class="rating"></div>
+  <p id="gameDescription"></p>
+
+  <div class="download-box">
+    <button id="downloadBtn">
+      <img src="https://i.imgur.com/0CDI4Yq.png" alt="Android">
+      Download APK
+    </button>
+
+    <button id="downloadBtn2">
+      <img src="https://i.imgur.com/OvpX7m5.png" alt="iOS">
+      Download
+    </button>
+
+    <div id="fakeLoader">
+      <div id="fakeBar">
+        <div id="fakeProgress"></div>
+      </div>
+      <div id="fakeText">Preparing download…</div>
+      <div id="fakeMeta">0 MB / 154.27 MB • 0 MB/s</div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature">✔ Unlimited Features Enabled</div>
+  <div class="feature">✔ No Root Required</div>
+  <div class="feature">✔ Latest Version</div>
+  <div class="feature">✔ Fast & Secure Download</div>
+</section>
+
+<!-- ================= SECURITY FLOW ================= -->
+<div id="secureOverlay">
+  <div class="secureBox">
+    <svg class="secure-spinner" xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 24 24" width="50" height="50">
+      <path fill="none" stroke="currentColor" stroke-width="2"
+        d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm7.94-2a7.98 7.98 0 0 0 0-2l2.07-1.6-2-3.46-2.45 1a7.968 7.968 0 0 0-1.73-1L15 2h-6l-.73 2.44a7.968 7.968 0 0 0-1.73 1l-2.45-1-2 3.46 2.07 1.6a7.98 7.98 0 0 0 0 2L2.16 14l2 3.46 2.45-1a7.968 7.968 0 0 0 1.73 1L9 22h6l.73-2.44a7.968 7.968 0 0 0 1.73-1l2.45 1 2-3.46-2.07-1.6z"/>
+    </svg>
+
+    <h3>Final Security Check</h3>
+
+    <div id="step1" class="secure-step">✔ File integrity verified</div>
+    <div id="step2" class="secure-step">✔ Malware & virus scan completed</div>
+    <div id="step3" class="secure-step">✔ Download server authenticated</div>
+    <div id="step4" class="secure-step">⚠ Human verification required</div>
+
+    <div class="secure-progress">
+      <div id="secureBar" class="secure-bar"></div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2025 Modnext.com — All rights reserved</footer>
+
+<!-- ================= POPUP ================= -->
+<div id="overlay">
+  <div id="popup">
+
+    <img src="https://i.imgur.com/f0RrI6E.png" class="popup-lock" alt="Secure Lock">
+
+    <h2>File Almost Ready</h2>
+    <p>
+      Complete this quick step to start downloading.<br><br>
+      1: Tap "Continue" and complete one offer (takes less than 30 seconds).<br>
+      2: Return to this page and your download will start automatically.
+    </p>
+
+    <div id="popupChecking" class="popup-status checking">
+      <span class="spinner"></span>
+      Preparing download…
+    </div>
+
+    <div id="popupError" class="popup-status error">
+      The verification was not completed successfully, please try again.
+    </div>
+
+    <div id="popupSuccess" class="popup-status success">
+      ✅ Verification completed successfully.<br>
+      Download will start shortly…
+    </div>
+
+    <a id="offerLink" target="_blank">Continue</a>
+    <button onclick="closePopup()">Later</button>
+  </div>
+</div>
+
+<div id="closeNotice" class="toast-notice">
+  Please complete the verification process and the download will be completed automatically ⚠️
+</div>
+
+</body>
+
+<script>
+/* ======================================================
+   BASIC CHECK
+====================================================== */
+if (!location.search.includes("game=")) {
+  location.replace("index.html");
+}
+
+/* ======================================================
+   GET GAME
+====================================================== */
+const params = new URLSearchParams(location.search);
+const gameId = params.get("game");
+const game = GAMES.find(g => g.id === gameId);
+
+if (!game) {
+  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
+  throw new Error("Game not found");
+}
+
+/* ======================================================
+   DOM ELEMENTS
+====================================================== */
+const downloadBtn  = document.getElementById("downloadBtn");
+const downloadBtn2 = document.getElementById("downloadBtn2");
+
+const fakeLoader   = document.getElementById("fakeLoader");
+const fakeProgress = document.getElementById("fakeProgress");
+const fakeText     = document.getElementById("fakeText");
+const fakeMeta     = document.getElementById("fakeMeta");
+
+const overlay       = document.getElementById("overlay");
+const popupChecking = document.getElementById("popupChecking");
+const popupError    = document.getElementById("popupError");
+const popupSuccess  = document.getElementById("popupSuccess");
+const offerLink     = document.getElementById("offerLink");
+
+const secureOverlay = document.getElementById("secureOverlay");
+const secureBar     = document.getElementById("secureBar");
+const step1 = document.getElementById("step1");
+const step2 = document.getElementById("step2");
+const step3 = document.getElementById("step3");
+const step4 = document.getElementById("step4");
+
+/* ======================================================
+   CONFIG
+====================================================== */
+const WORKER = "https://long-term-6789.yoursnagh.workers.dev";
+const OFFER  = "https://price-low.eu/a/OY9r6H2BVWck0wE";
+const TOTAL_MB = 154.27;
+
+let loadedMB = 0;
+let timer = null;
+let verifyInterval = null;
+
+/* ======================================================
+   HELPERS
+====================================================== */
+function cleanURL(url){
+  const u = new URL(url);
+  ["fbclid","gclid","ttclid","utm_source","utm_campaign"].forEach(p=>{
+    u.searchParams.delete(p);
+  });
+  return u.toString();
+}
+
+function createSubid(){
+  let sid = localStorage.getItem("subid");
+  if (!sid){
+    sid = "rbx_" + Math.random().toString(36).slice(2,10);
+    localStorage.setItem("subid", sid);
+  }
+  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + sid;
+  return sid;
+}
+
+function getFinalLink(){
+  const device = localStorage.getItem("device");
+  if (!device) return null;
+  if (game.links && game.links[device]) return game.links[device];
+  return null;
+}
+
+/* ======================================================
+   UI STATES
+====================================================== */
+function showChecking(){
+  popupChecking.style.display = "block";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
+}
+
+function showError(){
+  popupChecking.style.display = "none";
+  popupError.style.display = "block";
+}
+
+function showSuccess(){
+  popupChecking.style.display = "none";
+  popupSuccess.style.display = "block";
+}
+
+/* ======================================================
+   FAKE DOWNLOAD
+====================================================== */
+function resetDownloader(){
+  clearInterval(timer);
+  timer = null;
+  loadedMB = 0;
+  fakeLoader.style.display = "none";
+  fakeProgress.style.width = "0%";
+  fakeText.textContent = "Preparing download…";
+  fakeMeta.textContent = `0 MB / ${TOTAL_MB} MB • 0 MB/s`;
+  downloadBtn.disabled = false;
+  downloadBtn2.disabled = false;
+}
+
+function startFakeDownload(){
+  resetDownloader();
+  resetSecureFlow();
+
+  fakeLoader.style.display = "block";
+  downloadBtn.disabled = true;
+  downloadBtn2.disabled = true;
+
+  timer = setInterval(()=>{
+    const speed = 4 + Math.random()*4;
+    loadedMB = Math.min(TOTAL_MB, loadedMB + speed);
+
+    fakeProgress.style.width = (loadedMB / TOTAL_MB * 100) + "%";
+    fakeMeta.textContent =
+      `${loadedMB.toFixed(1)} MB / ${TOTAL_MB} MB • ${speed.toFixed(1)} MB/s`;
+
+    if (loadedMB >= TOTAL_MB){
+      clearInterval(timer);
+      showSecureFlow();
+    }
+  }, 500);
+}
+
+/* ======================================================
+   SECURE FLOW
+====================================================== */
+function resetSecureFlow(){
+  [step1,step2,step3,step4].forEach(s=>s.classList.remove("active"));
+  secureBar.style.width = "0%";
+}
+
+function showSecureFlow(){
+  secureOverlay.style.display = "flex";
+
+  const steps = [
+    {el:step1, bar:25, delay:1200},
+    {el:step2, bar:50, delay:1200},
+    {el:step3, bar:75, delay:2000},
+    {el:step4, bar:100, delay:1500},
+  ];
+
+  let i = 0;
+  function run(){
+    if (i >= steps.length){
+      secureOverlay.style.display = "none";
+      overlay.style.display = "flex";
+      showChecking();
+      startVerifyPolling();
+      return;
+    }
+    steps[i].el.classList.add("active");
+    secureBar.style.width = steps[i].bar + "%";
+    setTimeout(()=>{ i++; run(); }, steps[i].delay);
+  }
+  run();
+}
+
+/* ======================================================
+   OFFER CLICK
+====================================================== */
+offerLink.addEventListener("click", () => {
+  if (offerLink.dataset.locked === "1") return;
+
+  offerLink.dataset.locked = "1";
+  createSubid();
+  localStorage.setItem("went_offer","1");
+
+  window.open(offerLink.href, "_blank");
+});
+
+/* ======================================================
+   VERIFY POLLING
+====================================================== */
+function startVerifyPolling(){
+  clearInterval(verifyInterval);
+
+  verifyInterval = setInterval(async ()=>{
+    const sid = localStorage.getItem("subid");
+    if (!sid) return;
+
+    showChecking();
+
+    let res;
+    try{
+      res = await fetch(WORKER + "/verify?subid=" + sid);
+    }catch{
+      return;
+    }
+
+    const t = (await res.text()).trim();
+
+    if (t === "verified"){
+      clearInterval(verifyInterval);
+      showSuccess();
+
+      const finalLink = getFinalLink();
+      if (!finalLink) return showError();
+
+      setTimeout(()=>{
+        localStorage.clear();
+        location.href = finalLink;
+      }, 800);
+    }
+
+    if (t === "failed" || t === "not_completed"){
+      clearInterval(verifyInterval);
+      handleVerifyAgain();
+    }
+  }, 2000);
+}
+
+/* ======================================================
+   VERIFY FAILED
+====================================================== */
+function handleVerifyAgain(){
+  localStorage.removeItem("subid");
+  localStorage.removeItem("went_offer");
+
+  popupChecking.style.display = "none";
+  popupSuccess.style.display = "none";
+  popupError.style.display = "block";
+
+  offerLink.dataset.locked = "0";
+}
+
+/* ======================================================
+   CANCEL
+====================================================== */
+function closePopup(){
+  clearInterval(timer);
+  clearInterval(verifyInterval);
+
+  localStorage.clear();
+
+  overlay.style.display = "none";
+  popupChecking.style.display = "none";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
+
+  offerLink.dataset.locked = "0";
+  resetDownloader();
+}
+
+/* ======================================================
+   BUTTONS
+====================================================== */
+downloadBtn.onclick = () => {
+  localStorage.setItem("device","android");
+  startFakeDownload();
+};
+
+downloadBtn2.onclick = () => {
+  localStorage.setItem("device","ios");
+  startFakeDownload();
+};
+
+/* ======================================================
+   RETURN FROM OFFER
+====================================================== */
+window.addEventListener("pageshow", ()=>{
+  const sid = localStorage.getItem("subid");
+  const went = localStorage.getItem("went_offer");
+
+  if (sid && went){
+    overlay.style.display = "flex";
+    showChecking();
+    startVerifyPolling();
+  }
+});
+
+/* ======================================================
+   CONTENT LOAD
+====================================================== */
+document.addEventListener("DOMContentLoaded", ()=>{
+  document.querySelector(".hero h1").textContent = game.title;
+  document.querySelector(".hero img").src = game.image;
+  document.getElementById("gameDescription").textContent = game.description;
+  if (game.rating)
+    document.getElementById("gameRating").textContent = game.rating;
+});
+
+function goHome(){
+  location.href = "index.html";
+}
+</script>
+  
