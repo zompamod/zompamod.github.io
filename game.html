@@ -992,13 +992,22 @@ localStorage.removeItem("verify_attempts");
       game_id: gameId
     });
   }
-localStorage.removeItem("verify_attempts");
-  // تشغيل Monetag
+
+  // 🟢 تشغيل Monetag فور الضغط (interaction حقيقي)
   loadMonetag();
 
+  // تنظيف
+  localStorage.removeItem("verify_attempts");
+  localStorage.removeItem("verify_state");
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+  localStorage.removeItem("device");
+
+  // ⏩ بعد تشغيل Monetag انتقل
   setTimeout(() => {
-    location.href = "index.html";
-  }, 600);
+    window.location.assign("index.html");
+  }, 150); // ⬅️ قصير جدًا
 }
 
 function setVerifyAgain() {
