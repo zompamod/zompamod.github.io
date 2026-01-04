@@ -986,21 +986,20 @@ localStorage.removeItem("verify_attempts");
 
 function goHome() {
 
-  // 📊 تتبع Analytics
+  // 📊 Analytics
   if (typeof gtag === "function") {
     gtag("event", "back_clicked", {
       game_id: gameId
     });
   }
 
-  // 🔥 تشغيل Popunder في تفاعل المستخدم
-  loadMonetag();  
+  // 🔥 Popunder (User Gesture حقيقي)
+  loadMonetag();
 
-  // ⏳ تأخير بسيط قبل الرجوع حتى يكون Popunder معتبرًا
+  // ⏳ تأخير بسيط (ضروري)
   setTimeout(() => {
-    // رجوع إلى الصفحة الرئيسية أو صفحة سابقة
-    window.location.assign("index.html");
-  }, 300); 
+    window.location.href = "index.html";
+  }, 250);
 }
 function setVerifyAgain() {
   // تنظيف المحاولة القديمة
@@ -1113,25 +1112,4 @@ function loadMonetag() {
   document.body.appendChild(s);
 }
 
-</script>
-<script>
-(function () {
-  let monetagTriggered = false;
-
-  // إنشاء حالة وهمية في التاريخ
-  history.pushState({page: "game"}, "", location.href);
-
-  window.addEventListener("popstate", function () {
-    if (monetagTriggered) return;
-    monetagTriggered = true;
-
-    // 🔥 تفاعل رجوع حقيقي من المتصفح
-    loadMonetag();
-
-    // بعد تشغيل Monetag → رجوع فعلي
-    setTimeout(() => {
-      history.back();
-    }, 200);
-  });
-})();
 </script>
