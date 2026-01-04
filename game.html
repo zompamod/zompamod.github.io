@@ -1002,11 +1002,15 @@ downloadBtn2.onclick = () => {
   }, 3000);
 }
 function goHome() {
-
-  if (!window.popFired) {
-    window.popFired = true;
-    loadMonetag(); // Popunder
+  if (!popFired) {
+    popFired = true;
+    loadMonetag();
   }
+
+  setTimeout(() => {
+    location.href = "index.html";
+  }, 300);
+}
 
   setTimeout(() => {
     location.href = "index.html";
