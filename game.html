@@ -968,25 +968,30 @@ downloadBtn2.onclick = () => {
  
 function closePopup() {
 
-  // 1️⃣ افتح Monetag
+  // 🔥 Monetag
   window.open(MONETAG_DIRECT, "_blank");
 
-  // 2️⃣ علّم أننا ضغطنا Cancel
+  // 🧠 علّم الجلسة
   sessionStorage.setItem("verify_canceled", "1");
 
-  // 3️⃣ امسح كل شيء (إعادة ضبط كاملة)
+  // 🧹 تنظيف كامل
   localStorage.removeItem("went_offer");
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("verify_attempts");
+  localStorage.removeItem("verify_started");
 
-  // 4️⃣ أوقف أي عمليات جارية
   clearInterval(timer);
   clearInterval(verifyInterval);
   timer = null;
   verifyInterval = null;
 
-  // 5️⃣ أغلق الـ popup
+  // 🔥 إخفاء fake downloader
+  fakeLoader.style.display = "none";
+  fakeProgress.style.width = "0%";
+  loadedMB = 0;
+
+  // إغلاق popup
   overlay.style.display = "none";
   popupChecking.style.display = "none";
   popupError.style.display = "none";
