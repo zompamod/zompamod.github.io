@@ -968,21 +968,37 @@ downloadBtn2.onclick = () => {
     });
   }
 
-  // ❌ هنا فقط نسمح بإعادة البداية
+  // 🧹 تنظيف كامل — بداية نظيفة
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
   localStorage.removeItem("verify_started");
   localStorage.removeItem("verify_attempts");
+  localStorage.removeItem("force_monetag");
 
   clearInterval(verifyInterval);
   clearInterval(timer);
+  verifyInterval = null;
+  timer = null;
 
+  // 🧼 إخفاء الواجهات
   overlay.style.display = "none";
   popupChecking.style.display = "none";
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
+  // 🔓 إعادة تفعيل أزرار التحميل
+  downloadBtn.disabled = false;
+  downloadBtn2.disabled = false;
+
+  // 🔄 إعادة حالة الزر
+  offerLink.dataset.locked = "0";
+  offerLink.textContent = "Unlock Download";
+  offerLink.style.pointerEvents = "auto";
+  offerLink.style.background =
+    "linear-gradient(90deg,var(--accent),var(--accent2))";
+
+  // 🚀 Monetag
   window.open(MONETAG_DIRECT, "_blank");
 }
 function goHome() {
