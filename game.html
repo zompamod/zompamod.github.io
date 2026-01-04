@@ -561,7 +561,8 @@ const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
 window.addEventListener("pageshow", () => {
-  const wentOffer = localStorage.getItem("went_offer");
+  if (sessionStorage.getItem("verify_canceled") === "1") return;
+ const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
   const canceled = sessionStorage.getItem("verify_canceled");
 
