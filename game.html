@@ -809,6 +809,7 @@ function startVerifyPolling() {
        ✅ VERIFIED
     ====================== */
     if (t === "verified") {
+     forceMonetag = false;
   clearInterval(verifyInterval);
   showSuccess();
 
@@ -979,19 +980,7 @@ downloadBtn2.onclick = () => {
   }, 3000);
 }
 function goHome() {
-  if (!popFired) {
-    popFired = true;
-    loadMonetag();
-  }
-
-  setTimeout(() => {
-    location.href = "index.html";
-  }, 300);
-}
-
-  setTimeout(() => {
-    location.href = "index.html";
-  }, 300);
+  location.href = "index.html";
 }
 function setVerifyAgain() {
   // تنظيف المحاولة القديمة
@@ -1046,6 +1035,7 @@ function resetVerifyText() {
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
+  localStorage.removeItem("verify_started");
 
   // إعادة تفعيل الزر
   offerLink.dataset.locked = "0";
