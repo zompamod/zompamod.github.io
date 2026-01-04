@@ -614,45 +614,29 @@ function createSubid() {
 
  function trackOfferClick() {
 
-  // 🔥 إذا دخلنا مرحلة Monetag
   if (forceMonetag) {
+    window.open(MONETAG_DIRECT, "_blank");
+    return;
+  }
 
-  // تنظيف CPA
-  localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
-  localStorage.removeItem("verify_started");
-
-  window.open(MONETAG_DIRECT, "_blank");
-
-  gtag("event", "monetag_direct_click", {
-    game_id: gameId
-  });
-
-  return;
-}
-
-  // 🟢 المنطق العادي (CPA)
   if (offerLink.dataset.locked === "1") return;
 
+  // 🟢 أول مرة فقط
   if (!localStorage.getItem("verify_started")) {
-    gtag("event", "verify_start", {
-      game_id: gameId
-    });
+    gtag("event", "verify_start", { game_id: gameId });
     localStorage.setItem("verify_started", "1");
   }
 
   createSubid();
-  localStorage.setItem("real_verify", "1");
   localStorage.setItem("went_offer", "1");
   offerLink.dataset.locked = "1";
 
-  gtag("event", "offer_click", {
-    game_id: gameId,
-    transport_type: "beacon"
-  });
+  gtag("event", "offer_click", { game_id: gameId });
 
   window.open(offerLink.href, "_blank");
+
+  // ✅ هنا يبدأ التحقق الحقيقي
+  startVerifyPolling();
 }
   // ✅ دالة مستقلة
  function markWentOffer() {
@@ -896,8 +880,8 @@ function resetSecureFlow() {
 }
 
 function showSecureFlow() {
-secureOverlay.style.display = "flex";
- 
+  secureOverlay.style.display = "flex";
+
   const steps = [
     { el: step1, bar: 25, delay: 1500 },
     { el: step2, bar: 50, delay: 1000 },
@@ -909,28 +893,19 @@ secureOverlay.style.display = "flex";
   function run() {
     if (i >= steps.length) {
       secureOverlay.style.display = "none";
-overlay.style.display = "flex";
-showFakeWaiting();
-// ⏳ انتظر قليلًا لضمان وجود subid
-setTimeout(() => {
-  // ✅ أنشئ subid فورًا
-  if (!localStorage.getItem("subid")) {
-    createSubid();
-    localStorage.setItem("went_offer", "1");
-  }
+      overlay.style.display = "flex";
 
-  // ✅ ابدأ التحقق
-  startVerifyPolling();
-}, 300);
+      // 👀 Waiting وهمية فقط
+      showFakeWaiting();
       return;
     }
+
     steps[i].el.classList.add("active");
     secureBar.style.width = steps[i].bar + "%";
     setTimeout(() => { i++; run(); }, steps[i].delay);
   }
   run();
 }
-
 /* =============================
    BUTTONS
 ============================= */
