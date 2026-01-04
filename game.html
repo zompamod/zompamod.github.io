@@ -562,14 +562,12 @@ const closeNotice = document.getElementById("closeNotice");
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
 window.addEventListener("pageshow", () => {
   if (sessionStorage.getItem("verify_canceled") === "1") return;
- const wentOffer = localStorage.getItem("went_offer");
+
+  const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
-  const canceled = sessionStorage.getItem("verify_canceled");
 
-  // ❌ إذا المستخدم ضغط cancel → لا نعيد أي شيء
-  if (canceled === "1") return;
-
-  if (wentOffer === "1" && savedSubid && overlay.style.display === "flex") {
+  if (wentOffer === "1" && savedSubid) {
+    overlay.style.display = "flex";
     showChecking();
     startVerifyPolling();
   }
@@ -930,9 +928,10 @@ function showSecureFlow() {
    BUTTONS
 ============================= */
 downloadBtn.onclick = () => {
-offerLink.dataset.locked = "0";
+sessionStorage.removeItem("verify_canceled")
+ offerLink.dataset.locked = "0";
   // 🔁 reset كامل
-  sessionStorage.removeItem("verify_canceled");
+  
   localStorage.removeItem("went_offer");
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
@@ -944,8 +943,9 @@ offerLink.dataset.locked = "0";
 };
 
 downloadBtn2.onclick = () => {
+ sessionStorage.removeItem("verify_canceled")
 offerLink.dataset.locked = "0";
-  sessionStorage.removeItem("verify_canceled");
+  
   localStorage.removeItem("went_offer");
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
