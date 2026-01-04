@@ -643,6 +643,7 @@ function createSubid() {
   }
 
   createSubid();
+  localStorage.setItem("real_verify", "1");
   localStorage.setItem("went_offer", "1");
   offerLink.dataset.locked = "1";
 
@@ -896,6 +897,7 @@ function resetSecureFlow() {
 
 function showSecureFlow() {
 secureOverlay.style.display = "flex";
+ showFakeWaiting();
   const steps = [
     { el: step1, bar: 25, delay: 1500 },
     { el: step2, bar: 50, delay: 1000 },
@@ -1119,7 +1121,18 @@ if (imgEl.src !== game.image) {
 
 });
   </script>
+<script>
+ function showFakeWaiting() {
+  popupChecking.style.display = "block";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
 
+  popupChecking.innerHTML = `
+    <span class="spinner"></span>
+    Waiting for verification…
+  `;
+}
+</script>
  <script>
 function loadMonetag() {
   if (window.monetagLoaded) return;
