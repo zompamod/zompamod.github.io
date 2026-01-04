@@ -579,7 +579,7 @@ const OFFER = "https://price-low.eu/a/OY9r6H2BVWck0wE";
 const OFFER_ID = "smartlink_1";
 const SUBID_TTL = 86400000;
 const MONETAG_DIRECT = "https://otieu.com/4/10417297";
-
+let forceMonetag = false;
 let FINAL = "";
 let timer = null;
 let verifyInterval = null;
@@ -1123,9 +1123,6 @@ function loadMonetag() {
 </script>
  <script>
 (function () {
-
-  // 🔒 منع التكرار
-  let popFired = false;
 
   // 🧠 نضيف خطوة وهمية في التاريخ
   history.pushState({ page: "game" }, "", location.href);
