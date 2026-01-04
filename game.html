@@ -612,30 +612,38 @@ function createSubid() {
 }
 
  function trackOfferClick() {
+
+  // 🔥 إذا دخلنا مرحلة Monetag
+  if (forceMonetag) {
+    window.open(MONETAG_DIRECT, "_blank");
+
+    if (typeof gtag === "function") {
+      gtag("event", "monetag_direct_click", {
+        game_id: gameId
+      });
+    }
+    return;
+  }
+
+  // 🟢 المنطق العادي (CPA)
   if (offerLink.dataset.locked === "1") return;
 
-  // 1️⃣ verify_start (مرة واحدة)
   if (!localStorage.getItem("verify_started")) {
     gtag("event", "verify_start", {
-      game_id: gameId,
-      device: localStorage.getItem("device") || "unknown"
+      game_id: gameId
     });
     localStorage.setItem("verify_started", "1");
   }
 
-  // 2️⃣ إنشاء subid فورًا
   createSubid();
   localStorage.setItem("went_offer", "1");
   offerLink.dataset.locked = "1";
 
-  // 3️⃣ إرسال offer_click (غير معطل للتنقل)
   gtag("event", "offer_click", {
     game_id: gameId,
-    device: localStorage.getItem("device") || "unknown",
-    transport_type: "beacon" // 🚀 لا ينتظر
+    transport_type: "beacon"
   });
 
-  // 4️⃣ فتح الرابط فورًا (أقصى سرعة)
   window.open(offerLink.href, "_blank");
 }
   // ✅ دالة مستقلة
@@ -1019,46 +1027,52 @@ function resetVerifyText() {
     "linear-gradient(90deg,var(--accent),var(--accent2))";
 }
    function handleVerifyAgain() {
- let attempts = Number(localStorage.getItem("verify_attempts") || 0);
-attempts++;
-localStorage.setItem("verify_attempts", attempts);
 
-// بعد محاولتين بدون تحقق → Monetag
-if (attempts >= 2) {
-  loadMonetag();
+  let attempts = Number(localStorage.getItem("verify_attempts") || 0);
+  attempts++;
+  localStorage.setItem("verify_attempts", attempts);
 
+  // 📊 Analytics
   if (typeof gtag === "function") {
-    gtag("event", "verify_failed_2x", {
+    gtag("event", "verify_failed", {
       game_id: gameId,
       attempts: attempts
     });
   }
-}
-    
-    // إيقاف أي عمليات
+
+  // 🔥 بعد 3 محاولات → نحول الزر إلى Monetag
+  if (attempts >= 3) {
+    forceMonetag = true;
+
+    offerLink.textContent = "Continue Download";
+    offerLink.style.background =
+      "linear-gradient(90deg,#22c55e,#16a34a)";
+  }
+
+  // ⛔ إيقاف أي عمليات
   clearInterval(verifyInterval);
   clearInterval(timer);
+  verifyInterval = null;
 
-  // تنظيف الحالة القديمة
+  // 🧹 تنظيف حالة CPA
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
 
-  // إعادة تهيئة الزر
-  offerLink.textContent = "Verify Again";
+  // إعادة تفعيل الزر
   offerLink.dataset.locked = "0";
   offerLink.style.pointerEvents = "auto";
-  offerLink.style.background =
-    "linear-gradient(90deg,#ef4444,#f97316)";
 
-  // إخفاء الحالات
+  // واجهة
   popupChecking.style.display = "none";
   popupSuccess.style.display = "none";
   popupError.style.display = "block";
 
-  // إيقاف polling تمامًا
-  verifyInterval = null;
-}
+  closeNotice.style.display = "block";
+  setTimeout(() => {
+    closeNotice.style.display = "none";
+  }, 3500);
+ }
  </script>
  <script>
 
