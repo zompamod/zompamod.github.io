@@ -966,6 +966,7 @@ offerLink.dataset.locked = "0";
    
 
  function closePopup() {
+  sessionStorage.setItem("verify_canceled", "1");
 
   // 🔥 Monetag
   window.open(MONETAG_DIRECT, "_blank");
