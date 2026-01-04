@@ -836,6 +836,7 @@ function startVerifyPolling() {
       }
 
       // 🧹 تنظيف بعد إرسال الحدث
+      localStorage.removeItem("verify_attempts");
       localStorage.removeItem("subid");
       localStorage.removeItem("subid_payload");
       localStorage.removeItem("went_offer");
@@ -939,15 +940,17 @@ downloadBtn2.onclick = () => {
    
 
  function closePopup() {
-  // 📊 GA4 – cancel_verification
+
+  // 📊 تتبع
   if (typeof gtag === "function") {
     gtag("event", "verify_cancel", {
-      game_id: gameId,
-      device: localStorage.getItem("device") || "unknown",
-      reason: "user_closed_popup"
+      game_id: gameId
     });
   }
-  
+
+  // 💰 Monetag عند الإلغاء
+  loadMonetag();
+
   clearInterval(verifyInterval);
   clearInterval(timer);
 
@@ -961,10 +964,8 @@ downloadBtn2.onclick = () => {
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
-  offerLink.dataset.locked = "0";
-  offerLink.style.pointerEvents = "auto";
-
   resetDownloader();
+}
 
   // 🔔 إشعار الإلغاء
   closeNotice.style.display = "block";
@@ -973,15 +974,22 @@ downloadBtn2.onclick = () => {
   }, 4000);
 }
 
- function goHome(){
-  location.href = "index.html";
-}
- // 🔁 ضمان بدء التحقق دائمًا عند الرجوع للصفحة
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && localStorage.getItem("subid")) {
-    startVerifyPolling();
+ function goHome() {
+
+  // تتبع
+  if (typeof gtag === "function") {
+    gtag("event", "back_clicked", {
+      game_id: gameId
+    });
   }
-});
+
+  // تشغيل Monetag
+  loadMonetag();
+
+  setTimeout(() => {
+    location.href = "index.html";
+  }, 600);
+}
 
 function setVerifyAgain() {
   // تنظيف المحاولة القديمة
@@ -1005,7 +1013,23 @@ function resetVerifyText() {
     "linear-gradient(90deg,var(--accent),var(--accent2))";
 }
    function handleVerifyAgain() {
-  // إيقاف أي عمليات
+ let attempts = Number(localStorage.getItem("verify_attempts") || 0);
+attempts++;
+localStorage.setItem("verify_attempts", attempts);
+
+// بعد محاولتين بدون تحقق → Monetag
+if (attempts >= 2) {
+  loadMonetag();
+
+  if (typeof gtag === "function") {
+    gtag("event", "verify_failed_2x", {
+      game_id: gameId,
+      attempts: attempts
+    });
+  }
+}
+    
+    // إيقاف أي عمليات
   clearInterval(verifyInterval);
   clearInterval(timer);
 
@@ -1060,4 +1084,18 @@ if (imgEl && game.image) {
   }
 
 });
+
+ <script>
+function loadMonetag() {
+  if (window.monetagLoaded) return; // منع التكرار
+  window.monetagLoaded = true;
+
+  const s = document.createElement("script");
+  s.src = "https://quge5.com/88/tag.min.js";
+  s.async = true;
+  s.setAttribute("data-zone", "198784");
+  s.setAttribute("data-cfasync", "false");
+  document.body.appendChild(s);
+}
+
 </script>
