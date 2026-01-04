@@ -601,19 +601,35 @@ function cleanURL(url) {
   return u.toString();
 }
 
-function createSubid() {
-  subid = "rbx_" + Math.random().toString(36).slice(2, 10);
-  localStorage.setItem("subid", subid);
+function createSubidOnce() {
+  let existing = localStorage.getItem("subid");
+  if (existing) {
+    // ✅ subid موجود → لا نعيد إنشائه
+    offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + existing;
+    return existing;
+  }
+
+  // 🆕 إنشاء جديد
+  const sid = "rbx_" + Math.random().toString(36).slice(2, 10);
+
+  localStorage.setItem("subid", sid);
   localStorage.setItem("subid_payload", JSON.stringify({
-    id: subid,
+    id: sid,
     offer: OFFER_ID,
     time: Date.now()
   }));
-  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
+  localStorage.setItem("went_offer", "1");
+  localStorage.setItem("verify_started", "1");
+
+  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + sid;
+  return sid;
 }
 
- function trackOfferClick() {
+ 
 
+function trackOfferClick() {
+
+  // 🔥 بعد 3 محاولات → Monetag
   if (forceMonetag) {
     window.open(MONETAG_DIRECT, "_blank");
     return;
@@ -621,21 +637,21 @@ function createSubid() {
 
   if (offerLink.dataset.locked === "1") return;
 
-  // 🟢 أول مرة فقط
-  if (!localStorage.getItem("verify_started")) {
-    gtag("event", "verify_start", { game_id: gameId });
-    localStorage.setItem("verify_started", "1");
-  }
+  // ✅ أنشئ أو استعمل نفس subid
+  const sid = createSubidOnce();
 
-  createSubid();
-  localStorage.setItem("went_offer", "1");
   offerLink.dataset.locked = "1";
 
-  gtag("event", "offer_click", { game_id: gameId });
+  if (typeof gtag === "function") {
+    gtag("event", "offer_click", {
+      game_id: gameId,
+      subid: sid
+    });
+  }
 
   window.open(offerLink.href, "_blank");
 
-  // ✅ هنا يبدأ التحقق الحقيقي
+  // ⏳ يبدأ التحقق
   startVerifyPolling();
 }
   // ✅ دالة مستقلة
@@ -945,39 +961,28 @@ downloadBtn2.onclick = () => {
 
  function closePopup() {
 
-  // 📊 Analytics
   if (typeof gtag === "function") {
     gtag("event", "verify_cancel", {
       game_id: gameId
     });
   }
 
-  // 🔥 فتح Direct Link (تفاعل مباشر)
-  window.open(MONETAG_DIRECT, "_blank");
-
-  // 🧹 تنظيف الحالة
-  localStorage.removeItem("verify_attempts");
+  // ❌ هنا فقط نسمح بإعادة البداية
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
-  localStorage.removeItem("device");
+  localStorage.removeItem("verify_started");
+  localStorage.removeItem("verify_attempts");
 
   clearInterval(verifyInterval);
   clearInterval(timer);
 
-  // إغلاق الواجهة
   overlay.style.display = "none";
   popupChecking.style.display = "none";
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
-  resetDownloader();
-
-  // إشعار
-  closeNotice.style.display = "block";
-  setTimeout(() => {
-    closeNotice.style.display = "none";
-  }, 3000);
+  window.open(MONETAG_DIRECT, "_blank");
 }
 function goHome() {
   location.href = "index.html";
