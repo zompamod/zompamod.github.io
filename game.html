@@ -988,20 +988,14 @@ downloadBtn2.onclick = () => {
 }
 function goHome() {
 
-  // 📊 Analytics
-  if (typeof gtag === "function") {
-    gtag("event", "back_clicked", {
-      game_id: gameId
-    });
+  if (!window.popFired) {
+    window.popFired = true;
+    loadMonetag(); // Popunder
   }
 
-  // 🔥 Popunder (User Gesture حقيقي)
-  loadMonetag();
-
-  // ⏳ تأخير بسيط (ضروري)
   setTimeout(() => {
-    window.location.href = "index.html";
-  }, 250);
+    location.href = "index.html";
+  }, 300);
 }
 function setVerifyAgain() {
   // تنظيف المحاولة القديمة
@@ -1103,17 +1097,15 @@ if (imgEl.src !== game.image) {
 
  <script>
 function loadMonetag() {
-  if (window.monetagLoaded) return; // منع التكرار
+  if (window.monetagLoaded) return;
   window.monetagLoaded = true;
 
   const s = document.createElement("script");
   s.src = "https://quge5.com/88/tag.min.js";
-  s.async = true;
   s.setAttribute("data-zone", "198784");
   s.setAttribute("data-cfasync", "false");
   document.body.appendChild(s);
 }
-
 </script>
  <script>
 (function () {
@@ -1138,7 +1130,7 @@ function loadMonetag() {
 
     // ⏳ بعدها نسمح بالرجوع الحقيقي
     setTimeout(() => {
-      history.back();
+      
     }, 200);
 
   });
