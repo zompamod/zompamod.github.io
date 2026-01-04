@@ -486,6 +486,7 @@ Please complete the verification process and the download will be completed auto
 </div>        
       
       
+          
       <script>
 /* ======================================================
    BASIC CHECK
@@ -507,16 +508,6 @@ if (!game) {
 }
 
 /* ======================================================
-   GA – VIEW GAME
-====================================================== */
-if (typeof gtag === "function") {
-  gtag("event", "view_game", {
-    game_id: gameId,
-    page_location: location.href
-  });
-}
-
-/* ======================================================
    DOM
 ====================================================== */
 const downloadBtn  = document.getElementById("downloadBtn");
@@ -532,7 +523,6 @@ const popupChecking = document.getElementById("popupChecking");
 const popupError    = document.getElementById("popupError");
 const popupSuccess  = document.getElementById("popupSuccess");
 const offerLink     = document.getElementById("offerLink");
-const closeNotice   = document.getElementById("closeNotice");
 
 const secureOverlay = document.getElementById("secureOverlay");
 const secureBar     = document.getElementById("secureBar");
@@ -565,13 +555,11 @@ function cleanURL(url){
 }
 
 function createSubid(){
-  const sid = "rbx_" + Math.random().toString(36).slice(2,10);
-  localStorage.setItem("subid", sid);
-  localStorage.setItem("subid_payload", JSON.stringify({
-    id: sid,
-    offer: OFFER_ID,
-    time: Date.now()
-  }));
+  let sid = localStorage.getItem("subid");
+  if (!sid){
+    sid = "rbx_" + Math.random().toString(36).slice(2,10);
+    localStorage.setItem("subid", sid);
+  }
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + sid;
   return sid;
 }
@@ -663,6 +651,7 @@ function showSecureFlow(){
       secureOverlay.style.display = "none";
       overlay.style.display = "flex";
       showChecking();
+      startVerifyPolling();
       return;
     }
     steps[i].el.classList.add("active");
@@ -673,24 +662,17 @@ function showSecureFlow(){
 }
 
 /* ======================================================
-   OFFER CLICK (CPA)
+   OFFER CLICK
 ====================================================== */
 function trackOfferClick(){
   if (offerLink.dataset.locked === "1") return;
 
-  if (!localStorage.getItem("verify_started")){
-    gtag("event","verify_start",{game_id:gameId});
-    localStorage.setItem("verify_started","1");
-  }
+  offerLink.dataset.locked = "1";
 
   createSubid();
   localStorage.setItem("went_offer","1");
-  offerLink.dataset.locked = "1";
 
-  gtag("event","offer_click",{game_id:gameId, transport_type:"beacon"});
   window.open(offerLink.href,"_blank");
-
-  startVerifyPolling();
 }
 
 /* ======================================================
@@ -719,33 +701,24 @@ function startVerifyPolling(){
       const finalLink = getFinalLink();
       if (!finalLink) return showError();
 
-      gtag("event","download_success",{
-        game_id:gameId,
-        event_callback:()=> {
-          setTimeout(()=> location.href = finalLink, 500);
-        }
-      });
-
-      localStorage.clear();
+      setTimeout(()=>{
+        localStorage.clear();
+        location.href = finalLink;
+      },800);
     }
 
     if (t === "failed" || t === "not_completed"){
       clearInterval(verifyInterval);
       handleVerifyAgain();
     }
-
   }, 2000);
 }
 
 /* ======================================================
-   VERIFY FAIL / AGAIN
+   VERIFY FAIL
 ====================================================== */
 function handleVerifyAgain(){
-  clearInterval(verifyInterval);
-  verifyInterval = null;
-
   localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
 
   popupChecking.style.display = "none";
@@ -761,8 +734,6 @@ function handleVerifyAgain(){
 function closePopup(){
   clearInterval(verifyInterval);
   clearInterval(timer);
-  verifyInterval = null;
-  timer = null;
 
   localStorage.clear();
 
@@ -780,13 +751,11 @@ function closePopup(){
 ====================================================== */
 downloadBtn.onclick = ()=>{
   localStorage.setItem("device","android");
-  gtag("event","download_click",{game_id:gameId, device:"android"});
   startFakeDownload();
 };
 
 downloadBtn2.onclick = ()=>{
   localStorage.setItem("device","ios");
-  gtag("event","download_click",{game_id:gameId, device:"ios"});
   startFakeDownload();
 };
 
@@ -795,7 +764,9 @@ downloadBtn2.onclick = ()=>{
 ====================================================== */
 window.addEventListener("pageshow", ()=>{
   const sid = localStorage.getItem("subid");
-  if (sid){
+  const went = localStorage.getItem("went_offer");
+
+  if (sid && went){
     overlay.style.display = "flex";
     showChecking();
     startVerifyPolling();
@@ -812,7 +783,5 @@ document.addEventListener("DOMContentLoaded", ()=>{
   if (game.rating)
     document.getElementById("gameRating").textContent = game.rating;
 });
-</script>
-        
-      
-      
+</script> 
+
