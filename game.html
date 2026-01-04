@@ -615,15 +615,21 @@ function createSubid() {
 
   // 🔥 إذا دخلنا مرحلة Monetag
   if (forceMonetag) {
-    window.open(MONETAG_DIRECT, "_blank");
 
-    if (typeof gtag === "function") {
-      gtag("event", "monetag_direct_click", {
-        game_id: gameId
-      });
-    }
-    return;
-  }
+  // تنظيف CPA
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+  localStorage.removeItem("verify_started");
+
+  window.open(MONETAG_DIRECT, "_blank");
+
+  gtag("event", "monetag_direct_click", {
+    game_id: gameId
+  });
+
+  return;
+}
 
   // 🟢 المنطق العادي (CPA)
   if (offerLink.dataset.locked === "1") return;
@@ -1113,6 +1119,8 @@ if (imgEl.src !== game.image) {
 function loadMonetag() {
   if (window.monetagLoaded) return;
   window.monetagLoaded = true;
+ if (sessionStorage.getItem("monetag_done")) return;
+sessionStorage.setItem("monetag_done", "1");
 
   const s = document.createElement("script");
   s.src = "https://quge5.com/88/tag.min.js";
