@@ -568,6 +568,7 @@ window.addEventListener("pageshow", () => {
 
   if (wentOffer === "1" && savedSubid) {
     overlay.style.display = "flex";
+    showChecking();        // ✅ أضف هذا السطر فقط
     startVerifyPolling();
   }
 });
