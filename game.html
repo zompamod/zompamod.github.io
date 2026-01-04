@@ -578,6 +578,7 @@ const WORKER = "https://long-term-6789.yoursnagh.workers.dev";
 const OFFER = "https://price-low.eu/a/OY9r6H2BVWck0wE";
 const OFFER_ID = "smartlink_1";
 const SUBID_TTL = 86400000;
+const MONETAG_DIRECT = "https://your-monetag-direct-link.com";
 
 let FINAL = "";
 let timer = null;
@@ -951,24 +952,27 @@ downloadBtn2.onclick = () => {
 
  function closePopup() {
 
-  // 📊 تتبع
+  // 📊 Analytics
   if (typeof gtag === "function") {
     gtag("event", "verify_cancel", {
       game_id: gameId
     });
   }
-localStorage.removeItem("verify_attempts");
-  // 💰 Monetag عند الإلغاء
-  loadMonetag();
 
-  clearInterval(verifyInterval);
-  clearInterval(timer);
+  // 🔥 فتح Direct Link (تفاعل مباشر)
+  window.open(MONETAG_DIRECT, "_blank");
 
+  // 🧹 تنظيف الحالة
+  localStorage.removeItem("verify_attempts");
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
   localStorage.removeItem("device");
 
+  clearInterval(verifyInterval);
+  clearInterval(timer);
+
+  // إغلاق الواجهة
   overlay.style.display = "none";
   popupChecking.style.display = "none";
   popupError.style.display = "none";
@@ -976,14 +980,12 @@ localStorage.removeItem("verify_attempts");
 
   resetDownloader();
 
-
-  // 🔔 إشعار الإلغاء
+  // إشعار
   closeNotice.style.display = "block";
   setTimeout(() => {
     closeNotice.style.display = "none";
-  }, 4000);
+  }, 3000);
 }
-
 function goHome() {
 
   // 📊 Analytics
