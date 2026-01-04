@@ -486,563 +486,333 @@ Please complete the verification process and the download will be completed auto
 </div>        
       
       
-<script src="games.js"></script>      
-<script>      
-if (!location.search.includes("game=")) {      
-  location.replace("index.html");      
-}      
-</script>      
-<script>      
-/* =============================      
-   GET GAME FROM URL      
-============================= */      
-      
-      
-const params = new URLSearchParams(window.location.search);      
-const gameId = params.get("game");      
-/* =============================      
-   GOOGLE ANALYTICS – VIEW GAME      
-============================= */      
-if (typeof gtag === "function" && gameId) {      
-  gtag("event", "view_game", {      
-    game_id: gameId,      
-    page_location: location.href      
-  });      
-}      
-const game = GAMES.find(g => g.id === gameId);      
-      
-if (!game) {      
-  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";      
-  throw new Error("Game not found");      
-}      
-      
-/* =============================      
-   SEO (TITLE & DESCRIPTION)      
-============================= */      
-document.title = game.title + " Mod APK Latest Version | Modnext";      
-      
-let metaDesc = document.querySelector("meta[name='description']");      
-if (!metaDesc) {      
-  metaDesc = document.createElement("meta");      
-  metaDesc.name = "description";      
-  document.head.appendChild(metaDesc);      
-}      
-metaDesc.content = game.description;      
-      
-      
-      
-/* =============================      
-   DOM ELEMENTS      
-============================= */      
-const secureOverlay = document.getElementById("secureOverlay");      
-const secureBar = document.getElementById("secureBar");      
-      
-const step1 = document.getElementById("step1");      
-const step2 = document.getElementById("step2");      
-const step3 = document.getElementById("step3");      
-const step4 = document.getElementById("step4");      
-      
-const downloadBtn = document.getElementById("downloadBtn");      
-const downloadBtn2 = document.getElementById("downloadBtn2");      
-      
-const fakeLoader = document.getElementById("fakeLoader");      
-const fakeProgress = document.getElementById("fakeProgress");      
-const fakeText = document.getElementById("fakeText");      
-const fakeMeta = document.getElementById("fakeMeta");      
-      
-const overlay = document.getElementById("overlay");      
-const popupChecking = document.getElementById("popupChecking");      
-const popupError = document.getElementById("popupError");      
-const popupSuccess = document.getElementById("popupSuccess");      
-      
-      
-const offerLink = document.getElementById("offerLink");      
-const closeNotice = document.getElementById("closeNotice");      
-      
-/* 🔔 إشعار الرجوع بدون إكمال التحقق */      
-window.addEventListener("pageshow", () => {      
-  offerLink.dataset.locked = "0";      
-      
-  const wentOffer = localStorage.getItem("went_offer");      
-  const savedSubid = localStorage.getItem("subid");      
-      
-  if (wentOffer === "1" && savedSubid) {      
-    overlay.style.display = "flex";      
-    startVerifyPolling();      
-  }      
-});      
-/* =============================      
-   CONFIG      
-============================= */      
-const WORKER = "https://long-term-6789.yoursnagh.workers.dev";      
-const OFFER = "https://price-low.eu/a/OY9r6H2BVWck0wE";      
-const OFFER_ID = "smartlink_1";      
-const SUBID_TTL = 86400000;      
-      
-let FINAL = "";      
-let timer = null;      
-let verifyInterval = null;      
-let subid = null;      
-let loadedMB = 0;      
-      
-const totalMB = 154.27;      
-const SPEED_MBPS = 8.9;      
-      
-/* =============================      
-   HELPERS      
-============================= */      
-function cleanURL(url) {      
-  const u = new URL(url);      
-  ["fbclid","gclid","ttclid","utm_source","utm_campaign"].forEach(p => {      
-    u.searchParams.delete(p);      
-  });      
-  return u.toString();      
-}      
-      
-function createSubid() {      
-  subid = "rbx_" + Math.random().toString(36).slice(2, 10);      
-  localStorage.setItem("subid", subid);      
-  localStorage.setItem("subid_payload", JSON.stringify({      
-    id: subid,      
-    offer: OFFER_ID,      
-    time: Date.now()      
-  }));      
-  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;      
-}      
-      
- function trackOfferClick() {      
-  if (offerLink.dataset.locked === "1") return;      
-      
-  // 1️⃣ verify_start (مرة واحدة)      
-  if (!localStorage.getItem("verify_started")) {      
-    gtag("event", "verify_start", {      
-      game_id: gameId,      
-      device: localStorage.getItem("device") || "unknown"      
-    });      
-    localStorage.setItem("verify_started", "1");      
-  }      
-      
-  // 2️⃣ إنشاء subid فورًا      
-  createSubid();      
-  localStorage.setItem("went_offer", "1");      
-  offerLink.dataset.locked = "1";      
-      
-  // 3️⃣ إرسال offer_click (غير معطل للتنقل)      
-  gtag("event", "offer_click", {      
-    game_id: gameId,      
-    device: localStorage.getItem("device") || "unknown",      
-    transport_type: "beacon" // 🚀 لا ينتظر      
-  });      
-      
-  // 4️⃣ فتح الرابط فورًا (أقصى سرعة)      
-  window.open(offerLink.href, "_blank");      
-}      
-  // ✅ دالة مستقلة      
- function markWentOffer() {      
-  if (offerLink.dataset.locked === "1") return;      
-      
-  createSubid(); // إنشاء subid      
-  offerLink.dataset.locked = "1";      
-  localStorage.setItem("went_offer", "1");      
-}      
-      
-function isSubidExpired() {      
-  const raw = localStorage.getItem("subid_payload");      
-  if (!raw) return true;      
-  try {      
-    const d = JSON.parse(raw);      
-    return (Date.now() - d.time) > SUBID_TTL;      
-  } catch {      
-    return true;      
-  }      
-}      
-      
-/* =============================      
-   DOWNLOAD FLOW      
-============================= */      
-function resetDownloader() {      
-  clearInterval(timer);      
-  clearInterval(verifyInterval);      
-  fakeLoader.style.display = "none";      
-  fakeProgress.style.width = "0%";      
-  fakeText.textContent = "Preparing download…";      
-  fakeMeta.textContent = `0 MB / ${totalMB} MB • 0 MB/s`;      
-  loadedMB = 0;      
-  downloadBtn.disabled = false;      
-  downloadBtn2.disabled = false;      
-}      
-function getDynamicSpeed(progressPercent) {      
-  let base = getNetworkBaseSpeed();      
-      
-  // تذبذب واضح      
-  base += (Math.random() - 0.5) * 3; // ⬅️ أكبر      
-      
-  // تباطؤ طبيعي قرب النهاية      
-  if (progressPercent > 80) base *= 0.7;      
-  if (progressPercent > 92) base *= 0.45;      
-      
-  return Math.max(1.1, base);      
-}      
-      
-function getNetworkBaseSpeed() {      
-  const conn = navigator.connection || {};      
-  let base;      
-      
-  switch (conn.effectiveType) {      
-    case "slow-2g":      
-    case "2g":      
-      base = 1.5;      
-      break;      
-    case "3g":      
-      base = 3.5;      
-      break;      
-    case "4g":      
-    default:      
-      base = 7.5;      
-  }      
-      
-  // فرق بسيط حسب الجهاز      
-  const device = localStorage.getItem("device");      
-  if (device === "android") base *= 1.15;      
-  if (device === "ios") base *= 0.9;      
-      
-  return base;      
-}      
-       
-function startFakeDownload() {      
-  resetDownloader();      
-  resetSecureFlow();      
+      <script>
+/* ======================================================
+   BASIC CHECK
+====================================================== */
+if (!location.search.includes("game=")) {
+  location.replace("index.html");
+}
+
+/* ======================================================
+   GET GAME
+====================================================== */
+const params = new URLSearchParams(location.search);
+const gameId = params.get("game");
+const game = GAMES.find(g => g.id === gameId);
+
+if (!game) {
+  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
+  throw new Error("Game not found");
+}
+
+/* ======================================================
+   GA – VIEW GAME
+====================================================== */
+if (typeof gtag === "function") {
+  gtag("event", "view_game", {
+    game_id: gameId,
+    page_location: location.href
+  });
+}
+
+/* ======================================================
+   DOM
+====================================================== */
+const downloadBtn  = document.getElementById("downloadBtn");
+const downloadBtn2 = document.getElementById("downloadBtn2");
+
+const fakeLoader   = document.getElementById("fakeLoader");
+const fakeProgress = document.getElementById("fakeProgress");
+const fakeText     = document.getElementById("fakeText");
+const fakeMeta     = document.getElementById("fakeMeta");
+
+const overlay       = document.getElementById("overlay");
+const popupChecking = document.getElementById("popupChecking");
+const popupError    = document.getElementById("popupError");
+const popupSuccess  = document.getElementById("popupSuccess");
+const offerLink     = document.getElementById("offerLink");
+const closeNotice   = document.getElementById("closeNotice");
+
+const secureOverlay = document.getElementById("secureOverlay");
+const secureBar     = document.getElementById("secureBar");
+const step1 = document.getElementById("step1");
+const step2 = document.getElementById("step2");
+const step3 = document.getElementById("step3");
+const step4 = document.getElementById("step4");
+
+/* ======================================================
+   CONFIG
+====================================================== */
+const WORKER = "https://long-term-6789.yoursnagh.workers.dev";
+const OFFER  = "https://price-low.eu/a/OY9r6H2BVWck0wE";
+const OFFER_ID = "smartlink_1";
+
+const totalMB = 154.27;
+let loadedMB = 0;
+let timer = null;
+let verifyInterval = null;
+
+/* ======================================================
+   HELPERS
+====================================================== */
+function cleanURL(url){
+  const u = new URL(url);
+  ["fbclid","gclid","ttclid","utm_source","utm_campaign"].forEach(p=>{
+    u.searchParams.delete(p);
+  });
+  return u.toString();
+}
+
+function createSubid(){
+  const sid = "rbx_" + Math.random().toString(36).slice(2,10);
+  localStorage.setItem("subid", sid);
+  localStorage.setItem("subid_payload", JSON.stringify({
+    id: sid,
+    offer: OFFER_ID,
+    time: Date.now()
+  }));
+  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + sid;
+  return sid;
+}
+
+function getFinalLink(){
+  const device = localStorage.getItem("device");
+  if (!device) return null;
+  if (game.links && game.links[device]) return game.links[device];
+  return null;
+}
+
+/* ======================================================
+   UI HELPERS
+====================================================== */
+function showChecking(){
+  popupChecking.style.display = "block";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
+}
+
+function showError(){
+  popupChecking.style.display = "none";
+  popupError.style.display = "block";
+}
+
+function showSuccess(){
+  popupChecking.style.display = "none";
+  popupSuccess.style.display = "block";
+}
+
+/* ======================================================
+   FAKE DOWNLOAD
+====================================================== */
+function resetDownloader(){
+  clearInterval(timer);
+  timer = null;
+  loadedMB = 0;
+  fakeLoader.style.display = "none";
+  fakeProgress.style.width = "0%";
+  fakeText.textContent = "Preparing download…";
+  fakeMeta.textContent = `0 MB / ${totalMB} MB • 0 MB/s`;
+  downloadBtn.disabled = false;
+  downloadBtn2.disabled = false;
+}
+
+function startFakeDownload(){
+  resetDownloader();
+  resetSecureFlow();
+
+  fakeLoader.style.display = "block";
+  downloadBtn.disabled = true;
+  downloadBtn2.disabled = true;
+
+  timer = setInterval(()=>{
+    const speed = 5 + Math.random()*3;
+    loadedMB = Math.min(totalMB, loadedMB + speed);
+    fakeProgress.style.width = (loadedMB/totalMB*100)+"%";
+    fakeMeta.textContent =
+      `${loadedMB.toFixed(1)} MB / ${totalMB} MB • ${speed.toFixed(1)} MB/s`;
+
+    if (loadedMB >= totalMB){
+      clearInterval(timer);
+      showSecureFlow();
+    }
+  }, 500);
+}
+
+/* ======================================================
+   SECURE FLOW
+====================================================== */
+function resetSecureFlow(){
+  [step1,step2,step3,step4].forEach(s=>s.classList.remove("active"));
+  secureBar.style.width = "0%";
+}
+
+function showSecureFlow(){
+  secureOverlay.style.display = "flex";
+
+  const steps = [
+    {el:step1, bar:25, delay:1200},
+    {el:step2, bar:50, delay:1200},
+    {el:step3, bar:75, delay:2000},
+    {el:step4, bar:100, delay:1500},
+  ];
+
+  let i = 0;
+  function run(){
+    if (i >= steps.length){
+      secureOverlay.style.display = "none";
+      overlay.style.display = "flex";
+      showChecking();
+      return;
+    }
+    steps[i].el.classList.add("active");
+    secureBar.style.width = steps[i].bar + "%";
+    setTimeout(()=>{ i++; run(); }, steps[i].delay);
+  }
+  run();
+}
+
+/* ======================================================
+   OFFER CLICK (CPA)
+====================================================== */
+function trackOfferClick(){
+  if (offerLink.dataset.locked === "1") return;
+
+  if (!localStorage.getItem("verify_started")){
+    gtag("event","verify_start",{game_id:gameId});
+    localStorage.setItem("verify_started","1");
+  }
+
+  createSubid();
+  localStorage.setItem("went_offer","1");
+  offerLink.dataset.locked = "1";
+
+  gtag("event","offer_click",{game_id:gameId, transport_type:"beacon"});
+  window.open(offerLink.href,"_blank");
+
+  startVerifyPolling();
+}
+
+/* ======================================================
+   VERIFY POLLING
+====================================================== */
+function startVerifyPolling(){
+  clearInterval(verifyInterval);
+
+  verifyInterval = setInterval(async ()=>{
+    const sid = localStorage.getItem("subid");
+    if (!sid) return;
+
+    showChecking();
+
+    let res;
+    try{
+      res = await fetch(WORKER + "/verify?subid=" + sid);
+    }catch{ return; }
+
+    const t = (await res.text()).trim();
+
+    if (t === "verified"){
+      clearInterval(verifyInterval);
+      showSuccess();
+
+      const finalLink = getFinalLink();
+      if (!finalLink) return showError();
+
+      gtag("event","download_success",{
+        game_id:gameId,
+        event_callback:()=> {
+          setTimeout(()=> location.href = finalLink, 500);
+        }
+      });
+
+      localStorage.clear();
+    }
+
+    if (t === "failed" || t === "not_completed"){
+      clearInterval(verifyInterval);
+      handleVerifyAgain();
+    }
+
+  }, 2000);
+}
+
+/* ======================================================
+   VERIFY FAIL / AGAIN
+====================================================== */
+function handleVerifyAgain(){
+  clearInterval(verifyInterval);
+  verifyInterval = null;
+
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+
+  popupChecking.style.display = "none";
+  popupSuccess.style.display = "none";
+  popupError.style.display = "block";
+
+  offerLink.dataset.locked = "0";
+}
+
+/* ======================================================
+   CANCEL
+====================================================== */
+function closePopup(){
+  clearInterval(verifyInterval);
+  clearInterval(timer);
+  verifyInterval = null;
+  timer = null;
+
+  localStorage.clear();
+
+  overlay.style.display = "none";
+  popupChecking.style.display = "none";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
+
+  offerLink.dataset.locked = "0";
+  resetDownloader();
+}
+
+/* ======================================================
+   BUTTONS
+====================================================== */
+downloadBtn.onclick = ()=>{
+  localStorage.setItem("device","android");
+  gtag("event","download_click",{game_id:gameId, device:"android"});
+  startFakeDownload();
+};
+
+downloadBtn2.onclick = ()=>{
+  localStorage.setItem("device","ios");
+  gtag("event","download_click",{game_id:gameId, device:"ios"});
+  startFakeDownload();
+};
+
+/* ======================================================
+   RETURN FROM OFFER
+====================================================== */
+window.addEventListener("pageshow", ()=>{
+  const sid = localStorage.getItem("subid");
+  if (sid){
+    overlay.style.display = "flex";
+    showChecking();
+    startVerifyPolling();
+  }
+});
+
+/* ======================================================
+   CONTENT
+====================================================== */
+document.addEventListener("DOMContentLoaded", ()=>{
+  document.querySelector(".hero h1").textContent = game.title;
+  document.querySelector(".hero img").src = game.image;
+  document.getElementById("gameDescription").textContent = game.description;
+  if (game.rating)
+    document.getElementById("gameRating").textContent = game.rating;
+});
+</script>
         
       
-  fakeLoader.style.display = "block";      
-  downloadBtn.disabled = true;      
-  downloadBtn2.disabled = true;      
       
-  timer = setInterval(() => {      
-    const percent = (loadedMB / totalMB) * 100;      
-const speed = getDynamicSpeed(percent);      
-      
-loadedMB = Math.min(totalMB, loadedMB + speed);      
-      
-fakeProgress.style.width = (loadedMB / totalMB * 100) + "%";      
-fakeMeta.textContent =      
-  `${loadedMB.toFixed(1)} MB / ${totalMB} MB • ${speed.toFixed(1)} MB/s`;      
-    if (loadedMB >= totalMB) {      
-      clearInterval(timer);      
-      showSecureFlow();      
-    }      
-  }, 500);      
-}      
-      
-/* =============================      
-   VERIFY      
-============================= */      
-function getFinalLink() {      
-  const device = localStorage.getItem("device");      
-  if (!device || !game) return null;      
-      
-  // الحالة الموصى بها: links {}      
-  if (game.links && game.links[device]) {      
-    return game.links[device];      
-  }      
-      
-  // حالات احتياطية      
-  if (device === "android") {      
-    return (      
-      game.android ||      
-      game.link_android ||      
-      game.final_android ||      
-      game.apk ||      
-      null      
-    );      
-  }      
-      
-  if (device === "ios") {      
-    return (      
-      game.ios ||      
-      game.link_ios ||      
-      game.final_ios ||      
-      game.ipa ||      
-      null      
-    );      
-  }      
-      
-  return null;      
-}      
-      
-function showChecking() {      
-  popupChecking.style.display = "block";      
-  popupError.style.display = "none";      
-  popupSuccess.style.display = "none";      
-}      
-      
-function showError() {      
-  popupChecking.style.display = "none";      
-  popupError.style.display = "block";      
-}      
-      
-function showSuccess() {      
-  popupChecking.style.display = "none";      
-  popupSuccess.style.display = "block";      
-}      
-      
-      
-function startVerifyPolling() {      
-  clearInterval(verifyInterval);      
-      
-  verifyInterval = setInterval(async () => {      
-    const sid = localStorage.getItem("subid");      
-    if (!sid) return;      
-      
-    showChecking();      
-      
-    let t = "";      
-    try {      
-      const r = await fetch(WORKER + "/verify?subid=" + sid);      
-      t = (await r.text()).trim();      
-    } catch {      
-      return;      
-    }      
-      
-    /* ======================      
-       ✅ VERIFIED      
-    ====================== */      
-    if (t === "verified") {      
-      clearInterval(verifyInterval);      
-      showSuccess();      
-      
-      const device = localStorage.getItem("device");      
-      const finalLink = getFinalLink();      
-      
-      if (!finalLink || !device) {      
-        showError();      
-        return;      
-      }      
-      
-      // 📊 GA4 – download_success (مضمون)      
-      if (typeof gtag === "function") {      
-        gtag("event", "download_success", {      
-          game_id: gameId,      
-          device: device,      
-          event_callback: () => {      
-            setTimeout(() => {      
-              window.location.href = finalLink;      
-            }, 500);      
-          }      
-        });      
-      } else {      
-        // احتياط في حال GA غير جاهز      
-        window.location.href = finalLink;      
-      }      
-      
-      // 🧹 تنظيف بعد إرسال الحدث      
-      localStorage.removeItem("subid");      
-      localStorage.removeItem("subid_payload");      
-      localStorage.removeItem("went_offer");      
-      localStorage.removeItem("verify_started");      
-      localStorage.removeItem("device");      
-      
-      return;      
-    }      
-      
-    /* ======================      
-       ❌ FAILED / NOT COMPLETED      
-    ====================== */      
-    if (t === "failed" || t === "not_completed") {      
-      clearInterval(verifyInterval);      
-      handleVerifyAgain();      
-      
-      closeNotice.style.display = "block";      
-      setTimeout(() => {      
-        closeNotice.style.display = "none";      
-      }, 4000);      
-    }      
-      
-  }, 2000);      
- }      
-/* =============================      
-   SECURITY FLOW      
-============================= */      
-function resetSecureFlow() {      
-  [step1, step2, step3, step4].forEach(s => s.classList.remove("active"));      
-  secureBar.style.width = "0%";      
-}      
-      
-function showSecureFlow() {      
-secureOverlay.style.display = "flex";      
-  const steps = [      
-    { el: step1, bar: 25, delay: 1500 },      
-    { el: step2, bar: 50, delay: 1000 },      
-    { el: step3, bar: 75, delay: 4000 },      
-    { el: step4, bar: 100, delay: 2000 }      
-  ];      
-      
-  let i = 0;      
-  function run() {      
-    if (i >= steps.length) {      
-      secureOverlay.style.display = "none";      
-overlay.style.display = "flex";      
-      
-// ✅ أظهر checking فورًا      
-showChecking();      
-      
-// ⏳ انتظر قليلًا لضمان وجود subid      
-setTimeout(() => {      
-  startVerifyPolling();      
-}, 300);      
-      return;      
-    }      
-    steps[i].el.classList.add("active");      
-    secureBar.style.width = steps[i].bar + "%";      
-    setTimeout(() => { i++; run(); }, steps[i].delay);      
-  }      
-  run();      
-}      
-      
-/* =============================      
-   BUTTONS      
-============================= */      
-downloadBtn.onclick = () => {      
-  localStorage.setItem("device", "android");      
-      
-  if (typeof gtag === "function") {      
-    gtag("event", "download_click", {      
-      game_id: gameId,      
-      device: "android"      
-    });      
-  }      
-      
-  startFakeDownload();      
-};      
-      
-downloadBtn2.onclick = () => {      
-  localStorage.setItem("device", "ios");      
-      
-  if (typeof gtag === "function") {      
-    gtag("event", "download_click", {      
-      game_id: gameId,      
-      device: "ios"      
-    });      
-  }      
-      
-  startFakeDownload();      
-};      
-      
-/* =============================      
-   PROTECTION      
-============================= */      
-["contextmenu","dragstart","selectstart"].forEach(e =>      
-  document.addEventListener(e, ev => {      
-    if (ev.target.tagName === "IMG") ev.preventDefault();      
-  })      
-);      
-         
-      
- function closePopup() {      
-  clearInterval(verifyInterval);      
-  clearInterval(timer);      
-      
-  localStorage.removeItem("subid");      
-  localStorage.removeItem("subid_payload");      
-  localStorage.removeItem("went_offer");      
-  localStorage.removeItem("device");      
-      
-  overlay.style.display = "none";      
-  popupChecking.style.display = "none";      
-  popupError.style.display = "none";      
-  popupSuccess.style.display = "none";      
-      
-  offerLink.dataset.locked = "0";      
-  offerLink.style.pointerEvents = "auto";      
-      
-  resetDownloader();      
-      
-  // 🔔 إشعار الإلغاء      
-  closeNotice.style.display = "block";      
-  setTimeout(() => {      
-    closeNotice.style.display = "none";      
-  }, 4000);      
-}      
-      
- function goHome(){      
-  location.href = "index.html";      
-}      
- // 🔁 ضمان بدء التحقق دائمًا عند الرجوع للصفحة      
-document.addEventListener("visibilitychange", () => {      
-  if (!document.hidden && localStorage.getItem("subid")) {      
-    startVerifyPolling();      
-  }      
-});      
-      
-function setVerifyAgain() {      
-  // تنظيف المحاولة القديمة      
-  localStorage.removeItem("subid");      
-  localStorage.removeItem("subid_payload");      
-  localStorage.removeItem("went_offer");      
-      
-  // إنشاء SubID جديد 🔥      
-  createSubid();      
-      
-  offerLink.textContent = "Verify Again";      
-  offerLink.style.background =      
-    "linear-gradient(90deg,#ef4444,#f97316)";      
-  offerLink.dataset.locked = "0";      
-  offerLink.style.pointerEvents = "auto";      
-}      
-      
-function resetVerifyText() {      
-  offerLink.textContent = "Verify & Continue";      
-  offerLink.style.background =      
-    "linear-gradient(90deg,var(--accent),var(--accent2))";      
-}      
-   function handleVerifyAgain() {      
-  // إيقاف أي عمليات      
-  clearInterval(verifyInterval);      
-  clearInterval(timer);      
-      
-  // تنظيف الحالة القديمة      
-  localStorage.removeItem("subid");      
-  localStorage.removeItem("subid_payload");      
-  localStorage.removeItem("went_offer");      
-      
-  // إعادة تهيئة الزر      
-  offerLink.textContent = "Verify Again";      
-  offerLink.dataset.locked = "0";      
-  offerLink.style.pointerEvents = "auto";      
-  offerLink.style.background =      
-    "linear-gradient(90deg,#ef4444,#f97316)";      
-      
-  // إخفاء الحالات      
-  popupChecking.style.display = "none";      
-  popupSuccess.style.display = "none";      
-  popupError.style.display = "block";      
-      
-  // إيقاف polling تمامًا      
-  verifyInterval = null;      
-}      
-      
-  document.addEventListener("DOMContentLoaded", () => {      
-      
-  // Title      
-  const titleEl = document.querySelector(".hero h1");      
-  if (titleEl) titleEl.textContent = game.title;      
-      
-  // Image      
-  const imgEl = document.querySelector(".hero img");      
-  if (imgEl) imgEl.src = game.image;      
-      
-  // Rating      
-  const ratingEl = document.getElementById("gameRating");      
-  if (ratingEl && game.rating) {      
-    ratingEl.textContent = game.rating;      
-  }      
-      
-  // Description      
-  const descEl = document.getElementById("gameDescription");      
-  if (descEl && game.description) {      
-    descEl.textContent = game.description;      
-  }      
-      
-});      
-</script>      
-    
