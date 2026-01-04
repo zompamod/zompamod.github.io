@@ -930,7 +930,8 @@ function showSecureFlow() {
    BUTTONS
 ============================= */
 downloadBtn.onclick = () => {
-  localStorage.setItem("device", "android");
+ sessionStorage.removeItem("verify_canceled");
+ localStorage.setItem("device", "android");
   sessionStorage.setItem("device", "android"); // ✅ أضف هذا
 
   gtag("event", "download_click", {
@@ -942,7 +943,8 @@ downloadBtn.onclick = () => {
 };
 
 downloadBtn2.onclick = () => {
-  localStorage.setItem("device", "ios");
+  sessionStorage.removeItem("verify_canceled");
+ localStorage.setItem("device", "ios");
   sessionStorage.setItem("device", "ios"); // ✅ أضف هذا
 
   gtag("event", "download_click", {
