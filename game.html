@@ -984,30 +984,15 @@ localStorage.removeItem("verify_attempts");
   }, 4000);
 }
 
- function goHome() {
-
-  // تتبع
+function goHome() {
   if (typeof gtag === "function") {
     gtag("event", "back_clicked", {
       game_id: gameId
     });
   }
 
-  // 🟢 تشغيل Monetag فور الضغط (interaction حقيقي)
-  loadMonetag();
-
-  // تنظيف
-  localStorage.removeItem("verify_attempts");
-  localStorage.removeItem("verify_state");
-  localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
-  localStorage.removeItem("device");
-
-  // ⏩ بعد تشغيل Monetag انتقل
-  setTimeout(() => {
-    window.location.assign("index.html");
-  }, 150); // ⬅️ قصير جدًا
+  // رجوع طبيعي (سيتم التقاطه بالـ popstate)
+  history.back();
 }
 
 function setVerifyAgain() {
@@ -1121,4 +1106,25 @@ function loadMonetag() {
   document.body.appendChild(s);
 }
 
+</script>
+<script>
+(function () {
+  let monetagTriggered = false;
+
+  // إنشاء حالة وهمية في التاريخ
+  history.pushState({page: "game"}, "", location.href);
+
+  window.addEventListener("popstate", function () {
+    if (monetagTriggered) return;
+    monetagTriggered = true;
+
+    // 🔥 تفاعل رجوع حقيقي من المتصفح
+    loadMonetag();
+
+    // بعد تشغيل Monetag → رجوع فعلي
+    setTimeout(() => {
+      history.back();
+    }, 200);
+  });
+})();
 </script>
