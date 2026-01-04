@@ -930,7 +930,7 @@ function showSecureFlow() {
    BUTTONS
 ============================= */
 downloadBtn.onclick = () => {
-
+offerLink.dataset.locked = "0";
   // 🔁 reset كامل
   sessionStorage.removeItem("verify_canceled");
   localStorage.removeItem("went_offer");
@@ -944,7 +944,7 @@ downloadBtn.onclick = () => {
 };
 
 downloadBtn2.onclick = () => {
-
+offerLink.dataset.locked = "0";
   sessionStorage.removeItem("verify_canceled");
   localStorage.removeItem("went_offer");
   localStorage.removeItem("subid");
