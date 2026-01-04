@@ -1060,7 +1060,7 @@ if (attempts >= 2) {
  <script>
 
   document.addEventListener("DOMContentLoaded", () => {
-
+  if (typeof game === "undefined" || !game) return;
   // Title
   const titleEl = document.querySelector(".hero h1");
   if (titleEl) titleEl.textContent = game.title;
@@ -1068,9 +1068,10 @@ if (attempts >= 2) {
 // Image (FIXED – no flicker)
 const imgEl = document.querySelector(".hero img");
 
-if (imgEl && game.image) {
+if (imgEl.src !== game.image) {
   imgEl.style.opacity = "0";
   imgEl.src = game.image;
+}
 
   imgEl.onload = () => {
     imgEl.style.opacity = "1";
