@@ -914,30 +914,27 @@ setTimeout(() => {
 ============================= */
 downloadBtn.onclick = () => {
   localStorage.setItem("device", "android");
+  sessionStorage.setItem("device", "android"); // ✅ أضف هذا
 
-  if (typeof gtag === "function") {
-    gtag("event", "download_click", {
-      game_id: gameId,
-      device: "android"
-    });
-  }
+  gtag("event", "download_click", {
+    game_id: gameId,
+    device: "android"
+  });
 
   startFakeDownload();
 };
 
 downloadBtn2.onclick = () => {
   localStorage.setItem("device", "ios");
+  sessionStorage.setItem("device", "ios"); // ✅ أضف هذا
 
-  if (typeof gtag === "function") {
-    gtag("event", "download_click", {
-      game_id: gameId,
-      device: "ios"
-    });
-  }
+  gtag("event", "download_click", {
+    game_id: gameId,
+    device: "ios"
+  });
 
   startFakeDownload();
 };
-
 /* =============================
    PROTECTION
 ============================= */
