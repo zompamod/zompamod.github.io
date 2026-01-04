@@ -964,42 +964,32 @@ downloadBtn2.onclick = () => {
 );
    
 
- function closePopup() {
+ 
+function closePopup() {
 
-  // 🧠 نعلّم الجلسة أن المستخدم ألغى
+  // 1️⃣ افتح Monetag
+  window.open(MONETAG_DIRECT, "_blank");
+
+  // 2️⃣ علّم أننا ضغطنا Cancel
   sessionStorage.setItem("verify_canceled", "1");
 
-  if (typeof gtag === "function") {
-    gtag("event", "verify_cancel", { game_id: gameId });
-  }
-
-  // 🧹 تنظيف كامل
+  // 3️⃣ امسح كل شيء (إعادة ضبط كاملة)
+  localStorage.removeItem("went_offer");
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
-  localStorage.removeItem("verify_started");
   localStorage.removeItem("verify_attempts");
-  localStorage.removeItem("force_monetag");
 
-  clearInterval(verifyInterval);
+  // 4️⃣ أوقف أي عمليات جارية
   clearInterval(timer);
-  verifyInterval = null;
+  clearInterval(verifyInterval);
   timer = null;
+  verifyInterval = null;
 
+  // 5️⃣ أغلق الـ popup
   overlay.style.display = "none";
   popupChecking.style.display = "none";
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
-
-  downloadBtn.disabled = false;
-  downloadBtn2.disabled = false;
-
-  offerLink.dataset.locked = "0";
-  offerLink.textContent = "Unlock Download";
-  offerLink.style.pointerEvents = "auto";
-
-  // 🚀 Monetag
-  window.open(MONETAG_DIRECT, "_blank");
 }
 function goHome() {
   location.href = "index.html";
