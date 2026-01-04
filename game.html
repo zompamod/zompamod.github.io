@@ -994,7 +994,7 @@ function setVerifyAgain() {
   localStorage.removeItem("went_offer");
 
   // إنشاء SubID جديد 🔥
-  createSubid();
+  createSubidOnce()
 
   offerLink.textContent = "Verify Again";
   offerLink.style.background =
