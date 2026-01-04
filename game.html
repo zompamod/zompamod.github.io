@@ -561,14 +561,16 @@ const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
 window.addEventListener("pageshow", () => {
-  offerLink.dataset.locked = "0";
-
   const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
+  const canceled = sessionStorage.getItem("verify_canceled");
+
+  // ❌ إذا المستخدم ضغط cancel → لا نعيد أي شيء
+  if (canceled === "1") return;
 
   if (wentOffer === "1" && savedSubid) {
     overlay.style.display = "flex";
-    showChecking();        // ✅ أضف هذا السطر فقط
+    showChecking();
     startVerifyPolling();
   }
 });
