@@ -655,14 +655,6 @@ function trackOfferClick() {
   // ⏳ يبدأ التحقق
   startVerifyPolling();
 }
-  // ✅ دالة مستقلة
- function markWentOffer() {
-  if (offerLink.dataset.locked === "1") return;
-
-  createSubid(); // إنشاء subid
-  offerLink.dataset.locked = "1";
-  localStorage.setItem("went_offer", "1");
-}
 
 function isSubidExpired() {
   const raw = localStorage.getItem("subid_payload");
