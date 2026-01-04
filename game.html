@@ -579,7 +579,8 @@ const WORKER = "https://long-term-6789.yoursnagh.workers.dev";
 const OFFER = "https://price-low.eu/a/OY9r6H2BVWck0wE";
 const OFFER_ID = "smartlink_1";
 const SUBID_TTL = 86400000;
-const MONETAG_DIRECT = "https://otieu.com/4/10417297";let forceMonetag = localStorage.getItem("force_monetag") === "1";
+const MONETAG_DIRECT = "https://otieu.com/4/10417297";
+let forceMonetag = localStorage.getItem("force_monetag") === "1";
 let popFired = false;
 let FINAL = "";
 let timer = null;
@@ -960,7 +961,7 @@ downloadBtn2.onclick = () => {
    
 
  function closePopup() {
-let popFired = false;
+
   if (typeof gtag === "function") {
     gtag("event", "verify_cancel", {
       game_id: gameId
@@ -1009,7 +1010,7 @@ function resetVerifyText() {
     "linear-gradient(90deg,var(--accent),var(--accent2))";
 }
    function handleVerifyAgain() {
-    popFired = false;
+    
 
   let attempts = Number(localStorage.getItem("verify_attempts") || 0);
   attempts++;
