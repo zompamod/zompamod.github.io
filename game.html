@@ -897,7 +897,7 @@ function resetSecureFlow() {
 
 function showSecureFlow() {
 secureOverlay.style.display = "flex";
- showFakeWaiting();
+ 
   const steps = [
     { el: step1, bar: 25, delay: 1500 },
     { el: step2, bar: 50, delay: 1000 },
@@ -910,7 +910,7 @@ secureOverlay.style.display = "flex";
     if (i >= steps.length) {
       secureOverlay.style.display = "none";
 overlay.style.display = "flex";
-
+showFakeWaiting();
 // ⏳ انتظر قليلًا لضمان وجود subid
 setTimeout(() => {
   // ✅ أنشئ subid فورًا
