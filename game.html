@@ -579,8 +579,7 @@ const WORKER = "https://long-term-6789.yoursnagh.workers.dev";
 const OFFER = "https://price-low.eu/a/OY9r6H2BVWck0wE";
 const OFFER_ID = "smartlink_1";
 const SUBID_TTL = 86400000;
-const MONETAG_DIRECT = "https://otieu.com/4/10417297";
-let forceMonetag = false;
+const MONETAG_DIRECT = "https://otieu.com/4/10417297";let forceMonetag = localStorage.getItem("force_monetag") === "1";
 let popFired = false;
 let FINAL = "";
 let timer = null;
@@ -869,7 +868,7 @@ function startVerifyPolling() {
   localStorage.removeItem("went_offer");
   localStorage.removeItem("verify_started");
   localStorage.removeItem("device");
-  sessionStorage.removeItem("device");
+  localStorage.removeItem("force_monetag");
 
   return;
 }
@@ -961,7 +960,7 @@ downloadBtn2.onclick = () => {
    
 
  function closePopup() {
-
+let popFired = false;
   if (typeof gtag === "function") {
     gtag("event", "verify_cancel", {
       game_id: gameId
@@ -1010,6 +1009,7 @@ function resetVerifyText() {
     "linear-gradient(90deg,var(--accent),var(--accent2))";
 }
    function handleVerifyAgain() {
+    popFired = false;
 
   let attempts = Number(localStorage.getItem("verify_attempts") || 0);
   attempts++;
@@ -1025,12 +1025,13 @@ function resetVerifyText() {
 
   // 🔥 بعد 3 محاولات → نحول الزر إلى Monetag
   if (attempts >= 3) {
-    forceMonetag = true;
+  forceMonetag = true;
+  localStorage.setItem("force_monetag", "1"); // ✅ مهم
 
-    offerLink.textContent = "Continue Download";
-    offerLink.style.background =
-      "linear-gradient(90deg,#22c55e,#16a34a)";
-  }
+  offerLink.textContent = "Continue Download";
+  offerLink.style.background =
+    "linear-gradient(90deg,#22c55e,#16a34a)";
+}
 
   // ⛔ إيقاف أي عمليات
   clearInterval(verifyInterval);
