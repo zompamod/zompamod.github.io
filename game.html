@@ -1,595 +1,1048 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RYXLFC2ER8"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-RYXLFC2ER8');
-    gtag('set', 'debug_mode', true);
-  </script>
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modnext.com – Unlimited Features</title>
-  <link rel="canonical" id="canonicalLink">
-  <meta name="robots" content="index, follow">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-<style>
-:root{
-  --bg:#0f0704;
-  --card:#1a0c06;
-  --accent:#ff8b2c;
-  --accent2:#ffb45c;
-  --gold:#ffd58a;
-  --border:#3d1f12;
-}
-body{
-  background:radial-gradient(circle at top,#2a1409 0%,#120905 45%,#080403 100%);
-  margin:0;
-  font-family:Inter,Arial;
-  color:#fff;
-}
-*{box-sizing:border-box}
-
-/* ===== HEADER ===== */
-header{
-  padding:16px 22px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  border-bottom:1px solid var(--border);
-}
-.header-left{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.header-left img{width:36px}
-.header-left span{font-weight:800;font-size:20px}
-
-/* ===== BACK BUTTON ===== */
-.back-btn{
-  width:42px;
-  height:42px;
-  border-radius:14px;
-  border:1px solid rgba(255,180,90,.35);
-  background:linear-gradient(180deg,#231107,#120805);
-  color:var(--gold);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
-}
-.back-btn:hover{
-  background:linear-gradient(180deg,#2f170b,#1a0c06);
-  box-shadow:0 0 0 1px rgba(255,180,90,.4), 0 0 30px rgba(255,180,90,.35);
-  transform:translateX(-2px);
-}
-.back-btn:active{transform:scale(.95)}
-
-/* ===== HERO ===== */
-.hero{
-  padding:28px 22px;
-  display:grid;
-  gap:20px;
-}
-.hero img{
-  width:100%;
-  border-radius:22px;
-  animation:float 5s ease-in-out infinite;
-}
-.hero h1{font-size:28px;margin:0}
-.rating{color:var(--gold);font-weight:600}
-.hero p{color:#e7c8a2;font-size:15px}
-
-/* ===== DOWNLOAD BOX ===== */
-.download-box{
-  background:linear-gradient(180deg,#2a1409,#140a05);
-  border-radius:24px;
-  padding:22px;
-  margin:22px;
-  border:1px solid var(--border);
-  box-shadow:0 10px 40px rgba(0,0,0,.6), inset 0 0 25px rgba(255,138,42,.06);
-  animation:softFloat 6s ease-in-out infinite;
-}
-.download-box button{
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:18px;
-  background:linear-gradient(90deg,var(--accent),var(--accent2));
-  color:#1b0f09;
-  font-size:20px;
-  font-weight:800;
-  cursor:pointer;
-  animation:pulseGlow 2.2s infinite;
-  transition:transform 0.2s ease;
-  margin-bottom:12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:row-reverse;
-}
-.download-box button img{
-  width:20px;
-  height:20px;
-  margin-left:8px;
-}
-.download-box button:hover{transform:scale(1.05)}
-
-/* ===== FAKE LOADER ===== */
-#fakeLoader{margin-top:16px;display:none}
-#fakeBar{
-  width:100%;
-  height:14px;
-  background:#080403;
-  border-radius:10px;
-  overflow:hidden;
-  border:1px solid var(--border)
-}
-#fakeProgress{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg,var(--accent),var(--gold));
-}
-#fakeText,#fakeMeta{
-  margin-top:6px;
-  font-size:14px;
-  color:#e7c8a2;
-  text-align:center
-}
-
-/* ===== FEATURES ===== */
-.features{padding:22px;display:grid;gap:14px}
-.feature{
-  background:linear-gradient(180deg,#221108,#120805);
-  padding:14px 16px;
-  border-radius:14px;
-  font-size:14px;
-  border:1px solid var(--border)
-}
-
-/* ===== FOOTER ===== */
-footer{padding:20px;text-align:center;color:#c4a27a;font-size:13px}
-
-/* ===== ANIMATIONS ===== */
-@keyframes pulseGlow{
-  0%{box-shadow:0 0 18px rgba(255,138,42,.4)}
-  50%{box-shadow:0 0 38px rgba(255,138,42,.75)}
-  100%{box-shadow:0 0 18px rgba(255,138,42,.4)}
-}
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-10px)}
-}
-@keyframes softFloat{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-6px)}
-}
-</style>
-</head>
-  
-<body>
-
-<header>
-  <div class="header-left">
-    <img src="https://i.imgur.com/x5uKfGJ.png">
-    <span>Modnext</span>
-  </div>
-
-  <button class="back-btn" onclick="goHome()" aria-label="Back">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
-      <path d="M15 18l-6-6 6-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"/>
-    </svg>
-  </button>
-</header>
-
-<section class="hero">
-  <img id="gameImage" src="">
-  <h1 id="gameTitle"></h1>
-  <div id="gameRating" class="rating"></div>
-  <p id="gameDescription"></p>
-
-  <div class="download-box">
-    <button id="downloadBtn">
-      <img src="https://i.imgur.com/0CDI4Yq.png" alt="Android">
-      Download APK
-    </button>
-
-    <button id="downloadBtn2">
-      <img src="https://i.imgur.com/OvpX7m5.png" alt="iOS">
-      Download
-    </button>
-
-    <div id="fakeLoader">
-      <div id="fakeBar">
-        <div id="fakeProgress"></div>
-      </div>
-      <div id="fakeText">Preparing download…</div>
-      <div id="fakeMeta">0 MB / 154.27 MB • 0 MB/s</div>
-    </div>
-  </div>
-</section>
-
-<section class="features">
-  <div class="feature">✔ Unlimited Features Enabled</div>
-  <div class="feature">✔ No Root Required</div>
-  <div class="feature">✔ Latest Version</div>
-  <div class="feature">✔ Fast & Secure Download</div>
-</section>
-
-<!-- ================= SECURITY FLOW ================= -->
-<div id="secureOverlay">
-  <div class="secureBox">
-    <svg class="secure-spinner" xmlns="http://www.w3.org/2000/svg"
-         viewBox="0 0 24 24" width="50" height="50">
-      <path fill="none" stroke="currentColor" stroke-width="2"
-        d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm7.94-2a7.98 7.98 0 0 0 0-2l2.07-1.6-2-3.46-2.45 1a7.968 7.968 0 0 0-1.73-1L15 2h-6l-.73 2.44a7.968 7.968 0 0 0-1.73 1l-2.45-1-2 3.46 2.07 1.6a7.98 7.98 0 0 0 0 2L2.16 14l2 3.46 2.45-1a7.968 7.968 0 0 0 1.73 1L9 22h6l.73-2.44a7.968 7.968 0 0 0 1.73-1l2.45 1 2-3.46-2.07-1.6z"/>
-    </svg>
-
-    <h3>Final Security Check</h3>
-
-    <div id="step1" class="secure-step">✔ File integrity verified</div>
-    <div id="step2" class="secure-step">✔ Malware & virus scan completed</div>
-    <div id="step3" class="secure-step">✔ Download server authenticated</div>
-    <div id="step4" class="secure-step">⚠ Human verification required</div>
-
-    <div class="secure-progress">
-      <div id="secureBar" class="secure-bar"></div>
-    </div>
-  </div>
-</div>
-
-<footer>© 2025 Modnext.com — All rights reserved</footer>
-
-<!-- ================= POPUP ================= -->
-<div id="overlay">
-  <div id="popup">
-
-    <img src="https://i.imgur.com/f0RrI6E.png" class="popup-lock" alt="Secure Lock">
-
-    <h2>File Almost Ready</h2>
-    <p>
-      Complete this quick step to start downloading.<br><br>
-      1: Tap "Continue" and complete one offer (takes less than 30 seconds).<br>
-      2: Return to this page and your download will start automatically.
-    </p>
-
-    <div id="popupChecking" class="popup-status checking">
-      <span class="spinner"></span>
-      Preparing download…
-    </div>
-
-    <div id="popupError" class="popup-status error">
-      The verification was not completed successfully, please try again.
-    </div>
-
-    <div id="popupSuccess" class="popup-status success">
-      ✅ Verification completed successfully.<br>
-      Download will start shortly…
-    </div>
-
-    <a id="offerLink" target="_blank">Continue</a>
-    <button onclick="closePopup()">Later</button>
-  </div>
-</div>
-
-<div id="closeNotice" class="toast-notice">
-  Please complete the verification process and the download will be completed automatically ⚠️
-</div>
-
-</body>
-
-<script>
-/* ======================================================
-   BASIC CHECK
-====================================================== */
-if (!location.search.includes("game=")) {
-  location.replace("index.html");
-}
-
-/* ======================================================
-   GET GAME
-====================================================== */
-const params = new URLSearchParams(location.search);
-const gameId = params.get("game");
-const game = GAMES.find(g => g.id === gameId);
-
-if (!game) {
-  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
-  throw new Error("Game not found");
-}
-
-/* ======================================================
-   DOM ELEMENTS
-====================================================== */
-const downloadBtn  = document.getElementById("downloadBtn");
-const downloadBtn2 = document.getElementById("downloadBtn2");
-
-const fakeLoader   = document.getElementById("fakeLoader");
-const fakeProgress = document.getElementById("fakeProgress");
-const fakeText     = document.getElementById("fakeText");
-const fakeMeta     = document.getElementById("fakeMeta");
-
-const overlay       = document.getElementById("overlay");
-const popupChecking = document.getElementById("popupChecking");
-const popupError    = document.getElementById("popupError");
-const popupSuccess  = document.getElementById("popupSuccess");
-const offerLink     = document.getElementById("offerLink");
-
-const secureOverlay = document.getElementById("secureOverlay");
-const secureBar     = document.getElementById("secureBar");
-const step1 = document.getElementById("step1");
-const step2 = document.getElementById("step2");
-const step3 = document.getElementById("step3");
-const step4 = document.getElementById("step4");
-
-/* ======================================================
-   CONFIG
-====================================================== */
-const WORKER = "https://long-term-6789.yoursnagh.workers.dev";
-const OFFER  = "https://price-low.eu/a/OY9r6H2BVWck0wE";
-const TOTAL_MB = 154.27;
-
-let loadedMB = 0;
-let timer = null;
-let verifyInterval = null;
-
-/* ======================================================
-   HELPERS
-====================================================== */
-function cleanURL(url){
-  const u = new URL(url);
-  ["fbclid","gclid","ttclid","utm_source","utm_campaign"].forEach(p=>{
-    u.searchParams.delete(p);
-  });
-  return u.toString();
-}
-
-function createSubid(){
-  let sid = localStorage.getItem("subid");
-  if (!sid){
-    sid = "rbx_" + Math.random().toString(36).slice(2,10);
-    localStorage.setItem("subid", sid);
-  }
-  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + sid;
-  return sid;
-}
-
-function getFinalLink(){
-  const device = localStorage.getItem("device");
-  if (!device) return null;
-  if (game.links && game.links[device]) return game.links[device];
-  return null;
-}
-
-/* ======================================================
-   UI STATES
-====================================================== */
-function showChecking(){
-  popupChecking.style.display = "block";
-  popupError.style.display = "none";
-  popupSuccess.style.display = "none";
-}
-
-function showError(){
-  popupChecking.style.display = "none";
-  popupError.style.display = "block";
-}
-
-function showSuccess(){
-  popupChecking.style.display = "none";
-  popupSuccess.style.display = "block";
-}
-
-/* ======================================================
-   FAKE DOWNLOAD
-====================================================== */
-function resetDownloader(){
-  clearInterval(timer);
-  timer = null;
-  loadedMB = 0;
-  fakeLoader.style.display = "none";
-  fakeProgress.style.width = "0%";
-  fakeText.textContent = "Preparing download…";
-  fakeMeta.textContent = `0 MB / ${TOTAL_MB} MB • 0 MB/s`;
-  downloadBtn.disabled = false;
-  downloadBtn2.disabled = false;
-}
-
-function startFakeDownload(){
-  resetDownloader();
-  resetSecureFlow();
-
-  fakeLoader.style.display = "block";
-  downloadBtn.disabled = true;
-  downloadBtn2.disabled = true;
-
-  timer = setInterval(()=>{
-    const speed = 4 + Math.random()*4;
-    loadedMB = Math.min(TOTAL_MB, loadedMB + speed);
-
-    fakeProgress.style.width = (loadedMB / TOTAL_MB * 100) + "%";
-    fakeMeta.textContent =
-      `${loadedMB.toFixed(1)} MB / ${TOTAL_MB} MB • ${speed.toFixed(1)} MB/s`;
-
-    if (loadedMB >= TOTAL_MB){
-      clearInterval(timer);
-      showSecureFlow();
-    }
-  }, 500);
-}
-
-/* ======================================================
-   SECURE FLOW
-====================================================== */
-function resetSecureFlow(){
-  [step1,step2,step3,step4].forEach(s=>s.classList.remove("active"));
-  secureBar.style.width = "0%";
-}
-
-function showSecureFlow(){
-  secureOverlay.style.display = "flex";
-
-  const steps = [
-    {el:step1, bar:25, delay:1200},
-    {el:step2, bar:50, delay:1200},
-    {el:step3, bar:75, delay:2000},
-    {el:step4, bar:100, delay:1500},
-  ];
-
-  let i = 0;
-  function run(){
-    if (i >= steps.length){
-      secureOverlay.style.display = "none";
-      overlay.style.display = "flex";
-      showChecking();
-      startVerifyPolling();
-      return;
-    }
-    steps[i].el.classList.add("active");
-    secureBar.style.width = steps[i].bar + "%";
-    setTimeout(()=>{ i++; run(); }, steps[i].delay);
-  }
-  run();
-}
-
-/* ======================================================
-   OFFER CLICK
-====================================================== */
-offerLink.addEventListener("click", () => {
-  if (offerLink.dataset.locked === "1") return;
-
-  offerLink.dataset.locked = "1";
-  createSubid();
-  localStorage.setItem("went_offer","1");
-
-  window.open(offerLink.href, "_blank");
-});
-
-/* ======================================================
-   VERIFY POLLING
-====================================================== */
-function startVerifyPolling(){
-  clearInterval(verifyInterval);
-
-  verifyInterval = setInterval(async ()=>{
-    const sid = localStorage.getItem("subid");
-    if (!sid) return;
-
-    showChecking();
-
-    let res;
-    try{
-      res = await fetch(WORKER + "/verify?subid=" + sid);
-    }catch{
-      return;
-    }
-
-    const t = (await res.text()).trim();
-
-    if (t === "verified"){
-      clearInterval(verifyInterval);
-      showSuccess();
-
-      const finalLink = getFinalLink();
-      if (!finalLink) return showError();
-
-      setTimeout(()=>{
-        localStorage.clear();
-        location.href = finalLink;
-      }, 800);
-    }
-
-    if (t === "failed" || t === "not_completed"){
-      clearInterval(verifyInterval);
-      handleVerifyAgain();
-    }
-  }, 2000);
-}
-
-/* ======================================================
-   VERIFY FAILED
-====================================================== */
-function handleVerifyAgain(){
-  localStorage.removeItem("subid");
-  localStorage.removeItem("went_offer");
-
-  popupChecking.style.display = "none";
-  popupSuccess.style.display = "none";
-  popupError.style.display = "block";
-
-  offerLink.dataset.locked = "0";
-}
-
-/* ======================================================
-   CANCEL
-====================================================== */
-function closePopup(){
-  clearInterval(timer);
-  clearInterval(verifyInterval);
-
-  localStorage.clear();
-
-  overlay.style.display = "none";
-  popupChecking.style.display = "none";
-  popupError.style.display = "none";
-  popupSuccess.style.display = "none";
-
-  offerLink.dataset.locked = "0";
-  resetDownloader();
-}
-
-/* ======================================================
-   BUTTONS
-====================================================== */
-downloadBtn.onclick = () => {
-  localStorage.setItem("device","android");
-  startFakeDownload();
-};
-
-downloadBtn2.onclick = () => {
-  localStorage.setItem("device","ios");
-  startFakeDownload();
-};
-
-/* ======================================================
-   RETURN FROM OFFER
-====================================================== */
-window.addEventListener("pageshow", ()=>{
-  const sid = localStorage.getItem("subid");
-  const went = localStorage.getItem("went_offer");
-
-  if (sid && went){
-    overlay.style.display = "flex";
-    showChecking();
-    startVerifyPolling();
-  }
-});
-
-/* ======================================================
-   CONTENT LOAD
-====================================================== */
-document.addEventListener("DOMContentLoaded", ()=>{
-  document.querySelector(".hero h1").textContent = game.title;
-  document.querySelector(".hero img").src = game.image;
-  document.getElementById("gameDescription").textContent = game.description;
-  if (game.rating)
-    document.getElementById("gameRating").textContent = game.rating;
-});
-
-function goHome(){
-  location.href = "index.html";
-}
-</script>
+<!DOCTYPE html>          
+<html lang="en">          
+<head>        
+ <!-- Google Analytics -->        
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RYXLFC2ER8"></script>        
+<script>        
+  window.dataLayer = window.dataLayer || [];        
+  function gtag(){dataLayer.push(arguments);}        
+  gtag('js', new Date());        
+  gtag('config', 'G-RYXLFC2ER8');        
+  gtag('set', 'debug_mode', true);        
+</script>        
+         
+        
+<meta charset="UTF-8">            
+<meta name="viewport" content="width=device-width, initial-scale=1.0">            
+<title>Modnext.com – Unlimited Features</title>            
+ <link rel="canonical" id="canonicalLink">        
+<meta name="robots" content="index, follow">        
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">            
+          
+<style>          
+:root{          
+  --bg:#0f0704;          
+  --card:#1a0c06;          
+  --accent:#ff8b2c;          
+  --accent2:#ffb45c;          
+  --gold:#ffd58a;          
+  --border:#3d1f12;          
+}          
+body{          
+  background:radial-gradient(circle at top,#2a1409 0%,#120905 45%,#080403 100%);          
+  margin:0;          
+  font-family:Inter,Arial;          
+  color:#fff;          
+}          
+          
+*{box-sizing:border-box}          
+          
+/* ===== HEADER ===== */          
+header{          
+  padding:16px 22px;          
+  display:flex;          
+  align-items:center;          
+  gap:12px;          
+  border-bottom:1px solid var(--border);          
+}          
+header img{width:36px}          
+header span{font-weight:800;font-size:20px}          
+          
+/* ===== HERO ===== */          
+.hero{          
+  padding:28px 22px;          
+  display:grid;          
+  gap:20px;          
+}          
+.hero img{          
+  width:100%;          
+  border-radius:22px;          
+  animation:float 5s ease-in-out infinite;          
+}          
+.hero h1{font-size:28px;margin:0}          
+.rating{color:var(--gold);font-weight:600}          
+.hero p{color:#e7c8a2;font-size:15px}          
+          
+/* ===== DOWNLOAD BOX ===== */          
+.download-box{          
+  background:linear-gradient(180deg,#2a1409,#140a05);          
+  border-radius:24px;          
+  padding:22px;          
+  margin:22px;          
+  border:1px solid var(--border);          
+  box-shadow:0 10px 40px rgba(0,0,0,.6), inset 0 0 25px rgba(255,138,42,.06);          
+  animation:softFloat 6s ease-in-out infinite;          
+}          
+          
+.download-box button{          
+  width:100%;          
+  padding:16px;          
+  border:none;          
+  border-radius:18px;          
+  background:linear-gradient(90deg,var(--accent),var(--accent2));          
+  color:#1b0f09;          
+  font-size:20px;          
+  font-weight:800;          
+  cursor:pointer;          
+  animation:pulseGlow 2.2s infinite;          
+  transition:transform 0.2s ease;          
+  margin-bottom:12px; /* مسافة بين الأزرار */          
+  display:flex;          
+  align-items:center;          
+  justify-content:center;          
+  flex-direction: row-reverse;          
+}          
+          
+.download-box button img{          
+  width:20px;          
+  height:20px;          
+  margin-left:8px;          
+  vertical-align:middle;          
+}          
+          
+.download-box button:hover{          
+  transform:scale(1.05);          
+}          
+          
+/* ===== FAKE PROGRESS ===== */          
+#fakeLoader{margin-top:16px;display:none}          
+#fakeBar{          
+  width:100%;          
+  height:14px;          
+  background:#080403;          
+  border-radius:10px;          
+  overflow:hidden;          
+  border:1px solid var(--border)          
+}          
+#fakeProgress{          
+  height:100%;          
+  width:0%;          
+  background:linear-gradient(90deg,var(--accent),var(--gold));          
+}          
+#fakeText,#fakeMeta{          
+  margin-top:6px;          
+  font-size:14px;          
+  color:#e7c8a2;          
+  text-align:center          
+}          
+          
+/* ===== FEATURES ===== */          
+.features{padding:22px;display:grid;gap:14px}          
+.feature{          
+  background:linear-gradient(180deg,#221108,#120805);          
+  padding:14px 16px;          
+  border-radius:14px;          
+  font-size:14px;          
+  border:1px solid var(--border)          
+}          
+          
+/* ===== FOOTER ===== */          
+footer{padding:20px;text-align:center;color:#c4a27a;font-size:13px}          
+          
+/* ===== POPUP ===== */          
+#overlay{          
+  position:fixed;          
+  inset:0;          
+  background:rgba(0,0,0,.85);          
+  display:none;          
+  justify-content:center;          
+  align-items:center;          
+  z-index:9999          
+}          
+#popup{          
+  background:linear-gradient(180deg,#2a1409,#140a05);          
+  width:92%;          
+  max-width:420px;          
+  border-radius:22px;          
+  padding:24px;          
+  text-align:center;          
+  border:1px solid var(--border);          
+  animation:popupIn .35s ease-out;          
+}          
+#popup p{font-size:14px;color:#e7c8a2;line-height:1.6}          
+          
+/* ===== VERIFY BUTTON (NEW ANIMATION) ===== */          
+#offerLink{          
+  display:block;          
+  margin-top:16px;          
+  padding:14px;          
+  background:linear-gradient(90deg,var(--accent),var(--accent2));          
+  border-radius:16px;          
+  color:#1b0f09;          
+  font-weight:800;          
+  text-decoration:none;          
+  cursor:pointer;          
+  text-align:center;          
+  animation:pulseGlow 2.2s infinite;          
+  transition:transform 0.2s ease, box-shadow 0.2s ease;          
+}          
+#offerLink:hover{          
+  transform:scale(1.05);          
+  box-shadow:0 0 30px rgba(255,138,42,.8);          
+}          
+          
+#popup button{          
+  margin-top:12px;          
+  background:#b91c1c;          
+  border:none;          
+  padding:10px 14px;          
+  color:#fff;          
+  border-radius:12px;          
+  cursor:pointer          
+}          
+          
+.popup-status{margin-top:14px;font-weight:700;display:none}          
+.popup-status.checking{color:var(--gold)}          
+.popup-status.success{color:#22c55e}          
+.popup-status.error{color:#ef4444}          
+          
+.toast-notice{          
+  position:fixed;          
+  bottom:26px;          
+  left:50%;          
+  transform:translateX(-50%);          
+  background:#3a1f12;          
+  color:#fff;          
+  padding:14px 18px;          
+  border-radius:14px;          
+  font-weight:800;          
+  font-size:14px;          
+  display:none;          
+  z-index:10000          
+}          
+          
+/* ===== ANIMATIONS ===== */          
+@keyframes pulseGlow{          
+  0%{box-shadow:0 0 18px rgba(255,138,42,.4)}          
+  50%{box-shadow:0 0 38px rgba(255,138,42,.75)}          
+  100%{box-shadow:0 0 18px rgba(255,138,42,.4)}          
+}          
+@keyframes float{          
+  0%,100%{transform:translateY(0)}          
+  50%{transform:translateY(-10px)}          
+}          
+@keyframes softFloat{          
+  0%,100%{transform:translateY(0)}          
+  50%{transform:translateY(-6px)}          
+}          
+@keyframes popupIn{          
+  from{opacity:0;transform:scale(.92)}          
+  to{opacity:1;transform:scale(1)}          
+}          
+          
+/* ===== PERFORMANCE BOOST ===== */          
+*{          
+  -webkit-tap-highlight-color: transparent;          
+}          
+img{image-rendering:auto;backface-visibility:hidden}          
+button{will-change:transform,box-shadow}          
+.hero img,.download-box,.feature{transform:translateZ(0);}          
+          
+.popup-lock{        
+  width:76px !important;        
+  height:76px !important;        
+  display:block;        
+  margin:0 auto 14px;        
+  object-fit:contain;        
+  max-width:76px;        
+  max-height:76px;        
+}        
+            
+/* ===== SECURE CHECK FLOW ===== */          
+#secureOverlay{          
+  position:fixed;          
+  inset:0;          
+  background:rgba(0,0,0,.55);          
+  backdrop-filter:blur(6px);          
+  display:none;          
+  justify-content:center;          
+  align-items:center;          
+  z-index:9998;          
+}          
+          
+.secureBox{          
+  background:linear-gradient(180deg,#2a1409,#140a05);          
+  border:1px solid var(--border);          
+  border-radius:22px;          
+  padding:26px 24px;          
+  width:92%;          
+  max-width:380px;          
+  text-align:center;          
+  animation:popupIn .45s ease-out;          
+}          
+          
+.secure-lock{          
+  width:70px;          
+  margin-bottom:14px;          
+}          
+          
+.secure-step{          
+  font-size:14px;          
+  color:#e7c8a2;          
+  margin-top:8px;          
+  opacity:0;          
+  transition:opacity .6s ease;          
+}          
+          
+.secure-step.active{          
+  opacity:1;          
+}          
+          
+.secure-progress{          
+  height:10px;          
+  background:#080403;          
+  border-radius:10px;          
+  margin-top:16px;          
+  overflow:hidden;          
+  border:1px solid var(--border);          
+}          
+          
+.secure-bar{          
+  height:100%;          
+  width:0%;          
+  background:linear-gradient(90deg,var(--accent),var(--gold));          
+  transition:width 1.4s ease;          
+}          
+          
+.secure-spinner {          
+  animation: spin 1s linear infinite;          
+  color: var(--accent); /* هذا يلون الأيقونة */          
+}          
+@keyframes spin {          
+  to { transform: rotate(360deg); }          
+  }          
+            
+            
+   header{        
+  padding:16px 22px;        
+  display:flex;        
+  align-items:center;        
+  justify-content:space-between;        
+  border-bottom:1px solid var(--border);        
+}        
+        
+.header-left{        
+  display:flex;        
+  align-items:center;        
+  gap:12px;        
+}        
+        
+.header-left img{        
+  width:36px;        
+}        
+        
+.header-left span{        
+  font-weight:800;        
+  font-size:20px;        
+}        
+        
+/* زر الرجوع الاحترافي */        
+.back-btn{        
+  width:42px;        
+  height:42px;        
+  border-radius:14px;        
+  border:1px solid rgba(255,180,90,.35);        
+  background:linear-gradient(180deg,#231107,#120805);        
+  color:var(--gold);        
+  display:flex;        
+  align-items:center;        
+  justify-content:center;        
+  cursor:pointer;        
+  transition:        
+    transform .2s ease,        
+    box-shadow .2s ease,        
+    background .2s ease;        
+}        
+        
+.back-btn:hover{        
+  background:linear-gradient(180deg,#2f170b,#1a0c06);        
+  box-shadow:        
+    0 0 0 1px rgba(255,180,90,.4),        
+    0 0 30px rgba(255,180,90,.35);        
+  transform:translateX(-2px);        
+}        
+        
+.back-btn:active{        
+  transform:scale(.95);        
+}        
+ .spinner{        
+  width:16px;        
+  height:16px;        
+  border:3px solid rgba(255,213,138,.3);        
+  border-top-color: var(--gold);        
+  border-radius:50%;        
+  display:inline-block;        
+  margin-right:8px;        
+  vertical-align:middle;        
+  animation: spin 0.8s linear infinite;        
+ }        
+          
+</style>          
+</head>          
+          
+<body>          
+          
+<header>        
+  <div class="header-left">        
+    <img src="https://i.imgur.com/x5uKfGJ.png">        
+    <span>Modnext</span>        
+  </div>        
+        
+  <button class="back-btn" onclick="goHome()" aria-label="Back">        
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">        
+      <path d="M15 18l-6-6 6-6"        
+            fill="none"        
+            stroke="currentColor"        
+            stroke-width="2"        
+            stroke-linecap="round"        
+            stroke-linejoin="round"/>        
+    </svg>        
+  </button>        
+</header>        
+<section class="hero">            
+<img src="https://i.imgur.com/dexs6tR.jpeg">            
+<h1>Forza Horizon 5</h1>            
+<div id="gameRating" class="rating"></div>        
+<p id="gameDescription"></p>            
+          
+<div class="download-box">            
+  <button id="downloadBtn">          
+    <img src="https://i.imgur.com/0CDI4Yq.png" alt="Android">          
+    Download APK          
+  </button>            
+        
+  <button id="downloadBtn2">          
+    <img src="https://i.imgur.com/OvpX7m5.png" alt="iOS">          
+    Download          
+  </button>            
+          
+  <div id="fakeLoader">            
+    <div id="fakeBar"><div id="fakeProgress"></div></div>            
+    <div id="fakeText">Preparing APK…</div>            
+    <div id="fakeMeta">0 MB / 154.27 MB • 0 MB/s</div>            
+  </div>            
+</div>            
+          
+<section class="features">            
+<div class="feature">✔ Unlimited Features Enabled</div>            
+<div class="feature">✔ No Root Required</div>            
+<div class="feature">✔ Latest Version</div>            
+<div class="feature">✔ Fast & Secure Download</div>          
+</section>            
+          
+  <!-- Security Flow -->          
+<div id="secureOverlay">          
+  <div class="secureBox">          
+    <svg class="secure-spinner" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="50" height="50">          
+  <path fill="none" stroke="currentColor" stroke-width="2" d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zm7.94-2a7.98 7.98 0 0 0 0-2l2.07-1.6-2-3.46-2.45 1a7.968 7.968 0 0 0-1.73-1L15 2h-6l-.73 2.44a7.968 7.968 0 0 0-1.73 1l-2.45-1-2 3.46 2.07 1.6a7.98 7.98 0 0 0 0 2L2.16 14l2 3.46 2.45-1a7.968 7.968 0 0 0 1.73 1L9 22h6l.73-2.44a7.968 7.968 0 0 0 1.73-1l2.45 1 2-3.46-2.07-1.6z"/>          
+</svg>          
+          
+              
+          
+    <h3>Final Security Check</h3>          
+          
+    <div id="step1" class="secure-step">✔ File integrity verified</div>          
+    <div id="step2" class="secure-step">✔ Malware & virus scan completed</div>          
+    <div id="step3" class="secure-step">✔ Download server authenticated</div>          
+    <div id="step4" class="secure-step">⚠ Human verification required</div>          
+          
+    <div class="secure-progress">          
+      <div id="secureBar" class="secure-bar"></div>          
+    </div>          
+  </div>          
+  </div>          
+            
+            
+            
+          
+<footer>© 2025 Modnext.com — All rights reserved</footer>            
+          
+<div id="overlay">            
+<div id="popup">            
+          
+  <!-- Logo القفل -->          
+  <img src="https://i.imgur.com/f0RrI6E.png" alt="Secure Lock" class="popup-lock">          
+<h2>File Almost Ready</h2>            
+<p>          
+Complete this quick step to start downloading.<br><br>          
+1: Tap "Continue" and complete one offer-Takes less than 30 seconds.<br>          
+2: Return To this page and your download will start automatically.          
+</p>          
+          
+<div id="popupChecking" class="popup-status checking">        
+  <span class="spinner"></span>        
+  Preparing download…        
+</div>        
+<div id="popupError" class="popup-status error">The verification was not completed successfully, please Try again.</div>            
+<div id="popupSuccess" class="popup-status success">✅ Verification completed successfully.<br>Download will start shortly…</div>            
+          
+<a id="offerLink" target="_blank" onclick="trackOfferClick()">Continue</a>        
+<button onclick="closePopup()">Later</button>            
+</div>            
+</div>            
+          
+<div id="closeNotice" class="toast-notice">          
+Please complete the verification process and the download will be completed automatically⚠️.          
+</div>          
+        
+        
+<script src="games.js"></script>        
+<script>        
+if (!location.search.includes("game=")) {        
+  location.replace("index.html");        
+}        
+</script>        
+<script>        
+/* =============================        
+   GET GAME FROM URL        
+============================= */        
+        
+        
+const params = new URLSearchParams(window.location.search);        
+const gameId = params.get("game");        
+/* =============================        
+   GOOGLE ANALYTICS – VIEW GAME        
+============================= */        
+if (typeof gtag === "function" && gameId) {        
+  gtag("event", "view_game", {        
+    game_id: gameId,        
+    page_location: location.href        
+  });        
+}        
+const game = GAMES.find(g => g.id === gameId);        
+        
+if (!game) {        
+  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";        
+  throw new Error("Game not found");        
+}        
+        
+/* =============================        
+   SEO (TITLE & DESCRIPTION)        
+============================= */        
+document.title = game.title + " Mod APK Latest Version | Modnext";        
+        
+let metaDesc = document.querySelector("meta[name='description']");        
+if (!metaDesc) {        
+  metaDesc = document.createElement("meta");        
+  metaDesc.name = "description";        
+  document.head.appendChild(metaDesc);        
+}        
+metaDesc.content = game.description;        
+        
+        
+        
+/* =============================        
+   DOM ELEMENTS        
+============================= */        
+const secureOverlay = document.getElementById("secureOverlay");        
+const secureBar = document.getElementById("secureBar");        
+        
+const step1 = document.getElementById("step1");        
+const step2 = document.getElementById("step2");        
+const step3 = document.getElementById("step3");        
+const step4 = document.getElementById("step4");        
+        
+const downloadBtn = document.getElementById("downloadBtn");        
+const downloadBtn2 = document.getElementById("downloadBtn2");        
+        
+const fakeLoader = document.getElementById("fakeLoader");        
+const fakeProgress = document.getElementById("fakeProgress");        
+const fakeText = document.getElementById("fakeText");        
+const fakeMeta = document.getElementById("fakeMeta");        
+        
+const overlay = document.getElementById("overlay");        
+const popupChecking = document.getElementById("popupChecking");        
+const popupError = document.getElementById("popupError");        
+const popupSuccess = document.getElementById("popupSuccess");        
+        
+        
+const offerLink = document.getElementById("offerLink");        
+const closeNotice = document.getElementById("closeNotice");        
+        
+/* 🔔 إشعار الرجوع بدون إكمال التحقق */        
+window.addEventListener("pageshow", () => {        
+  offerLink.dataset.locked = "0";        
+        
+  const wentOffer = localStorage.getItem("went_offer");        
+  const savedSubid = localStorage.getItem("subid");        
+        
+  if (wentOffer === "1" && savedSubid) {        
+    overlay.style.display = "flex";        
+    startVerifyPolling();        
+  }        
+});        
+/* =============================        
+   CONFIG        
+============================= */        
+const WORKER = "https://long-term-6789.yoursnagh.workers.dev";        
+const OFFER = "https://price-low.eu/a/OY9r6H2BVWck0wE";        
+const OFFER_ID = "smartlink_1";        
+const SUBID_TTL = 86400000;        
+        
+let FINAL = "";        
+let timer = null;        
+let verifyInterval = null;        
+let subid = null;        
+let loadedMB = 0;        
+        
+const totalMB = 154.27;        
+const SPEED_MBPS = 8.9;        
+        
+/* =============================        
+   HELPERS        
+============================= */        
+function cleanURL(url) {        
+  const u = new URL(url);        
+  ["fbclid","gclid","ttclid","utm_source","utm_campaign"].forEach(p => {        
+    u.searchParams.delete(p);        
+  });        
+  return u.toString();        
+}        
+        
+function createSubid() {        
+  subid = "rbx_" + Math.random().toString(36).slice(2, 10);        
+  localStorage.setItem("subid", subid);        
+  localStorage.setItem("subid_payload", JSON.stringify({        
+    id: subid,        
+    offer: OFFER_ID,        
+    time: Date.now()        
+  }));        
+  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;        
+}        
+        
+ function trackOfferClick() {        
+  if (offerLink.dataset.locked === "1") return;        
+        
+  // 1️⃣ verify_start (مرة واحدة)        
+  if (!localStorage.getItem("verify_started")) {        
+    gtag("event", "verify_start", {        
+      game_id: gameId,        
+      device: localStorage.getItem("device") || "unknown"        
+    });        
+    localStorage.setItem("verify_started", "1");        
+  }        
+        
+  // 2️⃣ إنشاء subid فورًا        
+  createSubid();        
+  localStorage.setItem("went_offer", "1");        
+  offerLink.dataset.locked = "1";        
+        
+  // 3️⃣ إرسال offer_click (غير معطل للتنقل)        
+  gtag("event", "offer_click", {        
+    game_id: gameId,        
+    device: localStorage.getItem("device") || "unknown",        
+    transport_type: "beacon" // 🚀 لا ينتظر        
+  });        
+        
+  // 4️⃣ فتح الرابط فورًا (أقصى سرعة)        
+  window.open(offerLink.href, "_blank");        
+}        
+  // ✅ دالة مستقلة        
+ function markWentOffer() {        
+  if (offerLink.dataset.locked === "1") return;        
+        
+  createSubid(); // إنشاء subid        
+  offerLink.dataset.locked = "1";        
+  localStorage.setItem("went_offer", "1");        
+}        
+        
+function isSubidExpired() {        
+  const raw = localStorage.getItem("subid_payload");        
+  if (!raw) return true;        
+  try {        
+    const d = JSON.parse(raw);        
+    return (Date.now() - d.time) > SUBID_TTL;        
+  } catch {        
+    return true;        
+  }        
+}        
+        
+/* =============================        
+   DOWNLOAD FLOW        
+============================= */        
+function resetDownloader() {        
+  clearInterval(timer);        
+  clearInterval(verifyInterval);        
+  fakeLoader.style.display = "none";        
+  fakeProgress.style.width = "0%";        
+  fakeText.textContent = "Preparing download…";        
+  fakeMeta.textContent = `0 MB / ${totalMB} MB • 0 MB/s`;        
+  loadedMB = 0;        
+  downloadBtn.disabled = false;        
+  downloadBtn2.disabled = false;        
+}        
+function getDynamicSpeed(progressPercent) {        
+  let base = getNetworkBaseSpeed();        
+        
+  // تذبذب واضح        
+  base += (Math.random() - 0.5) * 3; // ⬅️ أكبر        
+        
+  // تباطؤ طبيعي قرب النهاية        
+  if (progressPercent > 80) base *= 0.7;        
+  if (progressPercent > 92) base *= 0.45;        
+        
+  return Math.max(1.1, base);        
+}        
+        
+function getNetworkBaseSpeed() {        
+  const conn = navigator.connection || {};        
+  let base;        
+        
+  switch (conn.effectiveType) {        
+    case "slow-2g":        
+    case "2g":        
+      base = 1.5;        
+      break;        
+    case "3g":        
+      base = 3.5;        
+      break;        
+    case "4g":        
+    default:        
+      base = 7.5;        
+  }        
+        
+  // فرق بسيط حسب الجهاز        
+  const device = localStorage.getItem("device");        
+  if (device === "android") base *= 1.15;        
+  if (device === "ios") base *= 0.9;        
+        
+  return base;        
+}        
+         
+function startFakeDownload() {        
+  resetDownloader();        
+  resetSecureFlow();        
+          
+        
+  fakeLoader.style.display = "block";        
+  downloadBtn.disabled = true;        
+  downloadBtn2.disabled = true;        
+        
+  timer = setInterval(() => {        
+    const percent = (loadedMB / totalMB) * 100;        
+const speed = getDynamicSpeed(percent);        
+        
+loadedMB = Math.min(totalMB, loadedMB + speed);        
+        
+fakeProgress.style.width = (loadedMB / totalMB * 100) + "%";        
+fakeMeta.textContent =        
+  `${loadedMB.toFixed(1)} MB / ${totalMB} MB • ${speed.toFixed(1)} MB/s`;        
+    if (loadedMB >= totalMB) {        
+      clearInterval(timer);        
+      showSecureFlow();        
+    }        
+  }, 500);        
+}        
+        
+/* =============================        
+   VERIFY        
+============================= */        
+function getFinalLink() {        
+  const device = localStorage.getItem("device");        
+  if (!device || !game) return null;        
+        
+  // الحالة الموصى بها: links {}        
+  if (game.links && game.links[device]) {        
+    return game.links[device];        
+  }        
+        
+  // حالات احتياطية        
+  if (device === "android") {        
+    return (        
+      game.android ||        
+      game.link_android ||        
+      game.final_android ||        
+      game.apk ||        
+      null        
+    );        
+  }        
+        
+  if (device === "ios") {        
+    return (        
+      game.ios ||        
+      game.link_ios ||        
+      game.final_ios ||        
+      game.ipa ||        
+      null        
+    );        
+  }        
+        
+  return null;        
+}        
+        
+function showChecking() {        
+  popupChecking.style.display = "block";        
+  popupError.style.display = "none";        
+  popupSuccess.style.display = "none";        
+}        
+        
+function showError() {        
+  popupChecking.style.display = "none";        
+  popupError.style.display = "block";        
+}        
+        
+function showSuccess() {        
+  popupChecking.style.display = "none";        
+  popupSuccess.style.display = "block";        
+}        
+        
+        
+function startVerifyPolling() {        
+  clearInterval(verifyInterval);        
+        
+  verifyInterval = setInterval(async () => {        
+    const sid = localStorage.getItem("subid");        
+    if (!sid) return;        
+        
+    showChecking();        
+        
+    let t = "";        
+    try {        
+      const r = await fetch(WORKER + "/verify?subid=" + sid);        
+      t = (await r.text()).trim();        
+    } catch {        
+      return;        
+    }        
+        
+    /* ======================        
+       ✅ VERIFIED        
+    ====================== */        
+    if (t === "verified") {        
+      clearInterval(verifyInterval);        
+      showSuccess();        
+        
+      const device = localStorage.getItem("device");        
+      const finalLink = getFinalLink();        
+        
+      if (!finalLink || !device) {        
+        showError();        
+        return;        
+      }        
+        
+      // 📊 GA4 – download_success (مضمون)        
+      if (typeof gtag === "function") {        
+        gtag("event", "download_success", {        
+          game_id: gameId,        
+          device: device,        
+          event_callback: () => {        
+            setTimeout(() => {        
+              window.location.href = finalLink;        
+            }, 500);        
+          }        
+        });        
+      } else {        
+        // احتياط في حال GA غير جاهز        
+        window.location.href = finalLink;        
+      }        
+        
+      // 🧹 تنظيف بعد إرسال الحدث        
+      localStorage.removeItem("subid");        
+      localStorage.removeItem("subid_payload");        
+      localStorage.removeItem("went_offer");        
+      localStorage.removeItem("verify_started");        
+      localStorage.removeItem("device");        
+        
+      return;        
+    }        
+        
+    /* ======================        
+       ❌ FAILED / NOT COMPLETED        
+    ====================== */        
+    if (t === "failed" || t === "not_completed") {        
+      clearInterval(verifyInterval);        
+      handleVerifyAgain();        
+        
+      closeNotice.style.display = "block";        
+      setTimeout(() => {        
+        closeNotice.style.display = "none";        
+      }, 4000);        
+    }        
+        
+  }, 2000);        
+ }        
+/* =============================        
+   SECURITY FLOW        
+============================= */        
+function resetSecureFlow() {        
+  [step1, step2, step3, step4].forEach(s => s.classList.remove("active"));        
+  secureBar.style.width = "0%";        
+}        
+        
+function showSecureFlow() {        
+secureOverlay.style.display = "flex";        
+  const steps = [        
+    { el: step1, bar: 25, delay: 1500 },        
+    { el: step2, bar: 50, delay: 1000 },        
+    { el: step3, bar: 75, delay: 4000 },        
+    { el: step4, bar: 100, delay: 2000 }        
+  ];        
+        
+  let i = 0;        
+  function run() {        
+    if (i >= steps.length) {        
+      secureOverlay.style.display = "none";        
+overlay.style.display = "flex";        
+        
+// ✅ أظهر checking فورًا        
+showChecking();        
+        
+// ⏳ انتظر قليلًا لضمان وجود subid        
+setTimeout(() => {        
+  startVerifyPolling();        
+}, 300);        
+      return;        
+    }        
+    steps[i].el.classList.add("active");        
+    secureBar.style.width = steps[i].bar + "%";        
+    setTimeout(() => { i++; run(); }, steps[i].delay);        
+  }        
+  run();        
+}        
+        
+/* =============================        
+   BUTTONS        
+============================= */        
+downloadBtn.onclick = () => {        
+  localStorage.setItem("device", "android");        
+        
+  if (typeof gtag === "function") {        
+    gtag("event", "download_click", {        
+      game_id: gameId,        
+      device: "android"        
+    });        
+  }        
+        
+  startFakeDownload();        
+};        
+        
+downloadBtn2.onclick = () => {        
+  localStorage.setItem("device", "ios");        
+        
+  if (typeof gtag === "function") {        
+    gtag("event", "download_click", {        
+      game_id: gameId,        
+      device: "ios"        
+    });        
+  }        
+        
+  startFakeDownload();        
+};        
+        
+/* =============================        
+   PROTECTION        
+============================= */        
+["contextmenu","dragstart","selectstart"].forEach(e =>        
+  document.addEventListener(e, ev => {        
+    if (ev.target.tagName === "IMG") ev.preventDefault();        
+  })        
+);        
+           
+        
+ function closePopup() {        
+  clearInterval(verifyInterval);        
+  clearInterval(timer);        
+        
+  localStorage.removeItem("subid");        
+  localStorage.removeItem("subid_payload");        
+  localStorage.removeItem("went_offer");        
+  localStorage.removeItem("device");        
+        
+  overlay.style.display = "none";        
+  popupChecking.style.display = "none";        
+  popupError.style.display = "none";        
+  popupSuccess.style.display = "none";        
+        
+  offerLink.dataset.locked = "0";        
+  offerLink.style.pointerEvents = "auto";        
+        
+  resetDownloader();        
+        
+  // 🔔 إشعار الإلغاء        
+  closeNotice.style.display = "block";        
+  setTimeout(() => {        
+    closeNotice.style.display = "none";        
+  }, 4000);        
+}        
+        
+ function goHome(){        
+  location.href = "index.html";        
+}        
+ // 🔁 ضمان بدء التحقق دائمًا عند الرجوع للصفحة        
+document.addEventListener("visibilitychange", () => {        
+  if (!document.hidden && localStorage.getItem("subid")) {        
+    startVerifyPolling();        
+  }        
+});        
+        
+function setVerifyAgain() {        
+  // تنظيف المحاولة القديمة        
+  localStorage.removeItem("subid");        
+  localStorage.removeItem("subid_payload");        
+  localStorage.removeItem("went_offer");        
+        
+  // إنشاء SubID جديد 🔥        
+  createSubid();        
+        
+  offerLink.textContent = "Verify Again";        
+  offerLink.style.background =        
+    "linear-gradient(90deg,#ef4444,#f97316)";        
+  offerLink.dataset.locked = "0";        
+  offerLink.style.pointerEvents = "auto";        
+}        
+        
+function resetVerifyText() {        
+  offerLink.textContent = "Verify & Continue";        
+  offerLink.style.background =        
+    "linear-gradient(90deg,var(--accent),var(--accent2))";        
+}        
+   function handleVerifyAgain() {        
+  // إيقاف أي عمليات        
+  clearInterval(verifyInterval);        
+  clearInterval(timer);        
+        
+  // تنظيف الحالة القديمة        
+  localStorage.removeItem("subid");        
+  localStorage.removeItem("subid_payload");        
+  localStorage.removeItem("went_offer");        
+        
+  // إعادة تهيئة الزر        
+  offerLink.textContent = "Verify Again";        
+  offerLink.dataset.locked = "0";        
+  offerLink.style.pointerEvents = "auto";        
+  offerLink.style.background =        
+    "linear-gradient(90deg,#ef4444,#f97316)";        
+        
+  // إخفاء الحالات        
+  popupChecking.style.display = "none";        
+  popupSuccess.style.display = "none";        
+  popupError.style.display = "block";        
+        
+  // إيقاف polling تمامًا        
+  verifyInterval = null;        
+}        
+        
+  document.addEventListener("DOMContentLoaded", () => {        
+        
+  // Title        
+  const titleEl = document.querySelector(".hero h1");        
+  if (titleEl) titleEl.textContent = game.title;        
+        
+  // Image        
+  const imgEl = document.querySelector(".hero img");        
+  if (imgEl) imgEl.src = game.image;        
+        
+  // Rating        
+  const ratingEl = document.getElementById("gameRating");        
+  if (ratingEl && game.rating) {        
+    ratingEl.textContent = game.rating;        
+  }        
+        
+  // Description        
+  const descEl = document.getElementById("gameDescription");        
+  if (descEl && game.description) {        
+    descEl.textContent = game.description;        
+  }        
+        
+});        
+</script>        
   
