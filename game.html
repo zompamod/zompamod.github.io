@@ -569,8 +569,7 @@ window.addEventListener("pageshow", () => {
   // ❌ إذا المستخدم ضغط cancel → لا نعيد أي شيء
   if (canceled === "1") return;
 
-  if (wentOffer === "1" && savedSubid) {
-    overlay.style.display = "flex";
+  if (wentOffer === "1" && savedSubid && overlay.style.display === "flex") {
     showChecking();
     startVerifyPolling();
   }
@@ -966,37 +965,43 @@ downloadBtn2.onclick = () => {
 );
    
 
- 
-function closePopup() {
+ function closePopup() {
 
   // 🔥 Monetag
   window.open(MONETAG_DIRECT, "_blank");
 
-  // 🧠 علّم الجلسة
-  sessionStorage.setItem("verify_canceled", "1");
+  // 🧹 RESET كامل
+  clearInterval(timer);
+  clearInterval(verifyInterval);
 
-  // 🧹 تنظيف كامل
+  timer = null;
+  verifyInterval = null;
+
+  // Fake downloader reset
+  fakeLoader.style.display = "none";
+  fakeProgress.style.width = "0%";
+  loadedMB = 0;
+
+  // Popup reset
+  overlay.style.display = "none";
+  popupChecking.style.display = "none";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
+
+  // 🔓 فك القفل
+  offerLink.dataset.locked = "0";
+  offerLink.style.pointerEvents = "auto";
+
+  // 🧠 مسح كل الحالة
   localStorage.removeItem("went_offer");
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("verify_attempts");
   localStorage.removeItem("verify_started");
+  localStorage.removeItem("force_monetag");
 
-  clearInterval(timer);
-  clearInterval(verifyInterval);
-  timer = null;
-  verifyInterval = null;
-
-  // 🔥 إخفاء fake downloader
-  fakeLoader.style.display = "none";
-  fakeProgress.style.width = "0%";
-  loadedMB = 0;
-
-  // إغلاق popup
-  overlay.style.display = "none";
-  popupChecking.style.display = "none";
-  popupError.style.display = "none";
-  popupSuccess.style.display = "none";
+  // 🔁 مهم جدًا
+  popFired = false;
 }
 function goHome() {
   location.href = "index.html";
