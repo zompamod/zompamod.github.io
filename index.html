@@ -190,28 +190,44 @@ footer{
   will-change:transform;
 }
 
-#spaceFloatBtn:hover{
-  transform:scale(1.12);
+#spaceFloatBtn{
+  position:fixed;
+  top:40%;
+  left:40%;
+  z-index:99999;
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  padding:14px 18px;
+  border-radius:22px;
+
+  background:linear-gradient(135deg,#ff8b2c,#ffd58a);
+  color:#1b0f09;
+  text-decoration:none;
+
+  font-family:Inter,Arial;
+  font-weight:800;
+  font-size:15px;
+
   box-shadow:
-    0 0 0 1px rgba(255,180,90,.7),
-    0 0 50px rgba(255,180,90,.9),
+    0 0 0 1px rgba(255,180,90,.45),
+    0 0 30px rgba(255,180,90,.6),
+    0 18px 50px rgba(0,0,0,.65);
+
+  will-change:top,left;
+  transition:box-shadow .25s ease;
+}
+
+#spaceFloatBtn:hover{
+  box-shadow:
+    0 0 50px rgba(255,180,90,.95),
     0 22px 65px rgba(0,0,0,.75);
 }
 
-/* Icon */
-.sf-icon{
-  font-size:26px;
-  filter:drop-shadow(0 0 10px rgba(255,180,90,.9));
-}
-
-/* Text */
-.sf-text{
-  line-height:1.1;
-}
-.sf-text small{
-  font-size:11px;
-  opacity:.9;
-}
+.sf-icon{ font-size:26px }
+.sf-text small{ font-size:11px }
 </style>
 </head>
 
@@ -359,33 +375,52 @@ if (typeof gtag === "function" && !sessionStorage.getItem("home_viewed")) {
   const btn = document.getElementById("spaceFloatBtn");
   if (!btn) return;
 
-  let x = window.innerWidth * 0.5;
+  let x = window.innerWidth * 0.4;
   let y = window.innerHeight * 0.4;
 
-  let vx = (Math.random() > 0.5 ? 1 : -1) * 0.25;
-  let vy = (Math.random() > 0.5 ? 1 : -1) * 0.18;
+  let vx = 0.25; // سرعة أفقية
+  let vy = 0.18; // سرعة عمودية
 
-  function move() {
+  function animate(){
     const rect = btn.getBoundingClientRect();
 
     x += vx;
     y += vy;
 
-    // ارتداد من الحواف
-    if (x < 20 || x + rect.width > window.innerWidth - 20) {
+    // ارتداد من الحواف (بدون خروج)
+    if (x <= 10 || x + rect.width >= window.innerWidth - 10) {
       vx *= -1;
     }
-    if (y < 20 || y + rect.height > window.innerHeight - 20) {
+    if (y <= 10 || y + rect.height >= window.innerHeight - 10) {
       vy *= -1;
     }
 
-    btn.style.transform = `translate(${x}px, ${y}px)`;
+    btn.style.left = x + "px";
+    btn.style.top  = y + "px";
 
-    requestAnimationFrame(move);
+    requestAnimationFrame(animate);
   }
 
-  // بداية الحركة بعد ثانيتين (CTR أعلى)
-  setTimeout(move, 2000);
+  // ابدأ بعد ثانيتين (أفضل CTR)
+  setTimeout(animate, 2000);
+
+  // توقف عند hover (احترافي جدًا)
+  btn.addEventListener("mouseenter", () => {
+    vx = 0;
+    vy = 0;
+  });
+
+  btn.addEventListener("mouseleave", () => {
+    vx = (Math.random() > 0.5 ? 1 : -1) * 0.25;
+    vy = (Math.random() > 0.5 ? 1 : -1) * 0.18;
+  });
+
+  // منع الخروج عند resize
+  window.addEventListener("resize", () => {
+    x = Math.min(x, window.innerWidth - btn.offsetWidth - 20);
+    y = Math.min(y, window.innerHeight - btn.offsetHeight - 20);
+  });
+
 })();
 </script>
 </body>
