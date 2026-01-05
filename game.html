@@ -567,7 +567,7 @@ window.addEventListener("pageshow", () => {
   const savedSubid = localStorage.getItem("subid");
 
   if (wentOffer === "1" && savedSubid) {
-    incrementVerifyFails(); // ⬅️ هذا هو المفتاح
+    incrementVerifyFails(); // ✅ هنا فقط
     overlay.style.display = "flex";
     startVerifyPolling();
   }
@@ -617,6 +617,16 @@ function cleanURL(url) {
   localStorage.setItem("verify_fails", n + 1);
  }
 
+ const FAIL_TTL = 30 * 60 * 1000; // 30 دقيقة
+
+function resetFailsIfExpired() {
+  const t = parseInt(localStorage.getItem("verify_fail_time") || "0", 10);
+
+  if (!t || Date.now() - t > FAIL_TTL) {
+    localStorage.removeItem("verify_fails");
+    localStorage.setItem("verify_fail_time", Date.now());
+  }
+}
 function createSubid() {
   subid = "rbx_" + Math.random().toString(36).slice(2, 10);
 
@@ -960,7 +970,7 @@ downloadBtn2.onclick = () => {
    
 
  function closePopup() {
-  incrementVerifyFails();
+  
   // 📊 GA4 – cancel_verification
   if (typeof gtag === "function") {
     gtag("event", "verify_cancel", {
