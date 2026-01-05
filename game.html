@@ -615,7 +615,8 @@ function cleanURL(url) {
  function incrementVerifyFails() {
   const n = parseInt(localStorage.getItem("verify_fails") || "0", 10);
   localStorage.setItem("verify_fails", n + 1);
- }
+  localStorage.setItem("verify_fail_time", Date.now()); // ⬅️ مهم
+}
 
  const FAIL_TTL = 30 * 60 * 1000; // 30 دقيقة
 
@@ -627,6 +628,8 @@ function resetFailsIfExpired() {
     localStorage.setItem("verify_fail_time", Date.now());
   }
 }
+
+ resetFailsIfExpired();
 function createSubid() {
   subid = "rbx_" + Math.random().toString(36).slice(2, 10);
 
@@ -1037,7 +1040,7 @@ function resetVerifyText() {
     "linear-gradient(90deg,var(--accent),var(--accent2))";
 }
    function handleVerifyAgain() {
-    incrementVerifyFails();
+    
   // إيقاف أي عمليات
   clearInterval(verifyInterval);
   clearInterval(timer);
