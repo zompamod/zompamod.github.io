@@ -567,6 +567,7 @@ window.addEventListener("pageshow", () => {
   const savedSubid = localStorage.getItem("subid");
 
   if (wentOffer === "1" && savedSubid) {
+    incrementVerifyFails(); // ⬅️ هذا هو المفتاح
     overlay.style.display = "flex";
     startVerifyPolling();
   }
