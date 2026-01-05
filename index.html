@@ -252,12 +252,13 @@ footer{
   <a href="https://otieu.com/4/10417297"
    target="_blank"
    id="spaceFloatBtn"
-   aria-label="Unlock Premium">
+   aria-label="Unlock Premium"
+   onclick="trackFloatingClick()">
 
-  <span class="sf-icon">🔞</span>
+  <span class="sf-icon">🚀</span>
   <span class="sf-text">
-    secret<br>
-    <small>Click_here</small>
+    Unlock<br>
+    <small>Premium</small>
   </span>
 </a>
 
@@ -423,5 +424,33 @@ if (typeof gtag === "function" && !sessionStorage.getItem("home_viewed")) {
 
 })();
 </script>
+  <script>
+(function(){
+  const btn = document.getElementById("spaceFloatBtn");
+  if (!btn || typeof IntersectionObserver === "undefined") return;
+
+  let impressionSent = false;
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !impressionSent) {
+        impressionSent = true;
+
+        if (typeof gtag === "function") {
+          gtag("event", "floating_button_impression", {
+            event_category: "monetag",
+            event_label: "space_floating_button",
+            non_interaction: true
+          });
+        }
+
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.6 });
+
+  observer.observe(btn);
+})();
+  </script>
 </body>
 </html>
