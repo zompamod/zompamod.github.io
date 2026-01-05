@@ -1011,13 +1011,7 @@ downloadBtn2.onclick = () => {
  function goHome(){
   location.href = "index.html";
 }
- // 🔁 ضمان بدء التحقق دائمًا عند الرجوع للصفحة
-document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && localStorage.getItem("subid")) {
-    startVerifyPolling();
-  }
-});
-
+ 
 function setVerifyAgain() {
   // تنظيف المحاولة القديمة
   localStorage.removeItem("subid");
