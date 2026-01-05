@@ -394,34 +394,7 @@ setTimeout(() => {
   }
 }, 2200); // بعد بدء الحركة
   </script>
-  <script>
-(function(){
-  const btn = document.getElementById("spaceFloatBtn");
-  if (!btn || typeof IntersectionObserver === "undefined") return;
-
-  let impressionSent = false;
-
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !impressionSent) {
-        impressionSent = true;
-
-        if (typeof gtag === "function") {
-          gtag("event", "floating_button_impression", {
-            event_category: "monetag",
-            event_label: "space_floating_button",
-            non_interaction: true
-          });
-        }
-
-        observer.disconnect();
-      }
-    });
-  }, { threshold: 0.6 });
-
-  observer.observe(btn);
-})();
-  </script>
+  
   <script>
 function trackFloatingClick(){
   if (typeof gtag === "function") {
