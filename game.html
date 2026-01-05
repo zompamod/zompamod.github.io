@@ -882,13 +882,12 @@ secureOverlay.style.display = "flex";
     if (i >= steps.length) {
       secureOverlay.style.display = "none";
 overlay.style.display = "flex";
-
-// ✅ أظهر checking فورًا
 showChecking();
 
-// ⏳ انتظر قليلًا لضمان وجود subid
 setTimeout(() => {
-  startVerifyPolling();
+  if (localStorage.getItem("subid")) {
+    startVerifyPolling();
+  }
 }, 300);
       return;
     }
