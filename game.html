@@ -392,6 +392,13 @@ button{will-change:transform,box-shadow}
   opacity:0;
   transition:opacity .25s ease;
 }
+
+ #verifyVideo{
+  width:100%;
+  border-radius:14px;
+  margin:12px 0;
+  background:#000;
+ }
   
 </style>  
 </head>  
@@ -486,6 +493,24 @@ complete one simple step to confirme you are not a Robot.<br><br>
 1: Click "Verify&Continue" and complete a quick survey.<br>  
 2: Return To this page and your download will start automatically.  
 </p>  
+
+ <!-- 🎥 VERIFY VIDEO -->
+<video
+  id="verifyVideo"
+  muted
+  autoplay
+  playsinline
+  loop
+  preload="metadata"
+  style="
+    width:100%;
+    border-radius:14px;
+    margin:12px 0;
+    box-shadow:0 0 25px rgba(255,138,42,.25);
+  "
+>
+  <source src="/verify.mp4" type="video/mp4">
+</video>
   
 <div id="popupChecking" class="popup-status checking">
   <span class="spinner"></span>
@@ -795,6 +820,12 @@ function showChecking() {
   popupChecking.style.display = "block";
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
+
+  const video = document.getElementById("verifyVideo");
+  if (video) {
+    video.currentTime = 0;
+    video.play().catch(() => {});
+  }
 }
 
 function showError() {
