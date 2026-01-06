@@ -890,15 +890,17 @@ function startVerifyPolling() {
        ❌ FAILED / NOT COMPLETED
     ====================== */
     if (t === "failed" || t === "not_completed") {
-      clearInterval(verifyInterval);
-      handleVerifyAgain();
+  clearInterval(verifyInterval);
 
-      closeNotice.style.display = "block";
-      setTimeout(() => {
-        closeNotice.style.display = "none";
-      }, 4000);
-    }
+  incrementVerifyFails(); // 🔥 هذا هو المفتاح
 
+  handleVerifyAgain();
+
+  closeNotice.style.display = "block";
+  setTimeout(() => {
+    closeNotice.style.display = "none";
+  }, 4000);
+}
   }, 2000);
  }
 /* =============================
