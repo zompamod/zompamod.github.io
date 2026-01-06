@@ -652,7 +652,7 @@ function createSubid() {
 
   // 1️⃣ verify_start (مرة واحدة)
   if (!localStorage.getItem("verify_started")) {
-   localStorage.setItem("offer_locked", "1");
+   
     gtag("event", "verify_start", {
       game_id: gameId,
       device: localStorage.getItem("device") || "unknown"
@@ -663,6 +663,7 @@ function createSubid() {
   // 2️⃣ إنشاء subid فورًا
   createSubid();
   localStorage.setItem("went_offer", "1");
+  localStorage.setItem("offer_locked", "1");
   offerLink.dataset.locked = "1";
 
   // 3️⃣ إرسال offer_click (غير معطل للتنقل)
