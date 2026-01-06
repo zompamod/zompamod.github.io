@@ -8,13 +8,13 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-RYXLFC2ER8');
-  
+  gtag('set', 'debug_mode', true);
 </script>
  
 
 <meta charset="UTF-8">    
 <meta name="viewport" content="width=device-width, initial-scale=1.0">    
-<title>Modnext.com – Unlimited Features</title>    
+<title>Roblox Mod APK V2 – Unlimited Features</title>    
  <link rel="canonical" id="canonicalLink">
 <meta name="robots" content="index, follow">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">    
@@ -559,21 +559,17 @@ const popupSuccess = document.getElementById("popupSuccess");
 const offerLink = document.getElementById("offerLink");
 const closeNotice = document.getElementById("closeNotice");
 
-
-// 🔁 RESTORE VERIFY STATE (الصحيح)
+/* 🔔 إشعار الرجوع بدون إكمال التحقق */
 window.addEventListener("pageshow", () => {
+  offerLink.dataset.locked = "0";
+
   const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
-  const locked = localStorage.getItem("offer_locked");
 
   if (wentOffer === "1" && savedSubid) {
-  overlay.style.display = "flex";
-  showChecking();
-  startVerifyPolling();
-} else {
-  // ❌ لم يكمّل العرض → افتح الزر من جديد
-  unlockVerifyButton();
-}
+    overlay.style.display = "flex";
+    startVerifyPolling();
+  }
 });
 /* =============================
    CONFIG
@@ -615,19 +611,34 @@ function createSubid() {
 }
 
  function trackOfferClick() {
-  if (localStorage.getItem("offer_locked") === "1") return;
+  if (offerLink.dataset.locked === "1") return;
 
-  localStorage.setItem("offer_locked", "1");
-  localStorage.setItem("went_offer", "1");
+  // 🔥 أنشئ الرابط فورًا (بدون انتظار)
+  markWentOffer();
 
-  createSubid();
+  // ✅ verify_start (مرة واحدة)
+  if (!localStorage.getItem("verify_started")) {
+    gtag("event", "verify_start", {
+      game_id: gameId,
+      device: localStorage.getItem("device") || "unknown"
+    });
+    localStorage.setItem("verify_started", "1");
+  }
 
-  showChecking();
-  startVerifyPolling();
-
-  window.open(offerLink.href, "_blank");
+  // 📊 offer_click (خلفية فقط)
+  gtag("event", "offer_click", {
+    game_id: gameId,
+    device: localStorage.getItem("device") || "unknown"
+  });
 }
-  
+  // ✅ دالة مستقلة
+ function markWentOffer() {
+  if (offerLink.dataset.locked === "1") return;
+
+  createSubid(); // إنشاء subid
+  offerLink.dataset.locked = "1";
+  localStorage.setItem("went_offer", "1");
+}
 
 function isSubidExpired() {
   const raw = localStorage.getItem("subid_payload");
@@ -833,7 +844,6 @@ function startVerifyPolling() {
     ====================== */
     if (t === "failed" || t === "not_completed") {
       clearInterval(verifyInterval);
-     localStorage.setItem("offer_abandoned", "1");
       handleVerifyAgain();
 
       closeNotice.style.display = "block";
@@ -870,7 +880,10 @@ overlay.style.display = "flex";
 // ✅ أظهر checking فورًا
 showChecking();
 
-
+// ⏳ انتظر قليلًا لضمان وجود subid
+setTimeout(() => {
+  startVerifyPolling();
+}, 300);
       return;
     }
     steps[i].el.classList.add("active");
@@ -927,7 +940,6 @@ downloadBtn2.onclick = () => {
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
   localStorage.removeItem("device");
-  localStorage.removeItem("offer_locked");
 
   overlay.style.display = "none";
   popupChecking.style.display = "none";
@@ -949,7 +961,12 @@ downloadBtn2.onclick = () => {
  function goHome(){
   location.href = "index.html";
 }
-
+ // 🔁 ضمان بدء التحقق دائمًا عند الرجوع للصفحة
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && localStorage.getItem("subid")) {
+    startVerifyPolling();
+  }
+});
 
 function setVerifyAgain() {
   // تنظيف المحاولة القديمة
@@ -980,7 +997,7 @@ function resetVerifyText() {
   // تنظيف الحالة القديمة
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
-  
+  localStorage.removeItem("went_offer");
 
   // إعادة تهيئة الزر
   offerLink.textContent = "Verify Again";
@@ -996,16 +1013,6 @@ function resetVerifyText() {
 
   // إيقاف polling تمامًا
   verifyInterval = null;
-}
- function unlockVerifyButton() {
-  localStorage.removeItem("offer_locked");
-  localStorage.removeItem("went_offer");
-
-  offerLink.dataset.locked = "0";
-  offerLink.style.pointerEvents = "auto";
-  offerLink.textContent = "Verify Again";
-  offerLink.style.background =
-    "linear-gradient(90deg,#ef4444,#f97316)";
 }
 
   document.addEventListener("DOMContentLoaded", () => {
