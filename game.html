@@ -997,6 +997,16 @@ function resetVerifyText() {
   // إيقاف polling تمامًا
   verifyInterval = null;
 }
+ function unlockVerifyButton() {
+  localStorage.removeItem("offer_locked");
+  localStorage.removeItem("went_offer");
+
+  offerLink.dataset.locked = "0";
+  offerLink.style.pointerEvents = "auto";
+  offerLink.textContent = "Verify Again";
+  offerLink.style.background =
+    "linear-gradient(90deg,#ef4444,#f97316)";
+}
 
   document.addEventListener("DOMContentLoaded", () => {
 
@@ -1037,16 +1047,5 @@ document.addEventListener("DOMContentLoaded", () => {
     // 🧹 تنظيف إضافي مهم
     localStorage.removeItem("went_offer");
   }
-
- function unlockVerifyButton() {
-  localStorage.removeItem("offer_locked");
-  localStorage.removeItem("went_offer");
-
-  offerLink.dataset.locked = "0";
-  offerLink.style.pointerEvents = "auto";
-  offerLink.textContent = "Verify Again";
-  offerLink.style.background =
-    "linear-gradient(90deg,#ef4444,#f97316)";
-}
 });
 </script>
