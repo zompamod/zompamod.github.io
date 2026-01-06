@@ -879,6 +879,7 @@ function startVerifyPolling() {
       localStorage.removeItem("verify_started");
       localStorage.removeItem("device");
       localStorage.removeItem("verify_fails");
+     localStorage.setItem("offer_locked", "1");
 
       return;
     }
