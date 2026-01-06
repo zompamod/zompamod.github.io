@@ -567,9 +567,9 @@ window.addEventListener("pageshow", () => {
   const savedSubid = localStorage.getItem("subid");
 
   if (wentOffer === "1" && savedSubid) {
-    overlay.style.display = "flex";
-    startVerifyPolling();
-  }
+  overlay.style.display = "flex";
+  tryStartVerifyPolling();
+}
 });
 /* =============================
    CONFIG
@@ -610,13 +610,14 @@ function createSubid() {
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
 
- function trackOfferClick() {
+function trackOfferClick() {
   if (offerLink.dataset.locked === "1") return;
 
-  // 🔥 أنشئ الرابط فورًا (بدون انتظار)
+  // 🔥 المستخدم ضغط Verify
+  localStorage.setItem("verify_clicked", "1");
+
   markWentOffer();
 
-  // ✅ verify_start (مرة واحدة)
   if (!localStorage.getItem("verify_started")) {
     gtag("event", "verify_start", {
       game_id: gameId,
@@ -625,12 +626,20 @@ function createSubid() {
     localStorage.setItem("verify_started", "1");
   }
 
-  // 📊 offer_click (خلفية فقط)
   gtag("event", "offer_click", {
     game_id: gameId,
     device: localStorage.getItem("device") || "unknown"
   });
 }
+ function tryStartVerifyPolling() {
+  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
+  const sid = localStorage.getItem("subid");
+
+  if (!verifyClicked || !sid) return;
+
+  if (verifyInterval) return; // منع التكرار
+  startVerifyPolling();
+ }
   // ✅ دالة مستقلة
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
@@ -881,9 +890,7 @@ overlay.style.display = "flex";
 showChecking();
 
 // ⏳ انتظر قليلًا لضمان وجود subid
-setTimeout(() => {
-  startVerifyPolling();
-}, 300);
+tryStartVerifyPolling();
       return;
     }
     steps[i].el.classList.add("active");
