@@ -624,14 +624,7 @@ function createSubid() {
 
   window.open(offerLink.href, "_blank");
 }
-  // ✅ دالة مستقلة
- function markWentOffer() {
-  if (offerLink.dataset.locked === "1") return;
-
-  createSubid(); // إنشاء subid
-  offerLink.dataset.locked = "1";
-  localStorage.setItem("went_offer", "1");
-}
+  
 
 function isSubidExpired() {
   const raw = localStorage.getItem("subid_payload");
@@ -984,7 +977,7 @@ function resetVerifyText() {
   // تنظيف الحالة القديمة
   localStorage.removeItem("subid");
   localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
+  
 
   // إعادة تهيئة الزر
   offerLink.textContent = "Verify Again";
