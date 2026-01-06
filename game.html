@@ -919,11 +919,6 @@ secureOverlay.style.display = "flex";
 overlay.style.display = "flex";
 showChecking();
 
-setTimeout(() => {
-  if (localStorage.getItem("subid")) {
-    startVerifyPolling();
-  }
-}, 300);
       return;
     }
     steps[i].el.classList.add("active");
