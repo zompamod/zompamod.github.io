@@ -628,7 +628,7 @@ function cleanURL(url) {
   localStorage.setItem("verify_fail_time", Date.now()); // ⬅️ مهم
 }
 
- const FAIL_TTL = 30 * 60 * 1000; // 30 دقيقة
+ const FAIL_TTL = 2 * 60 * 60 * 1000; // ساعتان
 
 function resetFailsIfExpired() {
   const t = parseInt(localStorage.getItem("verify_fail_time") || "0", 10);
