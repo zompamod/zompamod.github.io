@@ -584,26 +584,33 @@ const OFFER_ID = "smartlink_1";
 const SUBID_TTL = 86400000;
 const MONETAG_OFFER = "https://otieu.com/4/10417297"; // ⬅️ ضع رابطك
 
+ const ONE_HOUR = 60 * 60 * 1000;
+
 function getOfferByFails() {
   const fails = parseInt(localStorage.getItem("verify_fails") || "0", 10);
+  const monetagUntil = parseInt(localStorage.getItem("monetag_until") || "0", 10);
+  const now = Date.now();
 
-  // أول محاولتين
-  if (fails < 2) {
-    return OFFER; // smartlink
+  // ⏱️ إذا Monetag ما زال صالح
+  if (monetagUntil && now < monetagUntil) {
+    return MONETAG_OFFER;
   }
 
-  // الثالثة وما بعدها
-  return MONETAG_OFFER;
+  // ⏰ انتهت ساعة Monetag → إعادة الضبط
+  if (monetagUntil && now >= monetagUntil) {
+    localStorage.removeItem("monetag_until");
+    localStorage.setItem("verify_fails", "0");
+  }
+
+  // 🔥 المحاولة الثالثة → تفعيل Monetag ساعة
+  if (fails >= 2) {
+    localStorage.setItem("monetag_until", now + ONE_HOUR);
+    return MONETAG_OFFER;
+  }
+
+  // 🔗 المحاولات الأولى
+  return OFFER;
 }
-
-let FINAL = "";
-let timer = null;
-let verifyInterval = null;
-let subid = null;
-let loadedMB = 0;
-
-const totalMB = 154.27;
-const SPEED_MBPS = 8.9;
 
 /* =============================
    HELPERS
