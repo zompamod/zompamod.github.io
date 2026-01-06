@@ -652,6 +652,7 @@ function createSubid() {
 
   // 1️⃣ verify_start (مرة واحدة)
   if (!localStorage.getItem("verify_started")) {
+   localStorage.setItem("offer_locked", "1");
     gtag("event", "verify_start", {
       game_id: gameId,
       device: localStorage.getItem("device") || "unknown"
