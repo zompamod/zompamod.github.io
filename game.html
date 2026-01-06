@@ -563,12 +563,12 @@ const closeNotice = document.getElementById("closeNotice");
 window.addEventListener("pageshow", () => {
   const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
+  const locked = localStorage.getItem("offer_locked");
 
-  // 🔒 حماية إضافية
   if (
     wentOffer === "1" &&
     savedSubid &&
-    offerLink.dataset.locked === "1"
+    locked === "1"
   ) {
     overlay.style.display = "flex";
     showChecking();
