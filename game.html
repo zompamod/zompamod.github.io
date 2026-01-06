@@ -644,6 +644,10 @@ function createSubid() {
   }));
 
   const offerURL = getOfferByFails();
+
+if (offerURL === MONETAG_OFFER) {
+  offerLink.href = offerURL; // Monetag مباشر
+} else {
   offerLink.href = cleanURL(offerURL) + "?ml_sub1=" + subid;
 }
 
