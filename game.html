@@ -1039,4 +1039,20 @@ function resetVerifyText() {
   }
 
 });
+
+ // 🔁 RESTORE VERIFY STATE (عدم البدء من 0)
+window.addEventListener("pageshow", () => {
+  const wentOffer = localStorage.getItem("went_offer");
+  const savedSubid = localStorage.getItem("subid");
+
+  if (
+    wentOffer === "1" &&
+    savedSubid &&
+    offerLink.dataset.locked === "1"
+  ) {
+    overlay.style.display = "flex";
+    showChecking();       // يظهر "Checking verification…"
+    startVerifyPolling(); // يكمل التحقق
+  }
+});
 </script>
