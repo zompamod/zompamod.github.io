@@ -1097,20 +1097,6 @@ function resetVerifyText() {
     descEl.textContent = game.description;
   }
 
-  /* =====================
-     RESTORE VERIFY STATE
-  ===================== */
-
-  const locked = localStorage.getItem("offer_locked");
-
-  if (locked === "1") {
-    offerLink.dataset.locked = "1";
-    offerLink.style.pointerEvents = "none";
-  } else {
-    offerLink.dataset.locked = "0";
-    offerLink.style.pointerEvents = "auto";
-  }
-
 });
   
 </script>
