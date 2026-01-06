@@ -559,18 +559,21 @@ const popupSuccess = document.getElementById("popupSuccess");
 const offerLink = document.getElementById("offerLink");
 const closeNotice = document.getElementById("closeNotice");
 
-/* 🔔 إشعار الرجوع بدون إكمال التحقق */
+
 // 🔁 RESTORE VERIFY STATE (الصحيح)
 window.addEventListener("pageshow", () => {
   const wentOffer = localStorage.getItem("went_offer");
   const savedSubid = localStorage.getItem("subid");
   const locked = localStorage.getItem("offer_locked");
 
-  if (wentOffer === "1" && savedSubid && locked === "1") {
-    overlay.style.display = "flex";
-    showChecking();
-    startVerifyPolling();
-  }
+  if (wentOffer === "1" && savedSubid) {
+  overlay.style.display = "flex";
+  showChecking();
+  startVerifyPolling();
+} else {
+  // ❌ لم يكمّل العرض → افتح الزر من جديد
+  unlockVerifyButton();
+}
 });
 /* =============================
    CONFIG
@@ -1034,5 +1037,16 @@ document.addEventListener("DOMContentLoaded", () => {
     // 🧹 تنظيف إضافي مهم
     localStorage.removeItem("went_offer");
   }
+
+ function unlockVerifyButton() {
+  localStorage.removeItem("offer_locked");
+  localStorage.removeItem("went_offer");
+
+  offerLink.dataset.locked = "0";
+  offerLink.style.pointerEvents = "auto";
+  offerLink.textContent = "Verify Again";
+  offerLink.style.background =
+    "linear-gradient(90deg,#ef4444,#f97316)";
+}
 });
 </script>
