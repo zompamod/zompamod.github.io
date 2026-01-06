@@ -400,11 +400,11 @@ button{will-change:transform,box-shadow}
   </button>
 </header>
 <section class="hero">    
-<img src="https://i.imgur.com/dexs6tR.jpeg">    
-<h1>Forza Horizon 5</h1>    
-<div id="gameRating" class="rating"></div>
-<p id="gameDescription"></p>    
-  
+  <img class="hero-image" alt="Game Image">    
+  <h1 class="hero-title"></h1>    
+  <div id="gameRating" class="rating"></div>
+  <p id="gameDescription"></p>    
+
 <div class="download-box">    
   <button id="downloadBtn">  
     <img src="https://i.imgur.com/0CDI4Yq.png" alt="Android">  
@@ -1026,24 +1026,37 @@ function resetVerifyText() {
 
   document.addEventListener("DOMContentLoaded", () => {
 
-  // Title
-  const titleEl = document.querySelector(".hero h1");
-  if (titleEl) titleEl.textContent = game.title;
+  /* ===== VALIDATION ===== */
+  if (!game) return;
 
-  // Image
-  const imgEl = document.querySelector(".hero img");
-  if (imgEl) imgEl.src = game.image;
-
-  // Rating
-  const ratingEl = document.getElementById("gameRating");
-  if (ratingEl && game.rating) {
-    ratingEl.textContent = game.rating;
+  /* ===== TITLE ===== */
+  const titleEl = document.querySelector(".hero-title");
+  if (titleEl) {
+    titleEl.textContent = game.title;
   }
 
-  // Description
+  /* ===== IMAGE (NO FLICKER) ===== */
+  const imgEl = document.querySelector(".hero-image");
+  if (imgEl && game.image) {
+    const img = new Image();
+    img.src = game.image;
+
+    img.onload = () => {
+      imgEl.src = game.image;
+      imgEl.style.opacity = "1";
+    };
+  }
+
+  /* ===== RATING ===== */
+  const ratingEl = document.getElementById("gameRating");
+  if (ratingEl) {
+    ratingEl.textContent = game.rating || "";
+  }
+
+  /* ===== DESCRIPTION ===== */
   const descEl = document.getElementById("gameDescription");
-  if (descEl && game.description) {
-    descEl.textContent = game.description;
+  if (descEl) {
+    descEl.textContent = game.description || "";
   }
 
 });
