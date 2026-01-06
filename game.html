@@ -612,28 +612,16 @@ function createSubid() {
 }
 
  function trackOfferClick() {
-  offerLink.dataset.locked = "1";
-localStorage.setItem("offer_locked", "1");
+  if (localStorage.getItem("offer_locked") === "1") return;
 
-  // GA verify start
-  if (!localStorage.getItem("verify_started")) {
-    gtag("event", "verify_start", {
-      game_id: gameId,
-      device: localStorage.getItem("device") || "unknown"
-    });
-    localStorage.setItem("verify_started", "1");
-  }
-
-  // إنشاء subid
-  createSubid();
+  localStorage.setItem("offer_locked", "1");
   localStorage.setItem("went_offer", "1");
-  offerLink.dataset.locked = "1";
 
-  // ✅ الآن فقط
+  createSubid();
+
   showChecking();
   startVerifyPolling();
 
-  // فتح العرض
   window.open(offerLink.href, "_blank");
 }
   // ✅ دالة مستقلة
@@ -943,6 +931,7 @@ downloadBtn2.onclick = () => {
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
   localStorage.removeItem("device");
+  localStorage.removeItem("offer_locked");
 
   overlay.style.display = "none";
   popupChecking.style.display = "none";
@@ -1048,6 +1037,9 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     offerLink.dataset.locked = "0";
     offerLink.style.pointerEvents = "auto";
+
+    // 🧹 تنظيف إضافي مهم
+    localStorage.removeItem("went_offer");
   }
 });
 </script>
