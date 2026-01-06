@@ -626,9 +626,10 @@ function cleanURL(url) {
 function resetFailsIfExpired() {
   const t = parseInt(localStorage.getItem("verify_fail_time") || "0", 10);
 
-  if (!t || Date.now() - t > FAIL_TTL) {
+  // فقط إذا انتهت 30 دقيقة
+  if (t && Date.now() - t > FAIL_TTL) {
     localStorage.removeItem("verify_fails");
-    localStorage.setItem("verify_fail_time", Date.now());
+    localStorage.removeItem("verify_fail_time");
   }
 }
 
