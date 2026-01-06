@@ -844,6 +844,7 @@ function startVerifyPolling() {
       localStorage.removeItem("went_offer");
       localStorage.removeItem("verify_started");
       localStorage.removeItem("device");
+     localStorage.removeItem("verify_clicked");
 
       return;
     }
@@ -947,6 +948,7 @@ downloadBtn2.onclick = () => {
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
   localStorage.removeItem("device");
+  localStorage.removeItem("verify_clicked");
 
   overlay.style.display = "none";
   popupChecking.style.display = "none";
@@ -970,8 +972,8 @@ downloadBtn2.onclick = () => {
 }
  // 🔁 ضمان بدء التحقق دائمًا عند الرجوع للصفحة
 document.addEventListener("visibilitychange", () => {
-  if (!document.hidden && localStorage.getItem("subid")) {
-    startVerifyPolling();
+  if (!document.hidden) {
+    tryStartVerifyPolling();
   }
 });
 
