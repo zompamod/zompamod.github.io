@@ -218,18 +218,7 @@ footer{
 </div>
 
 <footer>© 2026 Zompamod.com — All rights reserved</footer>
-  <a href="https://otieu.com/4/10417297"
-   target="_blank"
-   id="spaceFloatBtn"
-   aria-label="ONLY CLICK HERE"
-   onclick="trackFloatingClick()">
-
-  <span class="sf-icon">🔞</span>
-  <span class="sf-text">
-    ONLY<br>
-    <small>Click_here</small>
-  </span>
-</a>
+  
 
 <!-- ملف الألعاب -->
 <script src="games.js"></script>
@@ -339,82 +328,5 @@ if (typeof gtag === "function" && !sessionStorage.getItem("home_viewed")) {
   sessionStorage.setItem("home_viewed", "1");
 }
 </script>
-  
-  <script>
-(() => {
-  const btn = document.getElementById("spaceFloatBtn");
-  if (!btn) return;
-
-  let x = window.innerWidth * 0.4;
-  let y = window.innerHeight * 0.4;
-
-  let vx = 0.25; // سرعة أفقية
-  let vy = 0.18; // سرعة عمودية
-
-  function animate(){
-    const rect = btn.getBoundingClientRect();
-
-    x += vx;
-    y += vy;
-
-    // ارتداد من الحواف (بدون خروج)
-    if (x <= 10 || x + rect.width >= window.innerWidth - 10) {
-      vx *= -1;
-    }
-    if (y <= 10 || y + rect.height >= window.innerHeight - 10) {
-      vy *= -1;
-    }
-
-    btn.style.left = x + "px";
-    btn.style.top  = y + "px";
-
-    requestAnimationFrame(animate);
-  }
-
-  // ابدأ بعد ثانيتين (أفضل CTR)
-  setTimeout(animate, 2000);
-
-  // توقف عند hover (احترافي جدًا)
-  btn.addEventListener("mouseenter", () => {
-    vx = 0;
-    vy = 0;
-  });
-
-  btn.addEventListener("mouseleave", () => {
-    vx = (Math.random() > 0.5 ? 1 : -1) * 0.25;
-    vy = (Math.random() > 0.5 ? 1 : -1) * 0.18;
-  });
-
-  // منع الخروج عند resize
-  window.addEventListener("resize", () => {
-    x = Math.min(x, window.innerWidth - btn.offsetWidth - 20);
-    y = Math.min(y, window.innerHeight - btn.offsetHeight - 20);
-  });
-
-})();
-</script>
-  <script>
-setTimeout(() => {
-  if (typeof gtag === "function") {
-    gtag("event", "floating_button_impression", {
-      event_category: "monetag",
-      event_label: "space_floating_button",
-      non_interaction: true
-    });
-  }
-}, 2200); // بعد بدء الحركة
-  </script>
-  
-  <script>
-function trackFloatingClick(){
-  if (typeof gtag === "function") {
-    gtag("event", "floating_button_click", {
-      event_category: "monetag",
-      event_label: "space_floating_button",
-      transport_type: "beacon"
-    });
-  }
-}
-  </script>
 </body>
 </html>
