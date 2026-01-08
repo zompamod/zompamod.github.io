@@ -920,19 +920,19 @@ function startVerifyPolling() {
 
     // 🔴 FAILED / NOT COMPLETED
     if (status === "failed" || status === "not_completed") {
-      clearInterval(verifyInterval);
-      verifyInterval = null;
+  if (!localStorage.getItem("verify_wait_once")) {
+    localStorage.setItem("verify_wait_once", "1");
+    return; // انتظر دورة أخرى
+  }
 
-      showError();
+  clearInterval(verifyInterval);
+  verifyInterval = null;
 
-      closeNotice.style.display = "block";
-      setTimeout(() => {
-        closeNotice.style.display = "none";
-      }, 4000);
-    }
+  showError();
 
-  }, 3000);
- }
+  closeNotice.style.display = "block";
+  setTimeout(() => closeNotice.style.display = "none", 4000);
+}
 
 
       // =============================
@@ -958,8 +958,7 @@ secureOverlay.style.display = "flex";
       secureOverlay.style.display = "none";
 overlay.style.display = "flex";
 
-// ✅ أظهر checking فورًا
-showChecking();
+
 
 // ⏳ انتظر قليلًا لضمان وجود subid
 tryStartVerifyPolling();
