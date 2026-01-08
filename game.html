@@ -609,23 +609,18 @@ window.addEventListener("pageshow", () => {
   const wentOffer = localStorage.getItem("went_offer");
   const subid = localStorage.getItem("subid");
   const offerOpened = localStorage.getItem("offer_opened");
+  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
 
-  if (!wentOffer || !subid || !offerOpened) return;
+  if (!wentOffer || !subid || !offerOpened || !verifyClicked) return;
 
   overlay.style.display = "flex";
 
-  // ⏳ انتظر 1 ثانية ثم قرر
   setTimeout(() => {
-    // لو لم يتم التحقق بعد الرجوع → خطأ مباشر
     showError();
-
     closeNotice.style.display = "block";
-    setTimeout(() => {
-      closeNotice.style.display = "none";
-    }, 4000);
+    setTimeout(() => closeNotice.style.display = "none", 4000);
   }, 1000);
 
-  // 🔁 ثم نبدأ polling (في حال أكمل لاحقًا)
   tryStartVerifyPolling();
 });
 /* =============================
@@ -667,7 +662,7 @@ function createSubid() {
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
 
-function trackOfferClick() {
+
 function trackOfferClick() {
   if (offerLink.dataset.locked === "1") return;
 
