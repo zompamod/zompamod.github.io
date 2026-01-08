@@ -653,54 +653,40 @@ function createSubid() {
 }
 
 function trackOfferClick() {
-  // منع الضغط المكرر
   if (offerLink.dataset.locked === "1") return;
 
-  // 🔒 قفل الزر ومنع تكرار الضغط
-  offerLink.dataset.locked = "1";
-  offerLink.style.pointerEvents = "none";
+  // 🔥 المستخدم ضغط Verify
+  localStorage.setItem("verify_clicked", "1");
 
-  // 🔗 إنشاء subid مرة واحدة فقط
-  if (!localStorage.getItem("subid")) {
-    createSubid();
-  }
+  markWentOffer();
 
-  // 🧠 تمييز أن المستخدم ذهب للعرض
-  localStorage.setItem("went_offer", "1");
-
-  // 📊 GA – بدء التحقق (مرة واحدة فقط)
   if (!localStorage.getItem("verify_started")) {
-    if (typeof gtag === "function") {
-      gtag("event", "verify_start", {
-        game_id: gameId,
-        device: localStorage.getItem("device") || "unknown"
-      });
-    }
-    localStorage.setItem("verify_started", "1");
-  }
-
-  // 📊 GA – نقرة العرض
-  if (typeof gtag === "function") {
-    gtag("event", "offer_click", {
+    gtag("event", "verify_start", {
       game_id: gameId,
       device: localStorage.getItem("device") || "unknown"
     });
+    localStorage.setItem("verify_started", "1");
   }
+
+  gtag("event", "offer_click", {
+    game_id: gameId,
+    device: localStorage.getItem("device") || "unknown"
+  });
 }
  function tryStartVerifyPolling() {
+  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
   const sid = localStorage.getItem("subid");
-  if (!sid) return;
-  if (verifyInterval) return;
+
+  if (!verifyClicked || !sid) return;
+
+  if (verifyInterval) return; // منع التكرار
   startVerifyPolling();
-}
+ }
   // ✅ دالة مستقلة
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
 
-  if (!localStorage.getItem("subid")) {
-    createSubid(); // ✔️ فقط إذا غير موجود
-  }
-
+  createSubid(); // إنشاء subid
   offerLink.dataset.locked = "1";
   localStorage.setItem("went_offer", "1");
 }
@@ -855,12 +841,11 @@ function showSuccess() {
 function startVerifyPolling() {
   clearInterval(verifyInterval);
 
-  // ⏳ أظهر checking مرة واحدة فقط
-  showChecking();
-
   verifyInterval = setInterval(async () => {
     const sid = localStorage.getItem("subid");
     if (!sid) return;
+
+    showChecking();
 
     let t = "";
     try {
@@ -870,23 +855,20 @@ function startVerifyPolling() {
       return;
     }
 
-    /* ✅ VERIFIED */
+    /* ======================
+       ✅ VERIFIED
+    ====================== */
     if (t === "verified") {
       clearInterval(verifyInterval);
       showSuccess();
-      return;
-    }
 
-    /* ❌ FAILED / NOT COMPLETED */
-    if (t === "failed" || t === "not_completed") {
-      clearInterval(verifyInterval);
+      const device = localStorage.getItem("device");
+      const finalLink = getFinalLink();
 
-      showError(); // ✅ ستبقى ظاهرة
-      handleVerifyAgain(); // زر Verify Again
-    }
-
-  }, 2000);
-}
+      if (!finalLink || !device) {
+        showError();
+        return;
+      }
 
       // 📊 GA4 – download_success (مضمون)
       if (typeof gtag === "function") {
@@ -1043,13 +1025,51 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
+function setVerifyAgain() {
+  // تنظيف المحاولة القديمة
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
 
+  // إنشاء SubID جديد 🔥
+  createSubid();
+
+  offerLink.textContent = "Verify Again";
+  offerLink.style.background =
+    "linear-gradient(90deg,#ef4444,#f97316)";
+  offerLink.dataset.locked = "0";
+  offerLink.style.pointerEvents = "auto";
+}
+
+function resetVerifyText() {
+  offerLink.textContent = "Verify & Continue";
+  offerLink.style.background =
+    "linear-gradient(90deg,var(--accent),var(--accent2))";
+}
    function handleVerifyAgain() {
+  // إيقاف أي عمليات
+  clearInterval(verifyInterval);
+  clearInterval(timer);
+
+  // تنظيف الحالة القديمة
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+
+  // إعادة تهيئة الزر
   offerLink.textContent = "Verify Again";
   offerLink.dataset.locked = "0";
   offerLink.style.pointerEvents = "auto";
   offerLink.style.background =
     "linear-gradient(90deg,#ef4444,#f97316)";
+
+  // إخفاء الحالات
+  popupChecking.style.display = "none";
+  popupSuccess.style.display = "none";
+  popupError.style.display = "block";
+
+  // إيقاف polling تمامًا
+  verifyInterval = null;
 }
 
   document.addEventListener("DOMContentLoaded", () => {
