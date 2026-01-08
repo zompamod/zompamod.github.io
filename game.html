@@ -670,27 +670,7 @@ function createSubid(){
   offerLink.href=cleanURL(OFFER)+"?ml_sub1="+subid;  
 }  
 
-function trackOfferClick() {
-  if (offerLink.dataset.locked === "1") return;
 
-  // 🔥 المستخدم ضغط Verify
-  localStorage.setItem("verify_clicked", "1");
-
-  markWentOffer();
-
-  if (!localStorage.getItem("verify_started")) {
-    gtag("event", "verify_start", {
-      game_id: gameId,
-      device: localStorage.getItem("device") || "unknown"
-    });
-    localStorage.setItem("verify_started", "1");
-  }
-
-  gtag("event", "offer_click", {
-    game_id: gameId,
-    device: localStorage.getItem("device") || "unknown"
-  });
-}
  function tryStartVerifyPolling() {
   const verifyClicked = localStorage.getItem("verify_clicked") === "1";
   const sid = localStorage.getItem("subid");
@@ -701,13 +681,9 @@ function trackOfferClick() {
   startVerifyPolling();
  }
   // ✅ دالة مستقلة
- function markWentOffer() {
-  if (offerLink.dataset.locked === "1") return;
-
-  createSubid(); // إنشاء subid
-  offerLink.dataset.locked = "1";
-  localStorage.setItem("went_offer", "1");
-}
+ function markWentOffer(){  
+  localStorage.setItem("went_offer","1");  
+}  
 
 function isSubidExpired() {
   const raw = localStorage.getItem("subid_payload");
