@@ -905,17 +905,15 @@ function startVerifyPolling() {
        ❌ FAILED / NOT COMPLETED
     ====================== */
     if (t === "failed" || t === "not_completed") {
-      clearInterval(verifyInterval);
-      handleVerifyAgain();
+  clearInterval(verifyInterval);
 
-      closeNotice.style.display = "block";
-      setTimeout(() => {
-        closeNotice.style.display = "none";
-      }, 4000);
-    }
+  showError(); // ✅ إظهار رسالة الخطأ
 
-  }, 2000);
- }
+  closeNotice.style.display = "block";
+  setTimeout(() => {
+    closeNotice.style.display = "none";
+  }, 4000);
+}
 /* =============================
    SECURITY FLOW
 ============================= */
