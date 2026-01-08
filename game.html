@@ -603,22 +603,23 @@ const offerLink = document.getElementById("offerLink");
 const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
-window.addEventListener("pageshow", () => {
-  const wentOffer = localStorage.getItem("went_offer");
-  const subid = localStorage.getItem("subid");
-  const offerOpened = localStorage.getItem("offer_opened");
-  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
+window.addEventListener("pageshow", (e) => {
   const verifyGame = localStorage.getItem("verify_game");
+  const subid = localStorage.getItem("subid");
+  const inProgress = localStorage.getItem("verify_in_progress") === "1";
 
-  // ❌ لعبة مختلفة → نظّف كل شيء
+  // رجوع من لعبة أخرى
   if (verifyGame && verifyGame !== gameId) {
     clearVerifyState();
     return;
   }
 
-  if (!verifyClicked || !subid) return;
-  overlay.style.display = "flex";
-  tryStartVerifyPolling();
+  // 🔁 رجوع بزر الهاتف / المتصفح
+  if (e.persisted && inProgress && subid) {
+    overlay.style.display = "flex";
+    showChecking();
+    tryStartVerifyPolling();
+  }
 });
 /* =============================
    CONFIG
@@ -876,6 +877,7 @@ function showSuccess() {
 
   const sid = localStorage.getItem("subid");
   if (!sid) return;
+  localStorage.setItem("verify_in_progress", "1");
 
   showChecking();
 
@@ -911,6 +913,8 @@ function showSuccess() {
           "subid",
           "subid_payload",
           "went_offer"
+          "verify_in_progress"
+          "verify_game"
         ].forEach(k => localStorage.removeItem(k));
 
         if (typeof gtag === "function") {
