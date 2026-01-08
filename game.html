@@ -676,7 +676,6 @@ function trackOfferClick() {
  function tryStartVerifyPolling() {
   const sid = localStorage.getItem("subid");
   if (!sid) return;
-
   if (verifyInterval) return;
   startVerifyPolling();
 }
@@ -1045,29 +1044,19 @@ function resetVerifyText() {
     "linear-gradient(90deg,var(--accent),var(--accent2))";
 }
    function handleVerifyAgain() {
-  // إيقاف أي عمليات
+  /function handleVerifyAgain() {
   clearInterval(verifyInterval);
-  clearInterval(timer);
+  verifyInterval = null;
 
-  // تنظيف الحالة القديمة
-  
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
-
-  // إعادة تهيئة الزر
   offerLink.textContent = "Verify Again";
   offerLink.dataset.locked = "0";
   offerLink.style.pointerEvents = "auto";
   offerLink.style.background =
     "linear-gradient(90deg,#ef4444,#f97316)";
 
-  // إخفاء الحالات
   popupChecking.style.display = "none";
   popupSuccess.style.display = "none";
   popupError.style.display = "block";
-
-  // إيقاف polling تمامًا
-  verifyInterval = null;
 }
 
   document.addEventListener("DOMContentLoaded", () => {
