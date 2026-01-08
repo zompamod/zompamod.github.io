@@ -615,11 +615,10 @@ window.addEventListener("pageshow", () => {
 
   overlay.style.display = "flex";
 
+  // ❌ لا نعرض toast هنا
   setTimeout(() => {
-    showError();
-    closeNotice.style.display = "block";
-    setTimeout(() => closeNotice.style.display = "none", 4000);
-  }, 1000);
+    showError(); // popup فقط
+  }, 800);
 
   tryStartVerifyPolling();
 });
