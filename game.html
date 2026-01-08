@@ -605,42 +605,16 @@ const offerLink = document.getElementById("offerLink");
 const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
-window.addEventListener("pageshow",()=>{  
-  startVerifyPolling();  
-});  
-  
-window.addEventListener("load",()=>{
-  if(isSubidExpired()){
-    localStorage.removeItem("subid");
-    localStorage.removeItem("subid_payload");
-    localStorage.removeItem("went_offer");
-  }
+window.addEventListener("pageshow", () => {
+  offerLink.dataset.locked = "0";
 
-  subid = localStorage.getItem("subid");
+  const wentOffer = localStorage.getItem("went_offer");
+  const savedSubid = localStorage.getItem("subid");
 
-  // ✅ الملاحظة الأولى: ضمان وجود SubID
-  if(!subid){
-    createSubid();
-    subid = localStorage.getItem("subid");
-  }
-
-  if(subid){
-    offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
-    overlay.style.display = "flex";
-    startVerifyPolling();
-  }
-});
-
-// ✅ يعمل عند الرجوع من cache
-window.addEventListener("pageshow", (e) => {
-  if (e.persisted) {
-    checkReturnWithoutVerify();
-  }
-});
-
-// ✅ يعمل عند إعادة تحميل الصفحة (وهو المهم)
-document.addEventListener("DOMContentLoaded", () => {
-  checkReturnWithoutVerify();
+  if (wentOffer === "1" && savedSubid) {
+  overlay.style.display = "flex";
+  tryStartVerifyPolling();
+}
 });
 /* =============================
    CONFIG
@@ -670,31 +644,66 @@ function cleanURL(url) {
   return u.toString();
 }
 
-function createSubid(){  
-  subid="rbx_"+Math.random().toString(36).slice(2,10);  
-  localStorage.setItem("subid",subid);  
-  localStorage.setItem("subid_payload",JSON.stringify({  
-    id:subid,offer:OFFER_ID,time:Date.now()  
-  }));  
-  offerLink.href=cleanURL(OFFER)+"?ml_sub1="+subid;  
-}  
+function createSubid() {
+  subid = "rbx_" + Math.random().toString(36).slice(2, 10);
+  localStorage.setItem("subid", subid);
+  localStorage.setItem("subid_payload", JSON.stringify({
+    id: subid,
+    offer: OFFER_ID,
+    time: Date.now()
+  }));
+  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
+}
 
+function trackOfferClick() {
+  if (offerLink.dataset.locked === "1") return;
 
- 
+  // 🔥 المستخدم ضغط Verify
+  localStorage.setItem("verify_clicked", "1");
+
+  markWentOffer();
+
+  if (!localStorage.getItem("verify_started")) {
+    gtag("event", "verify_start", {
+      game_id: gameId,
+      device: localStorage.getItem("device") || "unknown"
+    });
+    localStorage.setItem("verify_started", "1");
+  }
+
+  gtag("event", "offer_click", {
+    game_id: gameId,
+    device: localStorage.getItem("device") || "unknown"
+  });
+}
+ function tryStartVerifyPolling() {
+  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
+  const sid = localStorage.getItem("subid");
+
+  if (!verifyClicked || !sid) return;
+
+  if (verifyInterval) return; // منع التكرار
+  startVerifyPolling();
+ }
   // ✅ دالة مستقلة
- function markWentOffer(){  
-  localStorage.setItem("went_offer","1");  
-}  
+ function markWentOffer() {
+  if (offerLink.dataset.locked === "1") return;
 
-function isSubidExpired(){  
-  const raw=localStorage.getItem("subid_payload");  
-  if(!raw) return true;  
-  try{  
-    const d=JSON.parse(raw);  
-    return(Date.now()-d.time)>SUBID_TTL;  
-  }catch(e){return true;}  
-}  
-  
+  createSubid(); // إنشاء subid
+  offerLink.dataset.locked = "1";
+  localStorage.setItem("went_offer", "1");
+}
+
+function isSubidExpired() {
+  const raw = localStorage.getItem("subid_payload");
+  if (!raw) return true;
+  try {
+    const d = JSON.parse(raw);
+    return (Date.now() - d.time) > SUBID_TTL;
+  } catch {
+    return true;
+  }
+}
 
 /* =============================
    DOWNLOAD FLOW
@@ -832,47 +841,79 @@ function showSuccess() {
 }
 
 
-function startVerifyPolling(){  
-  clearInterval(verifyInterval);  
-  verifyInterval=setInterval(async()=>{  
-    subid=subid||localStorage.getItem("subid");  
-    if(!subid) return;  
-    showChecking();  
-    const r=await fetch(WORKER+"/verify?subid="+subid);  
-    const t=(await r.text()).trim();  
-    if (t === "verified") {
+function startVerifyPolling() {
   clearInterval(verifyInterval);
-  showSuccess();
 
-  const device = localStorage.getItem("device");
-  const game = gamesData[gameId];
+  verifyInterval = setInterval(async () => {
+    const sid = localStorage.getItem("subid");
+    if (!sid) return;
 
-  if (
-  game &&
-  device &&
-  game.final[device] &&
-  game.final[device].startsWith("http")
-) {
-  FINAL = game.final[device];
-} else {
-  alert("Download link not available for this device");
-  return;
-}
+    showChecking();
 
-  localStorage.removeItem("device");
-  localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
+    let t = "";
+    try {
+      const r = await fetch(WORKER + "/verify?subid=" + sid);
+      t = (await r.text()).trim();
+    } catch {
+      return;
+    }
 
-  setTimeout(() => location.href = FINAL, 1200);
+    /* ======================
+       ✅ VERIFIED
+    ====================== */
+    if (t === "verified") {
+      clearInterval(verifyInterval);
+      showSuccess();
 
-} else {
-  if (localStorage.getItem("went_offer") === "1") {
-    showError();
-  }
-}
-    }, 2000);
+      const device = localStorage.getItem("device");
+      const finalLink = getFinalLink();
 
+      if (!finalLink || !device) {
+        showError();
+        return;
+      }
+
+      // 📊 GA4 – download_success (مضمون)
+      if (typeof gtag === "function") {
+        gtag("event", "download_success", {
+          game_id: gameId,
+          device: device,
+          event_callback: () => {
+            setTimeout(() => {
+              window.location.href = finalLink;
+            }, 500);
+          }
+        });
+      } else {
+        // احتياط في حال GA غير جاهز
+        window.location.href = finalLink;
+      }
+
+      // 🧹 تنظيف بعد إرسال الحدث
+      localStorage.removeItem("subid");
+      localStorage.removeItem("subid_payload");
+      localStorage.removeItem("went_offer");
+      localStorage.removeItem("verify_started");
+      localStorage.removeItem("device");
+     localStorage.removeItem("verify_clicked");
+
+      return;
+    }
+
+    /* ======================
+       ❌ FAILED / NOT COMPLETED
+    ====================== */
+    if (t === "failed" || t === "not_completed") {
+      clearInterval(verifyInterval);
+      handleVerifyAgain();
+
+      closeNotice.style.display = "block";
+      setTimeout(() => {
+        closeNotice.style.display = "none";
+      }, 4000);
+    }
+
+  }, 2000);
  }
 /* =============================
    SECURITY FLOW
@@ -987,7 +1028,11 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-
+function setVerifyAgain() {
+  // تنظيف المحاولة القديمة
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
 
   // إنشاء SubID جديد 🔥
   createSubid();
@@ -1004,7 +1049,31 @@ function resetVerifyText() {
   offerLink.style.background =
     "linear-gradient(90deg,var(--accent),var(--accent2))";
 }
-   
+   function handleVerifyAgain() {
+  // إيقاف أي عمليات
+  clearInterval(verifyInterval);
+  clearInterval(timer);
+
+  // تنظيف الحالة القديمة
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+
+  // إعادة تهيئة الزر
+  offerLink.textContent = "Verify Again";
+  offerLink.dataset.locked = "0";
+  offerLink.style.pointerEvents = "auto";
+  offerLink.style.background =
+    "linear-gradient(90deg,#ef4444,#f97316)";
+
+  // إخفاء الحالات
+  popupChecking.style.display = "none";
+  popupSuccess.style.display = "none";
+  popupError.style.display = "block";
+
+  // إيقاف polling تمامًا
+  verifyInterval = null;
+}
 
   document.addEventListener("DOMContentLoaded", () => {
 
