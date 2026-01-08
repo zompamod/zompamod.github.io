@@ -609,12 +609,18 @@ window.addEventListener("pageshow", () => {
   offerLink.dataset.locked = "0";
 
   const wentOffer = localStorage.getItem("went_offer");
-  const savedSubid = localStorage.getItem("subid");
+  const verifyClicked = localStorage.getItem("verify_clicked");
 
-  if (wentOffer === "1" && savedSubid) {
-  overlay.style.display = "flex";
-  tryStartVerifyPolling();
-}
+  if (wentOffer === "1" && verifyClicked === "1") {
+    overlay.style.display = "flex";
+
+    // 🔥 أظهر الخطأ مباشرة
+    popupChecking.style.display = "none";
+    popupSuccess.style.display = "none";
+    popupError.style.display = "block";
+
+    handleVerifyAgain(); // تفعيل Verify Again
+  }
 });
 /* =============================
    CONFIG
