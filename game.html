@@ -1022,29 +1022,8 @@ document.addEventListener("visibilitychange", () => {
   }
 });
 
-function setVerifyAgain() {
-  // تنظيف المحاولة القديمة
-  localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
 
-  // إنشاء SubID جديد 🔥
-  createSubid();
-
-  offerLink.textContent = "Verify Again";
-  offerLink.style.background =
-    "linear-gradient(90deg,#ef4444,#f97316)";
-  offerLink.dataset.locked = "0";
-  offerLink.style.pointerEvents = "auto";
-}
-
-function resetVerifyText() {
-  offerLink.textContent = "Verify & Continue";
-  offerLink.style.background =
-    "linear-gradient(90deg,var(--accent),var(--accent2))";
-}
    function handleVerifyAgain() {
-  /function handleVerifyAgain() {
   clearInterval(verifyInterval);
   verifyInterval = null;
 
