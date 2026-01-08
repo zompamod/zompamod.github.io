@@ -661,16 +661,14 @@ function cleanURL(url) {
   return u.toString();
 }
 
-function createSubid() {
-  subid = "rbx_" + Math.random().toString(36).slice(2, 10);
-  localStorage.setItem("subid", subid);
-  localStorage.setItem("subid_payload", JSON.stringify({
-    id: subid,
-    offer: OFFER_ID,
-    time: Date.now()
-  }));
-  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
-}
+function createSubid(){  
+  subid="rbx_"+Math.random().toString(36).slice(2,10);  
+  localStorage.setItem("subid",subid);  
+  localStorage.setItem("subid_payload",JSON.stringify({  
+    id:subid,offer:OFFER_ID,time:Date.now()  
+  }));  
+  offerLink.href=cleanURL(OFFER)+"?ml_sub1="+subid;  
+}  
 
 function trackOfferClick() {
   if (offerLink.dataset.locked === "1") return;
