@@ -608,17 +608,17 @@ window.addEventListener("pageshow", () => {
   const subid = localStorage.getItem("subid");
   const offerOpened = localStorage.getItem("offer_opened");
   const verifyClicked = localStorage.getItem("verify_clicked") === "1";
+  const verifyGame = localStorage.getItem("verify_game");
+
+  // ❌ لعبة مختلفة → نظّف كل شيء
+  if (verifyGame && verifyGame !== gameId) {
+    clearVerifyState();
+    return;
+  }
 
   if (!wentOffer || !subid || !offerOpened || !verifyClicked) return;
 
   overlay.style.display = "flex";
-
-  // ✅ لا Error ولا Success هنا
-  popupChecking.style.display = "none";
-  popupError.style.display = "none";
-  popupSuccess.style.display = "none";
-
-  // 🔁 نبدأ polling فقط
   tryStartVerifyPolling();
 });
 /* =============================
@@ -665,7 +665,10 @@ function trackOfferClick() {
   if (offerLink.dataset.locked === "1") return;
 
   localStorage.setItem("verify_clicked", "1");
-  localStorage.setItem("offer_opened", Date.now()); // ✅ مهم
+  localStorage.setItem("offer_opened", Date.now());
+
+  // ✅ خزّن اللعبة الحالية
+  localStorage.setItem("verify_game", gameId);
 
   markWentOffer();
 
@@ -676,12 +679,32 @@ function trackOfferClick() {
     });
     localStorage.setItem("verify_started", "1");
   }
-
-  gtag("event", "offer_click", {
-    game_id: gameId,
-    device: localStorage.getItem("device") || "unknown"
-  });
 }
+
+ function clearVerifyState() {
+  [
+    "verify_clicked",
+    "verify_started",
+    "verify_game",
+    "went_offer",
+    "offer_opened",
+    "subid",
+    "subid_payload"
+  ].forEach(k => localStorage.removeItem(k));
+
+  clearInterval(verifyInterval);
+  verifyInterval = null;
+
+  overlay.style.display = "none";
+  popupChecking.style.display = "none";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
+
+  if (offerLink) {
+    offerLink.dataset.locked = "0";
+    offerLink.style.pointerEvents = "auto";
+  }
+ }
  function tryStartVerifyPolling() {
   const verifyClicked = localStorage.getItem("verify_clicked") === "1";
   const sid = localStorage.getItem("subid");
