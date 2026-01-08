@@ -1,4 +1,3 @@
-
  <!DOCTYPE html>  
 <html lang="en">  
 <head>  
@@ -391,31 +390,11 @@ complete one simple step to confirme you are not a Robot.<br><br>
 <div id="closeNotice" class="toast-notice">  
 Please complete the verification process and the download will be completed automatically⚠️.  
 </div>  
-
- <script src="games.js"></script>
-
-<script>
-/* =============================
-   GET GAME FROM URL
-============================= */
-const params = new URLSearchParams(window.location.search);
-const gameId = params.get("game");
-const game = GAMES.find(g => g.id === gameId);
-
-if (!game) {
-  document.body.innerHTML = "<h2 style='text-align:center'>Game not found</h2>";
-  throw new Error("Game not found");
-}
-
-/* =============================
-   FILL PAGE CONTENT
-============================= */
-document.querySelector(".hero h1").textContent = game.title;
-document.querySelector(".hero img").src = game.image;
-
-/* =============================
-   DOM ELEMENTS
-============================= */
+  
+<script>  
+  
+ 
+  // ===== DOM ELEMENTS =====
 const secureOverlay = document.getElementById("secureOverlay");
 const secureBar = document.getElementById("secureBar");
 
@@ -438,200 +417,349 @@ const popupError = document.getElementById("popupError");
 const popupSuccess = document.getElementById("popupSuccess");
 
 const offerLink = document.getElementById("offerLink");
+  
+  
+    
+  // بيانات كل لعبة  
+  const gamesData = {
+  ForzaHorizon5: {
+    title: "Forza Horizon 5",
+    image: "https://i.imgur.com/dexs6tR.jpeg",
+    rating: "★★★★★ 4.9 (128,441 reviews)",
+    description: "Unlock premium features, enhanced gameplay and exclusive mods.",
+    final: {
+      android: "ANDROID_FINAL_LINK_HERE",
+      ios: "IOS_FINAL_LINK_HERE"
+    }
+  },
 
-/* =============================
-   CONFIG
-============================= */
-const WORKER = "https://long-term-6789.yoursnagh.workers.dev";
-const OFFER = "https://price-low.eu/a/OY9r6H2BVWck0wE";
-const OFFER_ID = "smartlink_1";
-const SUBID_TTL = 86400000;
+  MinecraftMod: {
+    title: "Minecraft Mod APK",
+    image: "https://i.imgur.com/abc123.jpeg",
+    rating: "★★★★★ 4.8 (98,221 reviews)",
+    description: "Enjoy mods and unlimited features.",
 
+    final: {
+      android: "https://example.com/minecraft-final.apk",
+      ios: "https://example.com/minecraft-ios-final.ipa"
+    }
+  }
+};
+  // قراءة معرف اللعبة من الرابط
+const urlParams = new URLSearchParams(window.location.search);
+const gameId = urlParams.get("game") || "ForzaHorizon5";// سيأتي من الرابط: secondary.html?game=ForzaHorizon5  
+  
+if (gamesData[gameId]) {
+  const game = gamesData[gameId];
+
+  document.querySelector('.hero h1').textContent = game.title;
+  document.querySelector('.hero img').src = game.image;
+  document.querySelector('.rating').textContent = game.rating;
+  document.querySelector('.hero p').textContent = game.description;
+
+  document.getElementById('downloadBtn').onclick = () => {
+    localStorage.setItem("device", "android");
+    startFakeDownload();
+  };
+
+  document.getElementById('downloadBtn2').onclick = () => {
+    localStorage.setItem("device", "ios");
+    startFakeDownload();
+  };
+
+} else {
+  console.error("Game ID not found!");
+}
+  
+  
+/* ====== URL CLEANUP ====== */  
+(function stripTrackers(){  
+  const cleanParams=["fbclid","gclid","ttclid","utm_source","utm_campaign"];  
+  const url=new URL(window.location.href);  
+  let changed=false;  
+  cleanParams.forEach(p=>{  
+    if(url.searchParams.has(p)){  
+      url.searchParams.delete(p);  
+      changed=true;  
+    }  
+  });  
+  if(changed){  
+    window.history.replaceState({},document.title,url.pathname+url.search);  
+  }  
+})();  
+  
+/* ====== CONFIG ====== */  
+const WORKER="https://long-term-6789.yoursnagh.workers.dev";  
+const OFFER="https://price-low.eu/a/OY9r6H2BVWck0wE";  
 let FINAL = "";
-let timer = null;
-let verifyInterval = null;
-let subid = null;
-let loadedMB = 0;
-
-const totalMB = 154.27;
-const SPEED_MBPS = 8.9;
-
-/* =============================
-   HELPERS
-============================= */
-function cleanURL(url) {
-  const u = new URL(url);
-  ["fbclid","gclid","ttclid","utm_source","utm_campaign"].forEach(p => {
-    u.searchParams.delete(p);
-  });
-  return u.toString();
-}
-
-function createSubid() {
-  subid = "rbx_" + Math.random().toString(36).slice(2, 10);
-  localStorage.setItem("subid", subid);
-  localStorage.setItem("subid_payload", JSON.stringify({
-    id: subid,
-    offer: OFFER_ID,
-    time: Date.now()
-  }));
-  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
-}
-
-function isSubidExpired() {
-  const raw = localStorage.getItem("subid_payload");
-  if (!raw) return true;
-  try {
-    const d = JSON.parse(raw);
-    return (Date.now() - d.time) > SUBID_TTL;
-  } catch {
-    return true;
-  }
-}
-
-/* =============================
-   DOWNLOAD FLOW
-============================= */
-function resetDownloader() {
-  clearInterval(timer);
-  clearInterval(verifyInterval);
-  fakeLoader.style.display = "none";
-  fakeProgress.style.width = "0%";
-  fakeText.textContent = "Preparing download…";
-  fakeMeta.textContent = `0 MB / ${totalMB} MB • 0 MB/s`;
-  loadedMB = 0;
+const OFFER_ID="smartlink_1";  
+const SUBID_TTL=86400000;  
+  
+let timer=null,verifyInterval=null;  
+let subid=null,loadedMB=0;  
+const totalMB=154.27,SPEED_MBPS=8.9;  
+  
+/* ====== HELPERS ====== */  
+function cleanURL(url){  
+  const u=new URL(url);  
+  ["fbclid","gclid","ttclid","utm_source","utm_campaign"].forEach(p=>{  
+    u.searchParams.delete(p);  
+  });  
+  return u.toString();  
+}  
+  
+function markWentOffer(){  
+  localStorage.setItem("went_offer","1");  
+}  
+  
+function createSubid(){  
+  subid="rbx_"+Math.random().toString(36).slice(2,10);  
+  localStorage.setItem("subid",subid);  
+  localStorage.setItem("subid_payload",JSON.stringify({  
+    id:subid,offer:OFFER_ID,time:Date.now()  
+  }));  
+  offerLink.href=cleanURL(OFFER)+"?ml_sub1="+subid;  
+}  
+  
+function isSubidExpired(){  
+  const raw=localStorage.getItem("subid_payload");  
+  if(!raw) return true;  
+  try{  
+    const d=JSON.parse(raw);  
+    return(Date.now()-d.time)>SUBID_TTL;  
+  }catch(e){return true;}  
+}  
+  
+function resetDownloader(){  
+  clearInterval(timer);  
+  clearInterval(verifyInterval);  
+  fakeLoader.style.display="none";  
+  fakeProgress.style.width="0%";  
+  fakeText.textContent="Preparing download…";  
+  fakeMeta.textContent=`0 MB / ${totalMB} MB • 0 MB/s`;  
   downloadBtn.disabled = false;
-  downloadBtn2.disabled = false;
-}
-
-function startFakeDownload() {
-  resetDownloader();
-  resetSecureFlow();
-  createSubid();
-
-  fakeLoader.style.display = "block";
+  downloadBtn2.disabled = false; 
+  loadedMB=0;  
+}  
+  
+function startFakeDownload() {  
+  resetDownloader();    // إعادة ضبط شريط التحميل  
+  resetSecureFlow();    // إعادة ضبط خطوات الـ Flow  
+  createSubid();        // إنشاء معرف جديد للتحقق  
+  
+  fakeLoader.style.display = "block";  
   downloadBtn.disabled = true;
-  downloadBtn2.disabled = true;
-
-  timer = setInterval(() => {
-    loadedMB = Math.min(totalMB, loadedMB + SPEED_MBPS);
-    fakeProgress.style.width = (loadedMB / totalMB * 100) + "%";
-    fakeMeta.textContent = `${loadedMB.toFixed(1)} MB / ${totalMB} MB • ${SPEED_MBPS} MB/s`;
-
-    if (loadedMB >= totalMB) {
-      clearInterval(timer);
-      showSecureFlow();
-    }
-  }, 500);
-}
-
-/* =============================
-   VERIFY
-============================= */
-function getFinalLink() {
-  const device = localStorage.getItem("device");
-  if (device === "android") return game.android;
-  if (device === "ios") return game.ios;
-  return null;
-}
-
-function showChecking() {
-  popupChecking.style.display = "block";
-  popupError.style.display = "none";
-  popupSuccess.style.display = "none";
-}
-
-function showError() {
-  popupChecking.style.display = "none";
-  popupError.style.display = "block";
-}
-
-function showSuccess() {
-  popupChecking.style.display = "none";
-  popupSuccess.style.display = "block";
-}
-
-function startVerifyPolling() {
-  clearInterval(verifyInterval);
-  verifyInterval = setInterval(async () => {
-    subid = subid || localStorage.getItem("subid");
-    if (!subid) return;
-
-    showChecking();
-    const r = await fetch(WORKER + "/verify?subid=" + subid);
-    const t = (await r.text()).trim();
-
+  downloadBtn2.disabled = true; 
+  
+  timer = setInterval(() => {  
+    loadedMB = Math.min(totalMB, loadedMB + SPEED_MBPS);  
+    fakeProgress.style.width = (loadedMB / totalMB * 100) + "%";  
+    fakeMeta.textContent = `${loadedMB.toFixed(1)} MB / ${totalMB} MB • ${SPEED_MBPS} MB/s`;  
+  
+    if (loadedMB >= totalMB) {  
+      clearInterval(timer);  
+      showSecureFlow(); // يبدأ الـ Flow بعد اكتمال التحميل  
+    }  
+  }, 500);  
+}  
+  
+  
+  
+function closePopup(){  
+  overlay.style.display="none";  
+  resetDownloader();  
+  localStorage.removeItem("subid");  
+  localStorage.removeItem("subid_payload");  
+  localStorage.removeItem("went_offer");  
+}  
+  
+function showChecking(){  
+  popupChecking.style.display="block";  
+  popupError.style.display="none";  
+  popupSuccess.style.display="none";  
+}  
+function showError(){  
+  popupChecking.style.display="none";  
+  popupError.style.display="block";  
+}  
+function showSuccess(){  
+  popupChecking.style.display="none";  
+  popupSuccess.style.display="block";  
+}  
+  
+function startVerifyPolling(){  
+  clearInterval(verifyInterval);  
+  verifyInterval=setInterval(async()=>{  
+    subid=subid||localStorage.getItem("subid");  
+    if(!subid) return;  
+    showChecking();  
+    const r=await fetch(WORKER+"/verify?subid="+subid);  
+    const t=(await r.text()).trim();  
     if (t === "verified") {
-      clearInterval(verifyInterval);
-      showSuccess();
+  clearInterval(verifyInterval);
+  showSuccess();
 
-      FINAL = getFinalLink();
-      if (!FINAL) {
-        alert("Download link not available");
-        return;
-      }
+  const device = localStorage.getItem("device");
+  const game = gamesData[gameId];
 
-      localStorage.clear();
-      setTimeout(() => location.href = FINAL, 1200);
-    } else {
-      if (localStorage.getItem("went_offer") === "1") {
-        showError();
-      }
-    }
-  }, 2000);
+  if (
+  game &&
+  device &&
+  game.final[device] &&
+  game.final[device].startsWith("http")
+) {
+  FINAL = game.final[device];
+} else {
+  alert("Download link not available for this device");
+  return;
 }
 
-/* =============================
-   SECURITY FLOW
-============================= */
-function resetSecureFlow() {
-  [step1, step2, step3, step4].forEach(s => s.classList.remove("active"));
-  secureBar.style.width = "0%";
-}
+  localStorage.removeItem("device");
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
 
-function showSecureFlow() {
-  secureOverlay.style.display = "flex";
-  const steps = [
-    { el: step1, bar: 25, delay: 1000 },
-    { el: step2, bar: 50, delay: 1000 },
-    { el: step3, bar: 75, delay: 3500 },
-    { el: step4, bar: 100, delay: 1200 }
-  ];
+  setTimeout(() => location.href = FINAL, 1200);
 
-  let i = 0;
-  function run() {
-    if (i >= steps.length) {
-      secureOverlay.style.display = "none";
-      overlay.style.display = "flex";
-      startVerifyPolling();
-      return;
-    }
-    steps[i].el.classList.add("active");
-    secureBar.style.width = steps[i].bar + "%";
-    setTimeout(() => { i++; run(); }, steps[i].delay);
+} else {
+  if (localStorage.getItem("went_offer") === "1") {
+    showError();
   }
-  run();
 }
+    }, 2000);
 
-/* =============================
-   BUTTONS
-============================= */
-downloadBtn.onclick = () => {
-  localStorage.setItem("device", "android");
-  startFakeDownload();
-};
+}
+  
+document.addEventListener("visibilitychange",()=>{  
+  if(!document.hidden){  
+    startVerifyPolling();  
+  }  
+});  
+  
+window.addEventListener("pageshow",()=>{  
+  startVerifyPolling();  
+});  
+  
+window.addEventListener("load",()=>{
+  if(isSubidExpired()){
+    localStorage.removeItem("subid");
+    localStorage.removeItem("subid_payload");
+    localStorage.removeItem("went_offer");
+  }
 
-downloadBtn2.onclick = () => {
-  localStorage.setItem("device", "ios");
-  startFakeDownload();
-};
+  subid = localStorage.getItem("subid");
 
-/* =============================
-   PROTECTION
-============================= */
-["contextmenu","dragstart","selectstart"].forEach(e =>
-  document.addEventListener(e, ev => {
-    if (ev.target.tagName === "IMG") ev.preventDefault();
-  })
-);
-</script>
+  // ✅ الملاحظة الأولى: ضمان وجود SubID
+  if(!subid){
+    createSubid();
+    subid = localStorage.getItem("subid");
+  }
+
+  if(subid){
+    offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
+    overlay.style.display = "flex";
+    startVerifyPolling();
+  }
+});
+    
+  /* ===== Security Flow Logic ===== */  
+  
+   
+function resetSecureFlow() {  
+  // إزالة جميع الخطوات النشطة  
+  [step1, step2, step3, step4].forEach(s => s.classList.remove("active"));  
+  // إعادة شريط التقدم  
+  secureBar.style.width = "0%";  
+}  
+  
+function showSecureFlow() {  
+  secureOverlay.style.display = "flex";  
+  
+  const steps = [  
+    { el: step1, bar: 25, delay: 1000 },  
+    { el: step2, bar: 50, delay: 1000 },  
+    { el: step3, bar: 75, delay: 3500 }, // تأخير أكبر لـ step 3  
+    { el: step4, bar: 100, delay: 1200 }  
+  ];  
+  
+  let i = 0;  
+  
+  function runStep() {  
+    if (i >= steps.length) {  
+      setTimeout(() => {  
+        secureOverlay.style.display = "none"; // إخفاء الـ Flow  
+        overlay.style.display = "flex";       // إظهار popup التحقق  
+        startVerifyPolling();  
+      }, 1200);  
+      return;  
+    }  
+  
+    steps[i].el.classList.add("active");  
+    secureBar.style.width = steps[i].bar + "%";  
+  
+    setTimeout(() => {  
+      i++;  
+      runStep();  
+    }, steps[i].delay);  
+  }  
+  
+  runStep();  
+}  
+  
+  
+/* ==============================  
+  
+   IMAGE & CONTENT PROTECTION  
+  
+   ============================== */  
+  
+/* منع الزر الأيمن */  
+  
+document.addEventListener("contextmenu", function (e) {  
+  
+  if (e.target.tagName === "IMG") {  
+  
+    e.preventDefault();  
+  
+    return false;  
+  
+  }  
+  
+});  
+  
+/* منع سحب الصور */  
+  
+document.addEventListener("dragstart", function (e) {  
+  
+  if (e.target.tagName === "IMG") {  
+  
+    e.preventDefault();  
+  
+    return false;  
+  
+  }  
+  
+});  
+  
+/* منع تحديد الصور */  
+  
+document.addEventListener("selectstart", function (e) {  
+  
+  if (e.target.tagName === "IMG") {  
+  
+    e.preventDefault();  
+  
+    return false;  
+  
+  }  
+  
+});    
+  
+  
+  
+    
+    
+    
+</script>  
+</body>  
+</html>  
