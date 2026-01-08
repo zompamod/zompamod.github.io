@@ -685,14 +685,12 @@ function trackOfferClick() {
   });
 }
  function tryStartVerifyPolling() {
-  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
   const sid = localStorage.getItem("subid");
+  if (!sid) return;
 
-  if (!verifyClicked || !sid) return;
-
-  if (verifyInterval) return; // منع التكرار
+  if (verifyInterval) return;
   startVerifyPolling();
- }
+}
   // ✅ دالة مستقلة
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
@@ -851,80 +849,57 @@ function showSuccess() {
 
 
 function startVerifyPolling() {
-  clearInterval(verifyInterval);
+  if (verifyInterval) return;
+
+  popupChecking.style.display = "block";
+  popupError.style.display = "none";
 
   verifyInterval = setInterval(async () => {
-    const sid = localStorage.getItem("subid");
-    if (!sid) return;
-
-    showChecking();
-
-    let t = "";
     try {
-      const r = await fetch(WORKER + "/verify?subid=" + sid);
-      t = (await r.text()).trim();
-    } catch {
-      return;
-    }
+      const sid = localStorage.getItem("subid");
+      if (!sid) return;
 
-    /* ======================
-       ✅ VERIFIED
-    ====================== */
-    if (t === "verified") {
-      clearInterval(verifyInterval);
-      showSuccess();
+      const res = await fetch(`/verify?subid=${sid}`, {
+        cache: "no-store"
+      });
 
-      const device = localStorage.getItem("device");
-      const finalLink = getFinalLink();
+      if (!res.ok) return;
 
-      if (!finalLink || !device) {
-        showError();
+      const text = (await res.text()).trim();
+
+      // ✅ نجاح
+      if (text === "verified") {
+        clearInterval(verifyInterval);
+        verifyInterval = null;
+
+        popupChecking.style.display = "none";
+        popupSuccess.style.display = "block";
+
+        localStorage.removeItem("verify_clicked");
+        localStorage.removeItem("went_offer");
         return;
       }
 
-      // 📊 GA4 – download_success (مضمون)
-      if (typeof gtag === "function") {
-        gtag("event", "download_success", {
-          game_id: gameId,
-          device: device,
-          event_callback: () => {
-            setTimeout(() => {
-              window.location.href = finalLink;
-            }, 500);
-          }
-        });
-      } else {
-        // احتياط في حال GA غير جاهز
-        window.location.href = finalLink;
+      // ❌ فشل (أي شيء غير verified)
+      if (localStorage.getItem("went_offer") === "1") {
+        clearInterval(verifyInterval);
+        verifyInterval = null;
+
+        popupChecking.style.display = "none";
+        showError();
+
+        closeNotice.style.display = "block";
+        setTimeout(() => {
+          closeNotice.style.display = "none";
+        }, 4000);
       }
 
-      // 🧹 تنظيف بعد إرسال الحدث
-      localStorage.removeItem("subid");
-      localStorage.removeItem("subid_payload");
-      localStorage.removeItem("went_offer");
-      localStorage.removeItem("verify_started");
-      localStorage.removeItem("device");
-     localStorage.removeItem("verify_clicked");
-
-      return;
+    } catch (e) {
+      console.error("verify error", e);
     }
-
-    /* ======================
-       ❌ FAILED / NOT COMPLETED
-    ====================== */
-    if (t === "failed" || t === "not_completed") {
-      clearInterval(verifyInterval);
-
-      showError();
-
-      closeNotice.style.display = "block";
-      setTimeout(() => {
-        closeNotice.style.display = "none";
-      }, 4000);
-    }
-
-  }, 3000); // ✅ إغلاق setInterval
-}            // ✅ إغلاق startVerifyPolling
+  }, 2500);
+ }
+        
 /* =============================
    SECURITY FLOW
 ============================= */
