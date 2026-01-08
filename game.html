@@ -850,48 +850,69 @@ function showSuccess() {
 }
 
 
- function startVerifyPolling(){  
-  clearInterval(verifyInterval);  
-  verifyInterval=setInterval(async()=>{  
-    subid=subid||localStorage.getItem("subid");  
-    if(!subid) return;  
-    showChecking();  
-    const r=await fetch(WORKER+"/verify?subid="+subid);  
-    const t=(await r.text()).trim();  
-    if (t === "verified") {
-  clearInterval(verifyInterval);
-  showSuccess();
+ 
+ function startVerifyPolling() {
+  // منع التكرار
+  if (verifyInterval) return;
 
-  const device = localStorage.getItem("device");
-  const game = gamesData[gameId];
+  const sid = localStorage.getItem("subid");
+  if (!sid) return;
 
-  if (
-  game &&
-  device &&
-  game.final[device] &&
-  game.final[device].startsWith("http")
-) {
-  FINAL = game.final[device];
-} else {
-  alert("Download link not available for this device");
-  return;
+  showChecking(); // مرة واحدة فقط
+
+  verifyInterval = setInterval(async () => {
+    try {
+      const subid = localStorage.getItem("subid");
+      if (!subid) return;
+
+      const res = await fetch(WORKER + "/verify?subid=" + subid, {
+        cache: "no-store"
+      });
+
+      if (!res.ok) return;
+
+      const status = (await res.text()).trim();
+
+      /* ========= SUCCESS ========= */
+      if (status === "verified") {
+        clearInterval(verifyInterval);
+        verifyInterval = null;
+
+        showSuccess();
+
+        const finalLink = getFinalLink(); // حسب الجهاز
+
+        if (!finalLink) {
+          alert("Download link not available for this device");
+          return;
+        }
+
+        // تنظيف القيم
+        localStorage.removeItem("verify_clicked");
+        localStorage.removeItem("subid");
+        localStorage.removeItem("subid_payload");
+        localStorage.removeItem("went_offer");
+
+        setTimeout(() => {
+          location.href = finalLink;
+        }, 1200);
+
+        return;
+      }
+
+      /* ========= FAILED ========= */
+      if (localStorage.getItem("went_offer") === "1") {
+        clearInterval(verifyInterval);
+        verifyInterval = null;
+
+        showError();
+      }
+
+    } catch (err) {
+      console.error("verify polling error:", err);
+    }
+  }, 2000);
 }
-
-  localStorage.removeItem("device");
-  localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
-
-  setTimeout(() => location.href = FINAL, 1200);
-
-} else {
-  if (localStorage.getItem("went_offer") === "1") {
-    showError();
-  }
-}
-    }, 2000);
-
- }
       //===============
    
 function resetSecureFlow() {
