@@ -685,16 +685,15 @@ function createSubid(){
   localStorage.setItem("went_offer","1");  
 }  
 
-function isSubidExpired() {
-  const raw = localStorage.getItem("subid_payload");
-  if (!raw) return true;
-  try {
-    const d = JSON.parse(raw);
-    return (Date.now() - d.time) > SUBID_TTL;
-  } catch {
-    return true;
-  }
-}
+function isSubidExpired(){  
+  const raw=localStorage.getItem("subid_payload");  
+  if(!raw) return true;  
+  try{  
+    const d=JSON.parse(raw);  
+    return(Date.now()-d.time)>SUBID_TTL;  
+  }catch(e){return true;}  
+}  
+  
 
 /* =============================
    DOWNLOAD FLOW
