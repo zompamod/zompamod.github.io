@@ -615,12 +615,12 @@ window.addEventListener("pageshow", () => {
 
   overlay.style.display = "flex";
 
-  // ✅ لا Error ولا Success هنا
-  popupChecking.style.display = "none";
-  popupError.style.display = "none";
-  popupSuccess.style.display = "none";
+  setTimeout(() => {
+    showError();
+    closeNotice.style.display = "block";
+    setTimeout(() => closeNotice.style.display = "none", 4000);
+  }, 1000);
 
-  // 🔁 نبدأ polling فقط
   tryStartVerifyPolling();
 });
 /* =============================
