@@ -674,14 +674,12 @@ function trackOfferClick() {
   });
 }
  function tryStartVerifyPolling() {
-  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
   const sid = localStorage.getItem("subid");
+  if (!sid) return;
 
-  if (!verifyClicked || !sid) return;
-
-  if (verifyInterval) return; // منع التكرار
+  if (verifyInterval) return;
   startVerifyPolling();
- }
+}
   // ✅ دالة مستقلة
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
@@ -1052,7 +1050,7 @@ function resetVerifyText() {
   clearInterval(timer);
 
   // تنظيف الحالة القديمة
-  localStorage.removeItem("subid");
+  
   localStorage.removeItem("subid_payload");
   localStorage.removeItem("went_offer");
 
