@@ -832,8 +832,9 @@ function showChecking() {
 
 function showError() {
   popupChecking.style.display = "none";
-  popupError.style.display = "block";
-}
+  popupSuccess.style.display = "none";
+  popupError.style.display = "block"; // ✅
+ }
 
 function showSuccess() {
   popupChecking.style.display = "none";
