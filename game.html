@@ -850,13 +850,12 @@ function showSuccess() {
 
  
  function startVerifyPolling() {
-  // منع التكرار
   if (verifyInterval) return;
 
   const sid = localStorage.getItem("subid");
   if (!sid) return;
 
-  showChecking(); // مرة واحدة فقط
+  showChecking();
 
   verifyInterval = setInterval(async () => {
     try {
@@ -871,59 +870,51 @@ function showSuccess() {
 
       const status = (await res.text()).trim();
 
-      /* ========= SUCCESS ========= */
+      /* ===== SUCCESS ===== */
       if (status === "verified") {
         clearInterval(verifyInterval);
         verifyInterval = null;
 
         showSuccess();
 
-        const finalLink = getFinalLink(); // حسب الجهاز
+        const finalLink = getFinalLink();
+        const device = localStorage.getItem("device") || "unknown";
 
-        if (!finalLink) {
-          alert("Download link not available for this device");
-          return;
-        }
+        if (!finalLink) return;
 
-       // 📊 GA4 – download_success (مضمون)
-      if (typeof gtag === "function") {
-        gtag("event", "download_success", {
-          game_id: gameId,
-          device: device,
-          event_callback: () => {
-            setTimeout(() => {
+        // تنظيف
+        [
+          "verify_clicked",
+          "verify_started",
+          "subid",
+          "subid_payload",
+          "went_offer"
+        ].forEach(k => localStorage.removeItem(k));
+
+        if (typeof gtag === "function") {
+          gtag("event", "download_success", {
+            game_id: gameId,
+            device,
+            event_callback: () => {
               window.location.href = finalLink;
-            }, 500);
-          }
-        });
-      } else {
-        // احتياط في حال GA غير جاهز
-        window.location.href = finalLink;
- }
-
-        // تنظيف القيم
-        localStorage.removeItem("verify_clicked");
-        localStorage.removeItem("subid");
-        localStorage.removeItem("subid_payload");
-        localStorage.removeItem("went_offer");
-
-        setTimeout(() => {
-          location.href = finalLink;
-        }, 1200);
+            }
+          });
+        } else {
+          window.location.href = finalLink;
+        }
 
         return;
       }
 
-      /* ========= FAILED ========= */
+      /* ===== FAILED (بعد الذهاب للعرض فقط) ===== */
       if (localStorage.getItem("went_offer") === "1") {
         clearInterval(verifyInterval);
         verifyInterval = null;
-
         showError();
       }
 
-    } catch (err) {
-      console.error("verify polling error:", err);
+    } catch (e) {
+      console.error("verify polling error", e);
     }
   }, 2000);
 }
