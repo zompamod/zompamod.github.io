@@ -680,15 +680,7 @@ function createSubid(){
 }  
 
 
- function tryStartVerifyPolling() {
-  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
-  const sid = localStorage.getItem("subid");
-
-  if (!verifyClicked || !sid) return;
-
-  if (verifyInterval) return; // منع التكرار
-  startVerifyPolling();
- }
+ 
   // ✅ دالة مستقلة
  function markWentOffer(){  
   localStorage.setItem("went_offer","1");  
