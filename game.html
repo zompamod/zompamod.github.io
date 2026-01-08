@@ -615,12 +615,12 @@ window.addEventListener("pageshow", () => {
 
   overlay.style.display = "flex";
 
-  setTimeout(() => {
-    showError();
-    closeNotice.style.display = "block";
-    setTimeout(() => closeNotice.style.display = "none", 4000);
-  }, 1000);
+  // ✅ لا Error ولا Success هنا
+  popupChecking.style.display = "none";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
 
+  // 🔁 نبدأ polling فقط
   tryStartVerifyPolling();
 });
 /* =============================
@@ -685,12 +685,14 @@ function trackOfferClick() {
   });
 }
  function tryStartVerifyPolling() {
+  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
   const sid = localStorage.getItem("subid");
-  if (!sid) return;
 
-  if (verifyInterval) return;
+  if (!verifyClicked || !sid) return;
+
+  if (verifyInterval) return; // منع التكرار
   startVerifyPolling();
-}
+ }
   // ✅ دالة مستقلة
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
@@ -847,60 +849,93 @@ function showSuccess() {
   popupSuccess.style.display = "block";
 }
 
-
 function startVerifyPolling() {
+  // 🛑 منع التكرار
   if (verifyInterval) return;
 
-  popupChecking.style.display = "block";
-  popupError.style.display = "none";
+  // 👁️ إظهار checking مرة واحدة فقط
+  showChecking();
 
   verifyInterval = setInterval(async () => {
-    try {
-      const sid = localStorage.getItem("subid");
-      if (!sid) return;
+    const sid = localStorage.getItem("subid");
+    if (!sid) return;
 
-      const res = await fetch(`/verify?subid=${sid}`, {
+    let status = "";
+
+    try {
+      const r = await fetch(WORKER + "/verify?subid=" + sid, {
         cache: "no-store"
       });
+      status = (await r.text()).trim();
+    } catch {
+      // فشل مؤقت → لا نعرض أي شيء
+      return;
+    }
 
-      if (!res.ok) return;
+    // ⏳ ما زال التحقق جاري
+    if (status === "" || status === "pending") return;
 
-      const text = (await res.text()).trim();
+    // 🟢 VERIFIED
+    if (status === "verified") {
+      clearInterval(verifyInterval);
+      verifyInterval = null;
 
-      // ✅ نجاح
-      if (text === "verified") {
-        clearInterval(verifyInterval);
-        verifyInterval = null;
+      showSuccess();
 
-        popupChecking.style.display = "none";
-        popupSuccess.style.display = "block";
+      const device = localStorage.getItem("device");
+      const finalLink = getFinalLink();
 
-        localStorage.removeItem("verify_clicked");
-        localStorage.removeItem("went_offer");
+      if (!finalLink || !device) {
+        showError();
         return;
       }
 
-      // ❌ فشل (أي شيء غير verified)
-      if (localStorage.getItem("went_offer") === "1") {
-        clearInterval(verifyInterval);
-        verifyInterval = null;
-
-        popupChecking.style.display = "none";
-        showError();
-
-        closeNotice.style.display = "block";
-        setTimeout(() => {
-          closeNotice.style.display = "none";
-        }, 4000);
+      // 📊 GA4
+      if (typeof gtag === "function") {
+        gtag("event", "download_success", {
+          game_id: gameId,
+          device,
+          event_callback: () => {
+            setTimeout(() => {
+              location.href = finalLink;
+            }, 500);
+          }
+        });
+      } else {
+        location.href = finalLink;
       }
 
-    } catch (e) {
-      console.error("verify error", e);
+      // 🧹 تنظيف
+      [
+        "subid",
+        "subid_payload",
+        "went_offer",
+        "verify_started",
+        "verify_clicked",
+        "device"
+      ].forEach(k => localStorage.removeItem(k));
+
+      return;
     }
-  }, 2500);
+
+    // 🔴 FAILED / NOT COMPLETED
+    if (status === "failed" || status === "not_completed") {
+      clearInterval(verifyInterval);
+      verifyInterval = null;
+
+      showError();
+
+      closeNotice.style.display = "block";
+      setTimeout(() => {
+        closeNotice.style.display = "none";
+      }, 4000);
+    }
+
+  }, 3000);
  }
-        
-/* =============================
+
+
+      //===============
    SECURITY FLOW
 ============================= */
 function resetSecureFlow() {
