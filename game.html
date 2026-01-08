@@ -605,22 +605,31 @@ const offerLink = document.getElementById("offerLink");
 const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
-function checkReturnWithoutVerify() {
-  offerLink.dataset.locked = "0";
-
-  const wentOffer = localStorage.getItem("went_offer");
-  const verifyClicked = localStorage.getItem("verify_clicked");
-
-  if (wentOffer === "1" && verifyClicked === "1") {
-    overlay.style.display = "flex";
-
-    popupChecking.style.display = "none";
-    popupSuccess.style.display = "none";
-    popupError.style.display = "block";
-
-    handleVerifyAgain();
+window.addEventListener("pageshow",()=>{  
+  startVerifyPolling();  
+});  
+  
+window.addEventListener("load",()=>{
+  if(isSubidExpired()){
+    localStorage.removeItem("subid");
+    localStorage.removeItem("subid_payload");
+    localStorage.removeItem("went_offer");
   }
-}
+
+  subid = localStorage.getItem("subid");
+
+  // ✅ الملاحظة الأولى: ضمان وجود SubID
+  if(!subid){
+    createSubid();
+    subid = localStorage.getItem("subid");
+  }
+
+  if(subid){
+    offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
+    overlay.style.display = "flex";
+    startVerifyPolling();
+  }
+});
 
 // ✅ يعمل عند الرجوع من cache
 window.addEventListener("pageshow", (e) => {
