@@ -606,15 +606,27 @@ const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
 window.addEventListener("pageshow", () => {
-  offerLink.dataset.locked = "0";
-
   const wentOffer = localStorage.getItem("went_offer");
-  const savedSubid = localStorage.getItem("subid");
+  const subid = localStorage.getItem("subid");
+  const offerOpened = localStorage.getItem("offer_opened");
 
-  if (wentOffer === "1" && savedSubid) {
+  if (!wentOffer || !subid || !offerOpened) return;
+
   overlay.style.display = "flex";
+
+  // ⏳ انتظر 1 ثانية ثم قرر
+  setTimeout(() => {
+    // لو لم يتم التحقق بعد الرجوع → خطأ مباشر
+    showError();
+
+    closeNotice.style.display = "block";
+    setTimeout(() => {
+      closeNotice.style.display = "none";
+    }, 4000);
+  }, 1000);
+
+  // 🔁 ثم نبدأ polling (في حال أكمل لاحقًا)
   tryStartVerifyPolling();
-}
 });
 /* =============================
    CONFIG
@@ -656,10 +668,11 @@ function createSubid() {
 }
 
 function trackOfferClick() {
+function trackOfferClick() {
   if (offerLink.dataset.locked === "1") return;
 
-  // 🔥 المستخدم ضغط Verify
   localStorage.setItem("verify_clicked", "1");
+  localStorage.setItem("offer_opened", Date.now()); // ✅ مهم
 
   markWentOffer();
 
