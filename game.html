@@ -404,6 +404,82 @@ button{will-change:transform,box-shadow}
  #verifyVideo{
   display: none;
  }
+
+ /* ===== INSTALLATION GUIDE (EXACT UI) ===== */
+.install-guide-box{
+  margin:26px 22px;
+  padding:22px;
+  border-radius:26px;
+  background:linear-gradient(180deg,#2a1409,#140a05);
+  border:1px solid var(--border);
+  box-shadow:0 12px 40px rgba(0,0,0,.6),
+             inset 0 0 20px rgba(255,138,42,.06);
+}
+
+.install-title{
+  text-align:center;
+  font-size:26px;
+  font-weight:800;
+  margin-bottom:18px;
+  color:var(--accent2);
+}
+
+/* Switch buttons */
+.install-switch{
+  background:#0b0503;
+  border-radius:20px;
+  padding:6px;
+  display:flex;
+  gap:6px;
+  border:1px solid var(--border);
+  margin-bottom:18px;
+}
+
+.install-tab{
+  flex:1;
+  text-align:center;
+  padding:14px 0;
+  border-radius:16px;
+  font-weight:700;
+  font-size:16px;
+  color:#cbb08c;
+  cursor:pointer;
+  transition:.25s ease;
+}
+
+.install-tab.active{
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  color:#1b0f09;
+}
+
+/* Steps */
+.install-steps{
+  display:none;
+}
+
+.install-steps.active{
+  display:block;
+}
+
+.step{
+  background:linear-gradient(180deg,#221108,#120805);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:14px 16px 14px 40px;
+  font-size:14px;
+  color:#e7c8a2;
+  margin-bottom:10px;
+  position:relative;
+}
+
+.step::before{
+  content:"➜";
+  position:absolute;
+  left:16px;
+  top:14px;
+  font-weight:800;
+  color:var(--accent2);
+   }
   
 </style>  
 </head>  
@@ -459,6 +535,37 @@ button{will-change:transform,box-shadow}
 <div class="feature">✔ Latest Version</div>    
 <div class="feature">✔ Fast & Secure Download</div>  
 </section>    
+
+ <section class="install-guide-box">
+  <h2 class="install-title">Installation Guide</h2>
+
+  <div class="install-switch">
+    <div class="install-tab active" data-target="install-android">Android</div>
+    <div class="install-tab" data-target="install-ios">iOS</div>
+  </div>
+
+  <!-- ANDROID GUIDE -->
+  <div id="install-android" class="install-steps active">
+    <div class="step">Download the APK file using the Android download button above</div>
+    <div class="step">Go to Settings &gt; Security &gt; Enable "Unknown Sources"</div>
+    <div class="step">Locate the downloaded APK file in your file manager</div>
+    <div class="step">Tap to install and follow on-screen instructions</div>
+    <div class="step">After installation, download additional game cache files</div>
+    <div class="step">Place cache files in Android/obb/ folder</div>
+    <div class="step">Launch the game and enjoy!</div>
+  </div>
+
+  <!-- IOS GUIDE -->
+  <div id="install-ios" class="install-steps">
+    <div class="step">Download the IPA file using the iOS download button</div>
+    <div class="step">Install AltStore on your computer (Windows/Mac required)</div>
+    <div class="step">Connect your iOS device and open AltStore</div>
+    <div class="step">Select "Install .ipa" and choose the downloaded file</div>
+    <div class="step">Enter your Apple ID when prompted</div>
+    <div class="step">Trust the developer in Settings &gt; General &gt; Device Management</div>
+    <div class="step">Launch the game and download additional resources</div>
+  </div>
+ </section>
   
   <!-- Security Flow -->  
 <div id="secureOverlay">  
@@ -1079,3 +1186,14 @@ function resetVerifyText() {
 
 });
 </script>
+ <script>
+document.querySelectorAll(".install-tab").forEach(tab=>{
+  tab.addEventListener("click",()=>{
+    document.querySelectorAll(".install-tab").forEach(t=>t.classList.remove("active"));
+    document.querySelectorAll(".install-steps").forEach(s=>s.classList.remove("active"));
+
+    tab.classList.add("active");
+    document.getElementById(tab.dataset.target).classList.add("active");
+  });
+});
+ </script>
