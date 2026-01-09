@@ -604,26 +604,22 @@ const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
 window.addEventListener("pageshow", () => {
-  const verifyGame = localStorage.getItem("verify_game");
+  const wentOffer = localStorage.getItem("went_offer");
   const subid = localStorage.getItem("subid");
-  const inProgress = localStorage.getItem("verify_in_progress") === "1";
+  const offerOpened = localStorage.getItem("offer_opened");
+  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
 
-  // ❌ رجع من لعبة مختلفة
-  if (verifyGame && verifyGame !== gameId) {
-    clearVerifyState();
-    return;
-  }
+  if (!wentOffer || !subid || !offerOpened || !verifyClicked) return;
 
-  // ✅ رجع لنفس اللعبة → أكمل التحقق
-  if (inProgress && subid && localStorage.getItem("went_offer") === "1") {
-    overlay.style.display = "flex";
-    showChecking();
+  overlay.style.display = "flex";
 
-    // تأخير بسيط لضمان DOM جاهز
-    setTimeout(() => {
-      tryStartVerifyPolling();
-    }, 400);
-  }
+  // ✅ لا Error ولا Success هنا
+  popupChecking.style.display = "none";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
+
+  // 🔁 نبدأ polling فقط
+  tryStartVerifyPolling();
 });
 /* =============================
    CONFIG
@@ -645,28 +641,7 @@ const SPEED_MBPS = 8.9;
 /* =============================
    HELPERS
 ============================= */
-function clearVerifyState() {
-  [
-    "verify_clicked",
-    "verify_started",
-    "verify_game",
-    "verify_in_progress",
-    "went_offer",
-    "offer_opened",
-    "subid",
-    "subid_payload"
-  ].forEach(k => localStorage.removeItem(k));
-
-  clearInterval(verifyInterval);
-  verifyInterval = null;
-
-  overlay.style.display = "none";
-  popupChecking.style.display = "none";
-  popupError.style.display = "none";
-  popupSuccess.style.display = "none";
-}
- 
- function cleanURL(url) {
+function cleanURL(url) {
   const u = new URL(url);
   ["fbclid","gclid","ttclid","utm_source","utm_campaign"].forEach(p => {
     u.searchParams.delete(p);
@@ -690,10 +665,7 @@ function trackOfferClick() {
   if (offerLink.dataset.locked === "1") return;
 
   localStorage.setItem("verify_clicked", "1");
-  localStorage.setItem("offer_opened", Date.now());
-
-  // ✅ خزّن اللعبة الحالية
-  localStorage.setItem("verify_game", gameId);
+  localStorage.setItem("offer_opened", Date.now()); // ✅ مهم
 
   markWentOffer();
 
@@ -704,38 +676,38 @@ function trackOfferClick() {
     });
     localStorage.setItem("verify_started", "1");
   }
-}
 
- 
+  gtag("event", "offer_click", {
+    game_id: gameId,
+    device: localStorage.getItem("device") || "unknown"
+  });
+}
  function tryStartVerifyPolling() {
+  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
   const sid = localStorage.getItem("subid");
-  const inProgress = localStorage.getItem("verify_in_progress") === "1";
 
-  if (!sid || !inProgress) return;
-  if (verifyInterval) return;
+  if (!verifyClicked || !sid) return;
 
+  if (verifyInterval) return; // منع التكرار
   startVerifyPolling();
-}
+ }
   // ✅ دالة مستقلة
- function trackOfferClick() {
+ function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
 
-  localStorage.setItem("verify_clicked", "1");
-  localStorage.setItem("offer_opened", Date.now());
+  createSubid(); // إنشاء subid
+  offerLink.dataset.locked = "1";
+  localStorage.setItem("went_offer", "1");
+}
 
-  // ✅ هذا هو السطر الحاسم
-  localStorage.setItem("verify_in_progress", "1");
-
-  localStorage.setItem("verify_game", gameId);
-
-  markWentOffer();
-
-  if (!localStorage.getItem("verify_started")) {
-    gtag("event", "verify_start", {
-      game_id: gameId,
-      device: localStorage.getItem("device") || "unknown"
-    });
-    localStorage.setItem("verify_started", "1");
+function isSubidExpired() {
+  const raw = localStorage.getItem("subid_payload");
+  if (!raw) return true;
+  try {
+    const d = JSON.parse(raw);
+    return (Date.now() - d.time) > SUBID_TTL;
+  } catch {
+    return true;
   }
 }
 
@@ -878,13 +850,13 @@ function showSuccess() {
 
  
  function startVerifyPolling() {
+  // منع التكرار
   if (verifyInterval) return;
 
   const sid = localStorage.getItem("subid");
   if (!sid) return;
-  localStorage.setItem("verify_in_progress", "1");
 
-  showChecking();
+  showChecking(); // مرة واحدة فقط
 
   verifyInterval = setInterval(async () => {
     try {
@@ -899,53 +871,59 @@ function showSuccess() {
 
       const status = (await res.text()).trim();
 
-      /* ===== SUCCESS ===== */
+      /* ========= SUCCESS ========= */
       if (status === "verified") {
         clearInterval(verifyInterval);
         verifyInterval = null;
 
         showSuccess();
 
-        const finalLink = getFinalLink();
-        const device = localStorage.getItem("device") || "unknown";
+        const finalLink = getFinalLink(); // حسب الجهاز
 
-        if (!finalLink) return;
-
-        // تنظيف
-        [
-           "verify_clicked",
-           "verify_started",
-           "subid",
-           "subid_payload",
-           "went_offer",
-           "verify_in_progress",
-           "verify_game"
-        ].forEach(k => localStorage.removeItem(k));
-
-        if (typeof gtag === "function") {
-          gtag("event", "download_success", {
-            game_id: gameId,
-            device,
-            event_callback: () => {
-              window.location.href = finalLink;
-            }
-          });
-        } else {
-          window.location.href = finalLink;
+        if (!finalLink) {
+          alert("Download link not available for this device");
+          return;
         }
+
+       // 📊 GA4 – download_success (مضمون)
+      if (typeof gtag === "function") {
+        gtag("event", "download_success", {
+          game_id: gameId,
+          device: device,
+          event_callback: () => {
+            setTimeout(() => {
+              window.location.href = finalLink;
+            }, 500);
+          }
+        });
+      } else {
+        // احتياط في حال GA غير جاهز
+        window.location.href = finalLink;
+ }
+
+        // تنظيف القيم
+        localStorage.removeItem("verify_clicked");
+        localStorage.removeItem("subid");
+        localStorage.removeItem("subid_payload");
+        localStorage.removeItem("went_offer");
+
+        setTimeout(() => {
+          location.href = finalLink;
+        }, 1200);
 
         return;
       }
 
-      /* ===== FAILED (بعد الذهاب للعرض فقط) ===== */
+      /* ========= FAILED ========= */
       if (localStorage.getItem("went_offer") === "1") {
         clearInterval(verifyInterval);
         verifyInterval = null;
-        showError();
- }
 
-    } catch (e) {
-      console.error("verify polling error", e);
+        showError();
+      }
+
+    } catch (err) {
+      console.error("verify polling error:", err);
     }
   }, 2000);
 }
@@ -1025,7 +1003,6 @@ downloadBtn2.onclick = () => {
    
 
  function closePopup() {
-  clearVerifyState(); // ✅ هنا فقط
   clearInterval(verifyInterval);
   clearInterval(timer);
 
@@ -1056,7 +1033,11 @@ downloadBtn2.onclick = () => {
   location.href = "index.html";
 }
  // 🔁 ضمان بدء التحقق دائمًا عند الرجوع للصفحة
-
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden) {
+    tryStartVerifyPolling();
+  }
+});
 
 
 
