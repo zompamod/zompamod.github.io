@@ -906,13 +906,13 @@ function showSuccess() {
 
         // تنظيف
         [
-          "verify_clicked",
-          "verify_started",
-          "subid",
-          "subid_payload",
-          "went_offer"
-          "verify_in_progress"
-          "verify_game"
+           "verify_clicked",
+           "verify_started",
+           "subid",
+           "subid_payload",
+           "went_offer",
+           "verify_in_progress",
+           "verify_game"
         ].forEach(k => localStorage.removeItem(k));
 
         if (typeof gtag === "function") {
