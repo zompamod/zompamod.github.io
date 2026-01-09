@@ -615,7 +615,7 @@ window.addEventListener("pageshow", () => {
   }
 
   // ✅ رجع لنفس اللعبة → أكمل التحقق
-  if (inProgress && subid) {
+  if (inProgress && subid && localStorage.getItem("went_offer") === "1") {
     overlay.style.display = "flex";
     showChecking();
 
@@ -717,22 +717,25 @@ function trackOfferClick() {
   startVerifyPolling();
 }
   // ✅ دالة مستقلة
- function markWentOffer() {
+ function trackOfferClick() {
   if (offerLink.dataset.locked === "1") return;
 
-  createSubid(); // إنشاء subid
-  offerLink.dataset.locked = "1";
-  localStorage.setItem("went_offer", "1");
-}
+  localStorage.setItem("verify_clicked", "1");
+  localStorage.setItem("offer_opened", Date.now());
 
-function isSubidExpired() {
-  const raw = localStorage.getItem("subid_payload");
-  if (!raw) return true;
-  try {
-    const d = JSON.parse(raw);
-    return (Date.now() - d.time) > SUBID_TTL;
-  } catch {
-    return true;
+  // ✅ هذا هو السطر الحاسم
+  localStorage.setItem("verify_in_progress", "1");
+
+  localStorage.setItem("verify_game", gameId);
+
+  markWentOffer();
+
+  if (!localStorage.getItem("verify_started")) {
+    gtag("event", "verify_start", {
+      game_id: gameId,
+      device: localStorage.getItem("device") || "unknown"
+    });
+    localStorage.setItem("verify_started", "1");
   }
 }
 
