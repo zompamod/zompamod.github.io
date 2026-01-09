@@ -647,12 +647,12 @@ function cleanURL(url) {
 
 function createSubid() {
   subid = "rbx_" + Math.random().toString(36).slice(2, 10);
-  localStorage.setItem("subid", subid);
-  localStorage.setItem("subid_payload", JSON.stringify({
-    id: subid,
-    offer: OFFER_ID,
-    time: Date.now()
-  }));
+  localStorage.setItem(key("subid"), subid);
+localStorage.setItem(key("subid_payload"), JSON.stringify({
+  id: subid,
+  offer: OFFER_ID,
+  time: Date.now()
+}));
   offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
 
@@ -679,8 +679,8 @@ localStorage.setItem(key("offer_opened"), Date.now());
   });
 }
  function tryStartVerifyPolling() {
-  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
-  const sid = localStorage.getItem("subid");
+  const verifyClicked = localStorage.getItem(key("verify_clicked")) === "1";
+const sid = localStorage.getItem(key("subid"));
 
   if (!verifyClicked || !sid) return;
 
@@ -849,14 +849,14 @@ function showSuccess() {
   // منع التكرار
   if (verifyInterval) return;
 
-  const sid = localStorage.getItem("subid");
+  const sid = localStorage.getItem(key("subid"));
   if (!sid) return;
 
   showChecking(); // مرة واحدة فقط
 
   verifyInterval = setInterval(async () => {
     try {
-      const subid = localStorage.getItem("subid");
+      const subid = localStorage.getItem(key("subid"));
       if (!subid) return;
 
       const res = await fetch(WORKER + "/verify?subid=" + subid, {
@@ -898,10 +898,10 @@ function showSuccess() {
  }
 
         // تنظيف القيم
-        localStorage.removeItem("verify_clicked");
-        localStorage.removeItem("subid");
-        localStorage.removeItem("subid_payload");
-        localStorage.removeItem("went_offer");
+        localStorage.removeItem(key("verify_clicked"));
+localStorage.removeItem(key("subid"));
+localStorage.removeItem(key("subid_payload"));
+localStorage.removeItem(key("went_offer"));
 
         
 
@@ -909,7 +909,7 @@ function showSuccess() {
       }
 
       /* ========= FAILED ========= */
-      if (localStorage.getItem("went_offer") === "1") {
+      if (localStorage.getItem(key("went_offer")) === "1") {
         clearInterval(verifyInterval);
         verifyInterval = null;
 
@@ -1000,11 +1000,11 @@ downloadBtn2.onclick = () => {
   clearInterval(verifyInterval);
   clearInterval(timer);
 
-  localStorage.removeItem("subid");
-  localStorage.removeItem("subid_payload");
-  localStorage.removeItem("went_offer");
-  localStorage.removeItem("device");
-  localStorage.removeItem("verify_clicked");
+  localStorage.removeItem(key("subid"));
+localStorage.removeItem(key("subid_payload"));
+localStorage.removeItem(key("went_offer"));
+localStorage.removeItem(key("verify_clicked"));
+  localStorage.removeItem(key("device");
 
   overlay.style.display = "none";
   popupChecking.style.display = "none";
