@@ -888,14 +888,14 @@ function showSuccess() {
        // 📊 GA4 – download_success (مضمون)
       if (typeof gtag === "function") {
         gtag("event", "download_success", {
-          game_id: gameId,
-          device: device,
-          event_callback: () => {
-            setTimeout(() => {
-              window.location.href = finalLink;
-            }, 500);
-          }
-        });
+  game_id: gameId,
+  device: localStorage.getItem("device"),
+  event_callback: () => {
+    setTimeout(() => {
+      window.location.href = finalLink;
+    }, 500);
+  }
+});
       } else {
         // احتياط في حال GA غير جاهز
         window.location.href = finalLink;
@@ -907,9 +907,7 @@ function showSuccess() {
         localStorage.removeItem("subid_payload");
         localStorage.removeItem("went_offer");
 
-        setTimeout(() => {
-          location.href = finalLink;
-        }, 1200);
+        
 
         return;
       }
