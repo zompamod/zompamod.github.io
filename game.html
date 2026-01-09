@@ -932,10 +932,11 @@ function showSuccess() {
 
       /* ===== FAILED (بعد الذهاب للعرض فقط) ===== */
       if (localStorage.getItem("went_offer") === "1") {
-        clearInterval(verifyInterval);
-        verifyInterval = null;
-        showError();
-      }
+  clearInterval(verifyInterval);
+  verifyInterval = null;
+  localStorage.removeItem("verify_in_progress");
+  showError();
+}
 
     } catch (e) {
       console.error("verify polling error", e);
