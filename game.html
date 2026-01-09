@@ -608,13 +608,13 @@ window.addEventListener("pageshow", (e) => {
   const subid = localStorage.getItem("subid");
   const inProgress = localStorage.getItem("verify_in_progress") === "1";
 
-  // رجوع من لعبة أخرى
+  // ❌ رجع من لعبة أخرى → نظف كل شيء
   if (verifyGame && verifyGame !== gameId) {
     clearVerifyState();
     return;
   }
 
-  // 🔁 رجوع بزر الهاتف / المتصفح
+  // ✔ رجع لنفس اللعبة → كمل التحقق
   if (e.persisted && inProgress && subid) {
     overlay.style.display = "flex";
     showChecking();
@@ -641,7 +641,28 @@ const SPEED_MBPS = 8.9;
 /* =============================
    HELPERS
 ============================= */
-function cleanURL(url) {
+function clearVerifyState() {
+  [
+    "verify_clicked",
+    "verify_started",
+    "verify_game",
+    "verify_in_progress",
+    "went_offer",
+    "offer_opened",
+    "subid",
+    "subid_payload"
+  ].forEach(k => localStorage.removeItem(k));
+
+  clearInterval(verifyInterval);
+  verifyInterval = null;
+
+  overlay.style.display = "none";
+  popupChecking.style.display = "none";
+  popupError.style.display = "none";
+  popupSuccess.style.display = "none";
+}
+ 
+ function cleanURL(url) {
   const u = new URL(url);
   ["fbclid","gclid","ttclid","utm_source","utm_campaign"].forEach(p => {
     u.searchParams.delete(p);
@@ -681,39 +702,16 @@ function trackOfferClick() {
   }
 }
 
- function clearVerifyState() {
-  [
-    "verify_clicked",
-    "verify_started",
-    "verify_game",
-    "went_offer",
-    "offer_opened",
-    "subid",
-    "subid_payload"
-  ].forEach(k => localStorage.removeItem(k));
-
-  clearInterval(verifyInterval);
-  verifyInterval = null;
-
-  overlay.style.display = "none";
-  popupChecking.style.display = "none";
-  popupError.style.display = "none";
-  popupSuccess.style.display = "none";
-
-  if (offerLink) {
-    offerLink.dataset.locked = "0";
-    offerLink.style.pointerEvents = "auto";
-  }
- }
+ 
  function tryStartVerifyPolling() {
-  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
   const sid = localStorage.getItem("subid");
+  const inProgress = localStorage.getItem("verify_in_progress") === "1";
 
-  if (!verifyClicked || !sid) return;
+  if (!sid || !inProgress) return;
+  if (verifyInterval) return;
 
-  if (verifyInterval) return; // منع التكرار
   startVerifyPolling();
- }
+}
   // ✅ دالة مستقلة
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
@@ -1020,6 +1018,7 @@ downloadBtn2.onclick = () => {
    
 
  function closePopup() {
+  clearVerifyState(); // ✅ هنا فقط
   clearInterval(verifyInterval);
   clearInterval(timer);
 
