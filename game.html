@@ -665,12 +665,12 @@ localStorage.setItem(key("offer_opened"), Date.now());
 
   markWentOffer();
 
-  if (!localStorage.getItem("verify_started")) {
+  if (!localStorage.getItem(key("verify_started"))) {
     gtag("event", "verify_start", {
       game_id: gameId,
       device: localStorage.getItem("device") || "unknown"
     });
-    localStorage.setItem("verify_started", "1");
+    localStorage.setItem(key("verify_started"), "1");
   }
 
   gtag("event", "offer_click", {
@@ -680,13 +680,13 @@ localStorage.setItem(key("offer_opened"), Date.now());
 }
  function tryStartVerifyPolling() {
   const verifyClicked = localStorage.getItem(key("verify_clicked")) === "1";
-const sid = localStorage.getItem(key("subid"));
+  const sid = localStorage.getItem(key("subid"));
 
   if (!verifyClicked || !sid) return;
+  if (verifyInterval) return;
 
-  if (verifyInterval) return; // منع التكرار
   startVerifyPolling();
- }
+}
   // ✅ دالة مستقلة
  function markWentOffer() {
   if (offerLink.dataset.locked === "1") return;
@@ -697,7 +697,7 @@ const sid = localStorage.getItem(key("subid"));
 }
 
 function isSubidExpired() {
-  const raw = localStorage.getItem("subid_payload");
+  const raw = localStorage.getItem(key("subid_payload"));
   if (!raw) return true;
   try {
     const d = JSON.parse(raw);
@@ -1004,7 +1004,7 @@ downloadBtn2.onclick = () => {
 localStorage.removeItem(key("subid_payload"));
 localStorage.removeItem(key("went_offer"));
 localStorage.removeItem(key("verify_clicked"));
-  localStorage.removeItem(key("device");
+  localStorage.removeItem("device");
 
   overlay.style.display = "none";
   popupChecking.style.display = "none";
