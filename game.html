@@ -543,6 +543,9 @@ if (!location.search.includes("game=")) {
 
 const params = new URLSearchParams(window.location.search);
 const gameId = params.get("game");
+ function key(name) {
+  return name + "_" + gameId;
+ }
 /* =============================
    GOOGLE ANALYTICS – VIEW GAME
 ============================= */
