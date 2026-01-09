@@ -603,22 +603,26 @@ const offerLink = document.getElementById("offerLink");
 const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
-window.addEventListener("pageshow", (e) => {
+window.addEventListener("pageshow", () => {
   const verifyGame = localStorage.getItem("verify_game");
   const subid = localStorage.getItem("subid");
   const inProgress = localStorage.getItem("verify_in_progress") === "1";
 
-  // ❌ رجع من لعبة أخرى → نظف كل شيء
+  // ❌ رجع من لعبة مختلفة
   if (verifyGame && verifyGame !== gameId) {
     clearVerifyState();
     return;
   }
 
-  // ✔ رجع لنفس اللعبة → كمل التحقق
-  if (e.persisted && inProgress && subid) {
+  // ✅ رجع لنفس اللعبة → أكمل التحقق
+  if (inProgress && subid) {
     overlay.style.display = "flex";
     showChecking();
-    tryStartVerifyPolling();
+
+    // تأخير بسيط لضمان DOM جاهز
+    setTimeout(() => {
+      tryStartVerifyPolling();
+    }, 400);
   }
 });
 /* =============================
