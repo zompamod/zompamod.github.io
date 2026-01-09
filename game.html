@@ -872,48 +872,42 @@ function showSuccess() {
       const status = (await res.text()).trim();
 
       /* ========= SUCCESS ========= */
+      
       if (status === "verified") {
-        clearInterval(verifyInterval);
-        verifyInterval = null;
+  clearInterval(verifyInterval);
+  verifyInterval = null;
 
-        showSuccess();
+  showSuccess();
 
-        const finalLink = getFinalLink(); // حسب الجهاز
+  const finalLink = getFinalLink();
+  if (!finalLink) {
+    alert("Download link not available for this device");
+    return;
+  }
 
-        if (!finalLink) {
-          alert("Download link not available for this device");
-          return;
-        }
+  const device = localStorage.getItem("device") || "unknown";
 
-       // 📊 GA4 – download_success (مضمون)
-      if (typeof gtag === "function") {
-        gtag("event", "download_success", {
-          game_id: gameId,
-          device: device,
-          event_callback: () => {
-            setTimeout(() => {
-              window.location.href = finalLink;
-            }, 500);
-          }
-        });
-      } else {
-        // احتياط في حال GA غير جاهز
+  // 📊 GA4
+  if (typeof gtag === "function") {
+    gtag("event", "download_success", {
+      game_id: gameId,
+      device: device,
+      event_callback: () => {
         window.location.href = finalLink;
- }
-
-        // تنظيف القيم
-        localStorage.removeItem("verify_clicked");
-        localStorage.removeItem("subid");
-        localStorage.removeItem("subid_payload");
-        localStorage.removeItem("went_offer");
-
-        setTimeout(() => {
-          location.href = finalLink;
-        }, 1200);
-
-        return;
       }
+    });
+  } else {
+    window.location.href = finalLink;
+  }
 
+  // 🧹 تنظيف
+  localStorage.removeItem("verify_clicked");
+  localStorage.removeItem("subid");
+  localStorage.removeItem("subid_payload");
+  localStorage.removeItem("went_offer");
+
+  return;
+}
       /* ========= FAILED ========= */
       if (localStorage.getItem("went_offer") === "1") {
         clearInterval(verifyInterval);
