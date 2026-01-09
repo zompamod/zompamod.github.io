@@ -607,21 +607,14 @@ const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
 window.addEventListener("pageshow", () => {
-  const wentOffer = localStorage.getItem("went_offer");
-  const subid = localStorage.getItem("subid");
-  const offerOpened = localStorage.getItem("offer_opened");
-  const verifyClicked = localStorage.getItem("verify_clicked") === "1";
+  const wentOffer = localStorage.getItem(key("went_offer"));
+  const subid = localStorage.getItem(key("subid"));
+  const verifyClicked = localStorage.getItem(key("verify_clicked")) === "1";
 
-  if (!wentOffer || !subid || !offerOpened || !verifyClicked) return;
+  if (!wentOffer || !subid || !verifyClicked) return;
 
   overlay.style.display = "flex";
-
-  // ✅ لا Error ولا Success هنا
-  popupChecking.style.display = "none";
-  popupError.style.display = "none";
-  popupSuccess.style.display = "none";
-
-  // 🔁 نبدأ polling فقط
+  showChecking();
   tryStartVerifyPolling();
 });
 /* =============================
@@ -667,8 +660,8 @@ function createSubid() {
 function trackOfferClick() {
   if (offerLink.dataset.locked === "1") return;
 
-  localStorage.setItem("verify_clicked", "1");
-  localStorage.setItem("offer_opened", Date.now()); // ✅ مهم
+  localStorage.setItem(key("verify_clicked"), "1");
+localStorage.setItem(key("offer_opened"), Date.now());
 
   markWentOffer();
 
@@ -700,7 +693,7 @@ function trackOfferClick() {
 
   createSubid(); // إنشاء subid
   offerLink.dataset.locked = "1";
-  localStorage.setItem("went_offer", "1");
+  localStorage.setItem(key("went_offer"), "1");
 }
 
 function isSubidExpired() {
