@@ -823,7 +823,7 @@ function resetDownloader() {
   clearInterval(verifyInterval);
   fakeLoader.style.display = "none";
   fakeProgress.style.width = "0%";
-  fakeText.textContent = "Preparing download…";
+  fakeText.textContent = "Preparing file…";
   fakeMeta.textContent = `0 MB / ${totalMB} MB • 0 MB/s`;
   loadedMB = 0;
   downloadBtn.disabled = false;
