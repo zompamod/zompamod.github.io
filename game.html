@@ -525,7 +525,7 @@ button{will-change:transform,box-shadow}
   
   <div id="fakeLoader">    
     <div id="fakeBar"><div id="fakeProgress"></div></div>    
-    <div id="fakeText">Preparing Fille…</div>    
+    <div id="fakeText">Preparing File…</div>    
     <div id="fakeMeta">0 MB / 154.27 MB • 0 MB/s</div>    
   </div>    
 </div>    
@@ -620,7 +620,7 @@ complete one simple step to confirme you are not a Robot.<br><br>
   <source src="/assets/verify.mp4" type="video/mp4">
 </video>
  <div id="offersBox" style="margin-top:20px;"></div>
-  
+  <div id="offersList" style="margin-top:18px; display:flex; flex-direction:column; gap:12px;"></div>
 <div id="popupChecking" class="popup-status checking">
   <span class="spinner"></span>
   Waiting for vérification...
@@ -1199,53 +1199,43 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
   });
 });
   async function loadRealOffers() {
-  const box = document.getElementById("offersBox");
-  if (!box) return;
 
-  box.innerHTML = `<div style="color:#e7c8a2;text-align:center;">Loading offers…</div>`;
+  const url =
+    `${CONFIG.API_URL}?action=feed` +
+    `&api_key=${CONFIG.API_KEY}` +
+    `&user_id=${CONFIG.USER_ID}`;
 
   try {
-    const res = await fetch(
-      "https://dyl2cj3.cloudfront.net/public/offers/feed.php?user_id=323246&api_key=e9c247aa00b2e8972420e705c158aa85"
-    );
-
+    const res = await fetch(url);
     const offers = await res.json();
+
+    const selected = offers.slice(0, 2); // عرضين فقط
+
+    const box = document.getElementById("offersList");
     box.innerHTML = "";
+    box.style.display = "flex";
 
-    offers.slice(0, 2).forEach(o => {
-      const div = document.createElement("div");
-      div.style = `
-        background:#2a1409;
-        border:1px solid var(--border);
-        border-radius:16px;
-        padding:14px;
-        margin-bottom:12px;
-        display:flex;
-        gap:12px;
-        cursor:pointer;
+    selected.forEach(offer => {
+      const card = document.createElement("div");
+      card.className = "offer-card";
+      card.dataset.url = offer.url;
+      card.dataset.id = offer.id;
+
+      card.innerHTML = `
+        <img src="${offer.image}" class="offer-img">
+        <div class="offer-title">${offer.title}</div>
       `;
 
-      div.innerHTML = `
-        <img src="${o.image}" style="width:70px;height:70px;border-radius:12px;object-fit:cover;">
-        <div style="color:white;">
-          <div style="font-size:18px;font-weight:700;">${o.name}</div>
-          <div style="font-size:14px;opacity:0.7;">${o.description}</div>
-        </div>
-      `;
-
-      div.onclick = () => {
-        window.open(o.tracking_link, "_blank");
-        localStorage.setItem(key("verify_clicked"), "1");
-        localStorage.setItem(key("went_offer"), "1");
+      card.onclick = () => {
+         localStorage.setItem("abm_offer", offer.id);
+         window.open(offer.url, "_blank");
       };
 
-      box.appendChild(div);
+      box.appendChild(card);
     });
 
-  } catch (e) {
-    box.innerHTML = `<div style="color:red;text-align:center;">Error loading offers</div>`;
+  } catch (err) {
+    console.error("Offer load error:", err);
   }
 }
-
-document.addEventListener("DOMContentLoaded", loadRealOffers);
  </script>
