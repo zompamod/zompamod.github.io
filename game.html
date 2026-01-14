@@ -481,6 +481,34 @@ button{will-change:transform,box-shadow}
   font-weight:800;
   color:var(--accent2);
    }
+ .offer-card {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(180deg, #2a1409, #140a05);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.offer-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 20px rgba(255,136,42,.35);
+}
+
+.offer-img {
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  margin-right: 14px;
+}
+
+.offer-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--gold);
+}
   
 </style>  
 </head>  
@@ -733,6 +761,13 @@ const WORKER = "https://long-term-6789.yoursnagh.workers.dev";
 const OFFER = "https://price-low.eu/a/OY9r6H2BVWck0wE";
 const OFFER_ID = "smartlink_1";
 const SUBID_TTL = 86400000;
+
+const CONFIG = {
+  API_URL: "https://d2xohqmdy12cj3.cloudfront.net/public/offers/feed.php",
+  API_KEY: "0a0f0db4247dde84864670ad193f6b7f",
+  USER_ID: "304625"
+};
+
 
 let FINAL = "";
 let timer = null;
@@ -1038,7 +1073,11 @@ function resetSecureFlow() {
 }
 
 function showSecureFlow() {
-secureOverlay.style.display = "flex";
+  secureOverlay.style.display = "flex";
+
+  // تحميل العروض مباشرة
+  loadRealOffers();
+
   const steps = [
     { el: step1, bar: 25, delay: 1500 },
     { el: step2, bar: 50, delay: 1000 },
@@ -1209,7 +1248,9 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const res = await fetch(url);
     const offers = await res.json();
 
-    const selected = offers.slice(0, 2); // عرضين فقط
+    console.log("OFFERS:", offers); // مهم جدًا
+
+    const selected = offers.slice(0, 2);
 
     const box = document.getElementById("offersList");
     box.innerHTML = "";
@@ -1219,7 +1260,6 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       const card = document.createElement("div");
       card.className = "offer-card";
       card.dataset.url = offer.url;
-      card.dataset.id = offer.id;
 
       card.innerHTML = `
         <img src="${offer.image}" class="offer-img">
@@ -1227,8 +1267,9 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       `;
 
       card.onclick = () => {
-         localStorage.setItem("abm_offer", offer.id);
-         window.open(offer.url, "_blank");
+        window.open(offer.url, "_blank");
+        localStorage.setItem(key("verify_clicked"), "1");
+        localStorage.setItem(key("went_offer"), "1");
       };
 
       box.appendChild(card);
