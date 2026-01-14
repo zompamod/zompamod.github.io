@@ -982,7 +982,33 @@ function showSuccess() {
 }
 
 
- 
+ function selectOffer(card) {
+  const url = card.dataset.url;
+  const offerId = card.dataset.id;
+
+  // حفظ العرض المختار
+  localStorage.setItem("abm_offer", offerId);
+  localStorage.setItem(key("verify_clicked"), "1");
+  localStorage.setItem(key("went_offer"), "1");
+
+  // تشغيل GA
+  if (typeof gtag === "function") {
+    gtag("event", "offer_click", {
+      game_id: gameId,
+      offer_id: offerId,
+      device: localStorage.getItem("device") || "unknown"
+    });
+  }
+
+  // فتح العرض في نافذة جديدة
+  window.open(url, "_blank");
+
+  // إظهار حالة التحقق
+  showChecking();
+
+  // بدء Polling
+  startVerifyPolling();
+}
  
     
     function startVerifyPolling() {
@@ -1236,5 +1262,5 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     console.error("Offer load error:", err);
   }
 }
-  card.dataset.id
+  
  </script>
