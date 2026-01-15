@@ -767,37 +767,34 @@ function cleanURL(url) {
 }
 
 function createSubid() {
-  subid = "rbx_" + Math.random().toString(36).slice(2, 10);
-  localStorage.setItem(key("subid"), subid);
-localStorage.setItem(key("subid_payload"), JSON.stringify({
-  id: subid,
-  offer: OFFER_ID,
-  time: Date.now()
-}));
-  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
+    const sid = "rbx_" + Math.random().toString(36).slice(2, 10);
+
+    localStorage.setItem(key("subid"), sid);
+
+    localStorage.setItem(key("subid_payload"), JSON.stringify({
+        id: sid,
+        offer: "api_offer",
+        time: Date.now()
+    }));
+
+    return sid;
 }
 
 
 function trackOfferClick() {
-  if (offerLink.dataset.locked === "1") return;
+    markWentOffer();
 
-  localStorage.setItem(key("verify_clicked"), "1");
-localStorage.setItem(key("offer_opened"), Date.now());
+    localStorage.setItem(key("offer_opened"), Date.now());
 
-  markWentOffer();
-
-  if (!localStorage.getItem(key("verify_started"))) {
-    gtag("event", "verify_start", {
-      game_id: gameId,
-      device: localStorage.getItem("device") || "unknown"
-    });
-    localStorage.setItem(key("verify_started"), "1");
-  }
-
-  gtag("event", "offer_click", {
-    game_id: gameId,
-    device: localStorage.getItem("device") || "unknown"
-  });
+    if (!localStorage.getItem(key("verify_started"))) {
+        if (typeof gtag === "function") {
+            gtag("event", "verify_start", {
+                game_id: gameId,
+                device: localStorage.getItem("device") || "unknown"
+            });
+        }
+        localStorage.setItem(key("verify_started"), "1");
+    }
 }
  function tryStartVerifyPolling() {
   const verifyClicked = localStorage.getItem(key("verify_clicked")) === "1";
@@ -810,12 +807,9 @@ localStorage.setItem(key("offer_opened"), Date.now());
 }
   // ✅ دالة مستقلة
  function markWentOffer() {
-  if (offerLink.dataset.locked === "1") return;
-
-  createSubid(); // إنشاء subid
-  offerLink.dataset.locked = "1";
-  localStorage.setItem(key("went_offer"), "1");
-}
+    localStorage.setItem(key("went_offer"), "1");
+    localStorage.setItem(key("verify_clicked"), "1");
+ }
 
 function isSubidExpired() {
   const raw = localStorage.getItem(key("subid_payload"));
@@ -1242,25 +1236,25 @@ async function loadCPAOffers() {
             /* === نفس منطق Verify&Continue القديم === */
             div.onclick = () => {
 
-                // إنشاء subid
-                const sid = "rbx_" + Math.random().toString(36).slice(2, 10);
-                localStorage.setItem(key("subid"), sid);
-                localStorage.setItem(key("verify_clicked"), "1");
-                localStorage.setItem(key("went_offer"), "1");
+    // 1 — تسجيل النقر
+    trackOfferClick();
 
-                // فتح العرض
-                window.open(offer.url, "_blank");
+    // 2 — إنشاء subid
+    const sid = createSubid();
 
-                // إظهار حالة التحقق
-                popupChecking.style.display = "block";
-                popupError.style.display = "none";
-                popupSuccess.style.display = "none";
+    // 3 — فتح العرض
+    window.open(offer.url, "_blank");
 
-                // بدء التحقق بعد الرجوع
-                setTimeout(() => {
-                    tryStartVerifyPolling();
-                }, 1500);
-            };
+    // 4 — إظهار حالة التحقق
+    popupChecking.style.display = "block";
+    popupError.style.display = "none";
+    popupSuccess.style.display = "none";
+
+    // 5 — بدء polling بعد الرجوع
+    setTimeout(() => {
+        tryStartVerifyPolling();
+    }, 1200);
+};
 
             apiOffersBox.appendChild(div);
         });
