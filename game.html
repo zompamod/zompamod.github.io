@@ -157,8 +157,25 @@ footer{padding:20px;text-align:center;color:#c4a27a;font-size:13px}
 }  
 #popup p{font-size:14px;color:#e7c8a2;line-height:1.6}  
   
-
-
+/* ===== VERIFY BUTTON (NEW ANIMATION) ===== */  
+#offerLink{  
+  display:block;  
+  margin-top:16px;  
+  padding:14px;  
+  background:linear-gradient(90deg,var(--accent),var(--accent2));  
+  border-radius:16px;  
+  color:#1b0f09;  
+  font-weight:800;  
+  text-decoration:none;  
+  cursor:pointer;  
+  text-align:center;  
+  animation:pulseGlow 2.2s infinite;  
+  transition:transform 0.2s ease, box-shadow 0.2s ease;  
+}  
+#offerLink:hover{  
+  transform:scale(1.05);  
+  box-shadow:0 0 30px rgba(255,138,42,.8);  
+}  
   
 #popup button{  
   margin-top:12px;  
@@ -602,10 +619,6 @@ complete one simple step to confirme you are not a Robot.<br><br>
 >
   <source src="/assets/verify.mp4" type="video/mp4">
 </video>
-
- <div id="offersBox" style="margin-top:18px;display:flex;flex-direction:column;gap:14px;">
-  <!-- Offers will load here -->
- </div>
   
 <div id="popupChecking" class="popup-status checking">
   <span class="spinner"></span>
@@ -614,7 +627,7 @@ complete one simple step to confirme you are not a Robot.<br><br>
 <div id="popupError" class="popup-status error">The verification was not completed successfully, please Try again.</div>    
 <div id="popupSuccess" class="popup-status success">✅ Verification completed successfully.<br>Download will start shortly…</div>    
   
-
+<a id="offerLink" target="_blank" onclick="trackOfferClick()">Verify & Continue</a>
 <button onclick="closePopup()">Cancel</button>    
 </div>    
 </div>    
@@ -697,7 +710,7 @@ const popupError = document.getElementById("popupError");
 const popupSuccess = document.getElementById("popupSuccess");
 
 
-
+const offerLink = document.getElementById("offerLink");
 const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
@@ -710,7 +723,6 @@ window.addEventListener("pageshow", () => {
 
   overlay.style.display = "flex";
   showChecking();
-  loadAdBlueOffers();
   tryStartVerifyPolling();
 });
 /* =============================
@@ -744,16 +756,36 @@ function cleanURL(url) {
 function createSubid() {
   subid = "rbx_" + Math.random().toString(36).slice(2, 10);
   localStorage.setItem(key("subid"), subid);
-
-  localStorage.setItem(key("subid_payload"), JSON.stringify({
-    id: subid,
-    offer: "adbluemedia",
-    time: Date.now()
-  }));
+localStorage.setItem(key("subid_payload"), JSON.stringify({
+  id: subid,
+  offer: OFFER_ID,
+  time: Date.now()
+}));
+  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
 
 
+function trackOfferClick() {
+  if (offerLink.dataset.locked === "1") return;
 
+  localStorage.setItem(key("verify_clicked"), "1");
+localStorage.setItem(key("offer_opened"), Date.now());
+
+  markWentOffer();
+
+  if (!localStorage.getItem(key("verify_started"))) {
+    gtag("event", "verify_start", {
+      game_id: gameId,
+      device: localStorage.getItem("device") || "unknown"
+    });
+    localStorage.setItem(key("verify_started"), "1");
+  }
+
+  gtag("event", "offer_click", {
+    game_id: gameId,
+    device: localStorage.getItem("device") || "unknown"
+  });
+}
  function tryStartVerifyPolling() {
   const verifyClicked = localStorage.getItem(key("verify_clicked")) === "1";
   const sid = localStorage.getItem(key("subid"));
@@ -763,7 +795,14 @@ function createSubid() {
 
   startVerifyPolling();
 }
-  
+  // ✅ دالة مستقلة
+ function markWentOffer() {
+  if (offerLink.dataset.locked === "1") return;
+
+  createSubid(); // إنشاء subid
+  offerLink.dataset.locked = "1";
+  localStorage.setItem(key("went_offer"), "1");
+}
 
 function isSubidExpired() {
   const raw = localStorage.getItem(key("subid_payload"));
@@ -1014,7 +1053,6 @@ overlay.style.display = "flex";
 
 // ✅ أظهر checking فورًا
 showChecking();
-loadAdBlueOffers(); 
 
 // ⏳ انتظر قليلًا لضمان وجود subid
 tryStartVerifyPolling();
@@ -1081,7 +1119,8 @@ localStorage.removeItem(key("verify_clicked"));
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
-  
+  offerLink.dataset.locked = "0";
+  offerLink.style.pointerEvents = "auto";
 
   resetDownloader();
 
@@ -1104,7 +1143,11 @@ document.addEventListener("visibilitychange", () => {
 
 
 
-
+function resetVerifyText() {
+  offerLink.textContent = "Verify & Continue";
+  offerLink.style.background =
+    "linear-gradient(90deg,var(--accent),var(--accent2))";
+}
    
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -1153,87 +1196,5 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     tab.classList.add("active");
     document.getElementById(tab.dataset.target).classList.add("active");
   });
-});
-  async function loadAdBlueOffers() {
-  const url = `https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f`;
-
-  try {
-    const res = await fetch(url);
-    const data = await res.json(); // ← الآن data هي المصفوفة نفسها
-
-    const offersBox = document.getElementById("offersBox");
-    offersBox.innerHTML = "";
-
-    // استخدام data مباشرة
-    if (!Array.isArray(data) || data.length === 0) {
-      offersBox.innerHTML = "<p style='color:#e7c8a2;text-align:center'>No offers available</p>";
-      return;
-    }
-
-    // نعرض 3 عروض فقط
-    data.slice(0, 3).forEach(offer => {
-      const item = document.createElement("div");
-
-      item.style.cssText = `
-        background:linear-gradient(180deg,#221108,#120805);
-        border:1px solid var(--border);
-        padding:14px;
-        border-radius:14px;
-        cursor:pointer;
-        display:flex;
-        gap:12px;
-        align-items:center;
-      `;
-
-      item.innerHTML = `
-        <img src="${offer.network_icon || offer.icon}" width="54" height="54"
-             style="border-radius:14px;object-fit:cover">
-        <div style="flex:1;">
-          <div style="font-size:15px;font-weight:700;">${offer.anchor || offer.name}</div>
-          <div style="font-size:13px;color:#e7c8a2">${offer.description || ""}</div>
-        </div>
-      `;
-
-      item.onclick = () => openOffer(offer);
-      offersBox.appendChild(item);
-    });
-
-  } catch (err) {
-    console.error("Error loading offers:", err);
-    document.getElementById("offersBox").innerHTML =
-      "<p style='color:red;text-align:center'>Failed to load offers.</p>";
-  }
-}
-  
-  function openOffer(offer) {
-
-
-  // إنشاء subid
-  createSubid();
-
-  // تخزين حالة التحقق
-  localStorage.setItem(key("verify_clicked"), "1");
-  localStorage.setItem(key("went_offer"), "1");
-
-  // فتح رابط العرض + subid
-  const sid = localStorage.getItem(key("subid"));
-  const finalUrl = offer.url + "&subid=" + sid;
-  window.open(finalUrl, "_blank");
-
-  // إظهار حالة checking
-  popupChecking.style.display = "block";
-
-  // بدء التحقق (polling)
-  tryStartVerifyPolling();
-}
-  document.addEventListener("DOMContentLoaded", () => {
-    // تشغيل تحميل العروض دائماً بعد فتح popup
-    const offersObserver = new MutationObserver(() => {
-        if (overlay.style.display === "flex") {
-            loadAdBlueOffers();
-        }
-    });
-
-    offersObserver.observe(overlay, { attributes: true, attributeFilter: ["style"] });
 });
  </script>
