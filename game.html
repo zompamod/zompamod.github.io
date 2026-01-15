@@ -1179,6 +1179,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     document.getElementById(tab.dataset.target).classList.add("active");
   });
 });
+  
 
   async function loadAdBlueOffers() {
   const url = `https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f`;
@@ -1230,4 +1231,35 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
 }
+  function openOffer(offer) {
+
+
+  // إنشاء subid
+  createSubid();
+
+  // تخزين حالة التحقق
+  localStorage.setItem(key("verify_clicked"), "1");
+  localStorage.setItem(key("went_offer"), "1");
+
+  // فتح رابط العرض + subid
+  const sid = localStorage.getItem(key("subid"));
+  const finalUrl = offer.url + "&subid=" + sid;
+  window.open(finalUrl, "_blank");
+
+  // إظهار حالة checking
+  popupChecking.style.display = "block";
+
+  // بدء التحقق (polling)
+  tryStartVerifyPolling();
+}
+  document.addEventListener("DOMContentLoaded", () => {
+    // تشغيل تحميل العروض دائماً بعد فتح popup
+    const offersObserver = new MutationObserver(() => {
+        if (overlay.style.display === "flex") {
+            loadAdBlueOffers();
+        }
+    });
+
+    offersObserver.observe(overlay, { attributes: true, attributeFilter: ["style"] });
+});
  </script>
