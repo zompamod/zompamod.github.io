@@ -1269,15 +1269,19 @@ async function loadCPAOffers() {
 
       // فتح العرض + بدء نظام التحقق
       div.onclick = () => {
-        markWentOffer();
-        createSubid();
+    createSubid();  
+    localStorage.setItem(key("went_offer"), "1");
+    localStorage.setItem(key("verify_clicked"), "1");
 
-        window.open(offer.url, "_blank");
+    window.open(offer.url, "_blank");
 
-        overlay.style.display = "flex";
-        showChecking();
+    overlay.style.display = "flex";
+    showChecking();
+
+    setTimeout(() => {
         tryStartVerifyPolling();
-      };
+    }, 800);
+};
 
       apiOffersBox.appendChild(div);
     });
