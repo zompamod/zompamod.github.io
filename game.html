@@ -1157,7 +1157,8 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 });
   
         async function loadAdBlueOffers() {
-  const url = `https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f`;
+  const url =
+    "https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f";
 
   try {
     const res = await fetch(url);
@@ -1166,54 +1167,65 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* ────────────────────────────────
-       الإطار الخارجي مع تقسيم الخط
-    ───────────────────────────────── */
+    /* =====================================================
+       إنشاء صندوق كامل مع قطع أعلى الإطار + OFFER LIST
+    ===================================================== */
     const container = document.createElement("div");
     container.style.cssText = `
       background:linear-gradient(180deg,#2b1409,#140a05);
       border:1px solid rgba(255,200,120,0.25);
       border-radius:22px;
       margin-top:22px;
-      padding:32px 18px 18px 18px;
+      padding:40px 18px 18px 18px;
       position:relative;
-      overflow:hidden;
+      overflow:visible;
     `;
 
-    /* ─── خط الإطار المنقسم من الأعلى ─── */
-    const topBorderCut = document.createElement("div");
-    topBorderCut.style.cssText = `
+    // الخط العلوي الكامل
+    const topLine = document.createElement("div");
+    topLine.style.cssText = `
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:1px;
+      background:rgba(255,200,120,0.25);
+    `;
+    container.appendChild(topLine);
+
+    // القطع في الوسط
+    const cutWidth = 170;
+    const cutPiece = document.createElement("div");
+    cutPiece.style.cssText = `
       position:absolute;
       top:0;
       left:50%;
       transform:translateX(-50%);
-      width:180px;
-      height:20px;
+      width:${cutWidth}px;
+      height:1px;
       background:linear-gradient(180deg,#2b1409,#140a05);
-      z-index:5;
     `;
-    container.appendChild(topBorderCut);
+    container.appendChild(cutPiece);
 
-    /* ─── نص OFFER LIST داخل الفتحة ─── */
+    // عنوان OFFER LIST في منتصف القطع
     const title = document.createElement("div");
     title.textContent = "OFFER LIST";
     title.style.cssText = `
       position:absolute;
-      top:-12px;
+      top:-15px;
       left:50%;
       transform:translateX(-50%);
-      padding:4px 18px;
-      background:#2b1409;
-      border:1px solid rgba(255,200,120,0.4);
-      border-radius:12px;
+      padding:3px 16px;
+      background:linear-gradient(180deg,#2b1409,#140a05);
+      border:1px solid rgba(255,200,120,0.35);
+      border-radius:10px;
       font-size:18px;
       font-weight:800;
       color:#fff;
-      z-index:10;
     `;
     container.appendChild(title);
 
-    /* ─── لمعان الشريط ─── */
+    // لمعان الشريط
     const shine = document.createElement("div");
     shine.style.cssText = `
       position:absolute;
@@ -1232,47 +1244,53 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     `;
     container.appendChild(shine);
 
+    // إدراج الصندوق في offersBox
     offersBox.appendChild(container);
 
-    /* لم توجد عروض */
+    /* =====================================================
+       التحقق من البيانات
+    ===================================================== */
     if (!Array.isArray(data) || data.length === 0) {
-      container.innerHTML += "<p style='text-align:center;color:#e7c8a2'>No offers available</p>";
+      container.innerHTML += `<p style="color:#fff;text-align:center">No offers available</p>`;
       return;
     }
 
-    /* ─── 3 عروض فقط ─── */
-    data.slice(0, 3).forEach(offer => {
+    /* =====================================================
+       عرض 3 عروض فقط
+    ===================================================== */
+    data.slice(0, 3).forEach((offer) => {
       const item = document.createElement("div");
+
       item.style.cssText = `
         background:rgba(0,0,0,0.25);
         border:1px solid rgba(255,200,120,0.18);
-        padding:12px;
-        margin-bottom:12px;
+        padding:10px 12px;
         border-radius:14px;
-        display:flex;
-        gap:12px;
         cursor:pointer;
+        display:flex;
+        gap:10px;
         align-items:center;
-        transition:0.15s ease;
-        z-index:20;
-        position:relative;
+        margin-bottom:12px;
+        transition:transform .15s ease, box-shadow .18s ease;
       `;
 
-      item.onmouseenter = () => {
+      item.onmouseover = () => {
         item.style.transform = "scale(1.02)";
         item.style.boxShadow = "0 6px 18px rgba(0,0,0,.45)";
       };
-      item.onmouseleave = () => {
+
+      item.onmouseout = () => {
         item.style.transform = "scale(1)";
         item.style.boxShadow = "none";
       };
 
       item.innerHTML = `
-        <img src="${offer.icon}" 
-             style="width:42px;height:42px;border-radius:12px;object-fit:cover">
+        <img src="${offer.network_icon || offer.icon}"
+             width="40" height="40"
+             style="border-radius:12px;object-fit:cover">
 
         <div style="flex:1;">
-          <div style="font-size:15px;font-weight:700;color:white;">
+          <div style="font-size:14px;font-weight:700;color:#ffffff;">
             ${offer.anchor || offer.name}
           </div>
           <div style="font-size:12px;color:#e7c8a2;margin-top:3px;">
@@ -1285,13 +1303,13 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 
       container.appendChild(item);
     });
-
   } catch (err) {
-    console.error("offer load error:", err);
+    console.error("Offer Load Error:", err);
     document.getElementById("offersBox").innerHTML =
-      "<p style='color:red;text-align:center'>Error loading offers.</p>";
+      "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
 }
+    
   
   function openOffer(offer) {
 
