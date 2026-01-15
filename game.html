@@ -1181,49 +1181,51 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       overflow:visible;
     `;
 
-    // الخط العلوي الكامل
-    const topLine = document.createElement("div");
-    topLine.style.cssText = `
-      position:absolute;
-      top:0;
-      left:0;
-      width:100%;
-      height:1px;
-      background:rgba(255,200,120,0.25);
-    `;
-    container.appendChild(topLine);
+    // خط كامل فوق الإطار
+const topLine = document.createElement("div");
+topLine.style.cssText = `
+  position:absolute;
+  top:18px;
+  left:0;
+  width:100%;
+  height:1px;
+  background:rgba(255,200,120,0.25);
+  z-index:2;
+`;
+container.appendChild(topLine);
 
-    // القطع في الوسط
-    const cutWidth = 170;
-    const cutPiece = document.createElement("div");
-    cutPiece.style.cssText = `
-      position:absolute;
-      top:0;
-      left:50%;
-      transform:translateX(-50%);
-      width:${cutWidth}px;
-      height:1px;
-      background:linear-gradient(180deg,#2b1409,#140a05);
-    `;
-    container.appendChild(cutPiece);
+// القطعة التي تقطع الخط (الفتحة)
+const cutPiece = document.createElement("div");
+cutPiece.style.cssText = `
+  position:absolute;
+  top:18px;
+  left:50%;
+  transform:translateX(-50%);
+  width:180px;
+  height:1px;
+  background:linear-gradient(180deg,#2b1409,#140a05);
+  z-index:3;
+`;
+container.appendChild(cutPiece);
 
-    // عنوان OFFER LIST في منتصف القطع
-    const title = document.createElement("div");
-    title.textContent = "OFFER LIST";
-    title.style.cssText = `
-      position:absolute;
-      top:-15px;
-      left:50%;
-      transform:translateX(-50%);
-      padding:3px 16px;
-      background:linear-gradient(180deg,#2b1409,#140a05);
-      border:1px solid rgba(255,200,120,0.35);
-      border-radius:10px;
-      font-size:18px;
-      font-weight:800;
-      color:#fff;
-    `;
-    container.appendChild(title);
+// عنوان OFFER LIST داخل الفتحة بالضبط
+const title = document.createElement("div");
+title.textContent = "OFFER LIST";
+title.style.cssText = `
+  position:absolute;
+  top:4px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:4px 22px;
+  background:linear-gradient(180deg,#2b1409,#140a05);
+  border:1px solid rgba(255,200,120,0.35);
+  border-radius:12px;
+  font-size:19px;
+  font-weight:800;
+  color:#fff;
+  z-index:4;
+`;
+container.appendChild(title);
 
     // لمعان الشريط
     const shine = document.createElement("div");
