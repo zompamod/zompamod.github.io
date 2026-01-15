@@ -1225,4 +1225,14 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
   // بدء التحقق (polling)
   tryStartVerifyPolling();
 }
+  document.addEventListener("DOMContentLoaded", () => {
+    // تشغيل تحميل العروض دائماً بعد فتح popup
+    const offersObserver = new MutationObserver(() => {
+        if (overlay.style.display === "flex") {
+            loadAdBlueOffers();
+        }
+    });
+
+    offersObserver.observe(overlay, { attributes: true, attributeFilter: ["style"] });
+});
  </script>
