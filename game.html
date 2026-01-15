@@ -743,36 +743,16 @@ function cleanURL(url) {
 function createSubid() {
   subid = "rbx_" + Math.random().toString(36).slice(2, 10);
   localStorage.setItem(key("subid"), subid);
-localStorage.setItem(key("subid_payload"), JSON.stringify({
-  id: subid,
-  offer: OFFER_ID,
-  time: Date.now()
-}));
-  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
+
+  localStorage.setItem(key("subid_payload"), JSON.stringify({
+    id: subid,
+    offer: "adbluemedia",
+    time: Date.now()
+  }));
 }
 
 
-function trackOfferClick() {
-  if (offerLink.dataset.locked === "1") return;
 
-  localStorage.setItem(key("verify_clicked"), "1");
-localStorage.setItem(key("offer_opened"), Date.now());
-
-  markWentOffer();
-
-  if (!localStorage.getItem(key("verify_started"))) {
-    gtag("event", "verify_start", {
-      game_id: gameId,
-      device: localStorage.getItem("device") || "unknown"
-    });
-    localStorage.setItem(key("verify_started"), "1");
-  }
-
-  gtag("event", "offer_click", {
-    game_id: gameId,
-    device: localStorage.getItem("device") || "unknown"
-  });
-}
  function tryStartVerifyPolling() {
   const verifyClicked = localStorage.getItem(key("verify_clicked")) === "1";
   const sid = localStorage.getItem(key("subid"));
@@ -782,14 +762,7 @@ localStorage.setItem(key("offer_opened"), Date.now());
 
   startVerifyPolling();
 }
-  // ✅ دالة مستقلة
- function markWentOffer() {
-  if (offerLink.dataset.locked === "1") return;
-
-  createSubid(); // إنشاء subid
-  offerLink.dataset.locked = "1";
-  localStorage.setItem(key("went_offer"), "1");
-}
+  
 
 function isSubidExpired() {
   const raw = localStorage.getItem(key("subid_payload"));
@@ -1107,8 +1080,7 @@ localStorage.removeItem(key("verify_clicked"));
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
-  offerLink.dataset.locked = "0";
-  offerLink.style.pointerEvents = "auto";
+  
 
   resetDownloader();
 
@@ -1233,36 +1205,27 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
   }
+  
   function openOffer(offer) {
-  // منع تكرار الضغط
+  // منع تكرار الضغط على عرض آخر
   if (localStorage.getItem(key("went_offer")) === "1") return;
 
-  // 1 — إنشاء subid
+  // إنشاء subid
   createSubid();
 
-  // 2 — تخزين حالة الفتح
+  // تخزين حالة التحقق
   localStorage.setItem(key("verify_clicked"), "1");
   localStorage.setItem(key("went_offer"), "1");
 
-  // 3 — فتح العرض مع subid
+  // فتح رابط العرض + subid
   const sid = localStorage.getItem(key("subid"));
   const finalUrl = offer.url + "&subid=" + sid;
-
   window.open(finalUrl, "_blank");
 
-  // 4 — إظهار حالة التحقق
+  // إظهار حالة checking
   popupChecking.style.display = "block";
 
-  // 5 — تشغيل البولينغ
+  // بدء التحقق (polling)
   tryStartVerifyPolling();
-
-  // 6 — Analytics (اختياري)
-  if (typeof gtag === "function") {
-    gtag("event", "offer_click", {
-      offer_id: offer.id,
-      game_id: gameId,
-      device: localStorage.getItem("device")
-    });
-  }
-  }
+}
  </script>
