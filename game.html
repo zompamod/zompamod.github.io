@@ -1175,24 +1175,42 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       const item = document.createElement("div");
 
       item.style.cssText = `
-        background:linear-gradient(180deg,#221108,#120805);
-        border:1px solid var(--border);
-        padding:14px;
-        border-radius:14px;
-        cursor:pointer;
-        display:flex;
-        gap:12px;
-        align-items:center;
-      `;
+  background:linear-gradient(180deg,#2a1409,#140a05);
+  border:1px solid var(--border);
+  padding:12px 14px;
+  border-radius:16px;
+  cursor:pointer;
+  display:flex;
+  gap:12px;
+  align-items:center;
+  box-shadow:0 4px 14px rgba(0,0,0,.45);
+  transition:transform .15s ease, box-shadow .2s ease;
+`;
+
+item.onmouseover = () => {
+  item.style.transform = "scale(1.03)";
+  item.style.boxShadow = "0 6px 18px rgba(0,0,0,.55)";
+};
+item.onmouseout = () => {
+  item.style.transform = "scale(1)";
+  item.style.boxShadow = "0 4px 14px rgba(0,0,0,.45)";
+};
 
       item.innerHTML = `
-        <img src="${offer.network_icon || offer.icon}" width="54" height="54"
-             style="border-radius:14px;object-fit:cover">
-        <div style="flex:1;">
-          <div style="font-size:15px;font-weight:700;">${offer.anchor || offer.name}</div>
-          <div style="font-size:13px;color:#e7c8a2">${offer.description || ""}</div>
-        </div>
-      `;
+  <img src="${offer.network_icon || offer.icon}"
+       width="46" height="46"
+       style="border-radius:12px;object-fit:cover">
+
+  <div style="flex:1;">
+    <div style="font-size:14px;font-weight:700;color:#ffd58a;">
+      ${offer.anchor || offer.name}
+    </div>
+
+    <div style="font-size:12px;color:#e7c8a2;margin-top:2px;">
+      ${offer.description || ""}
+    </div>
+  </div>
+`;
 
       item.onclick = () => openOffer(offer);
       offersBox.appendChild(item);
