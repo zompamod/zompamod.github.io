@@ -1159,17 +1159,19 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 
   try {
     const res = await fetch(url);
-    const data = await res.json();
+    const data = await res.json(); // ← الآن data هي المصفوفة نفسها
 
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    if (!data.offers || data.offers.length === 0) {
+    // استخدام data مباشرة
+    if (!Array.isArray(data) || data.length === 0) {
       offersBox.innerHTML = "<p style='color:#e7c8a2;text-align:center'>No offers available</p>";
       return;
     }
 
-    data.offers.forEach(offer => {
+    // نعرض 3 عروض فقط
+    data.slice(0, 3).forEach(offer => {
       const item = document.createElement("div");
 
       item.style.cssText = `
@@ -1184,11 +1186,11 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       `;
 
       item.innerHTML = `
-        <img src="${offer.icon}" width="54" height="54"
+        <img src="${offer.network_icon || offer.icon}" width="54" height="54"
              style="border-radius:14px;object-fit:cover">
         <div style="flex:1;">
-          <div style="font-size:15px;font-weight:700;">${offer.name}</div>
-          <div style="font-size:13px;color:#e7c8a2">${offer.description}</div>
+          <div style="font-size:15px;font-weight:700;">${offer.anchor || offer.name}</div>
+          <div style="font-size:13px;color:#e7c8a2">${offer.description || ""}</div>
         </div>
       `;
 
@@ -1201,7 +1203,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     document.getElementById("offersBox").innerHTML =
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
-  }
+}
   
   function openOffer(offer) {
   // منع تكرار الضغط على عرض آخر
