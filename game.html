@@ -1156,7 +1156,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
   });
 });
   
-  async function loadAdBlueOffers() {
+        async function loadAdBlueOffers() {
   const url = `https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f`;
 
   try {
@@ -1166,97 +1166,113 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* ───── صندوق كامل للعروض + الشريط + الكلمة ───── */
-    const wrapper = document.createElement("div");
-    wrapper.style.cssText = `
+    /* ────────────────────────────────
+       الإطار الخارجي مع تقسيم الخط
+    ───────────────────────────────── */
+    const container = document.createElement("div");
+    container.style.cssText = `
       background:linear-gradient(180deg,#2b1409,#140a05);
       border:1px solid rgba(255,200,120,0.25);
-      border-radius:20px;
-      padding:28px 16px 18px 16px;
-      margin-top:18px;
+      border-radius:22px;
+      margin-top:22px;
+      padding:32px 18px 18px 18px;
       position:relative;
       overflow:hidden;
     `;
 
-    /* ───── الشريط اللامع ───── */
+    /* ─── خط الإطار المنقسم من الأعلى ─── */
+    const topBorderCut = document.createElement("div");
+    topBorderCut.style.cssText = `
+      position:absolute;
+      top:0;
+      left:50%;
+      transform:translateX(-50%);
+      width:180px;
+      height:20px;
+      background:linear-gradient(180deg,#2b1409,#140a05);
+      z-index:5;
+    `;
+    container.appendChild(topBorderCut);
+
+    /* ─── نص OFFER LIST داخل الفتحة ─── */
+    const title = document.createElement("div");
+    title.textContent = "OFFER LIST";
+    title.style.cssText = `
+      position:absolute;
+      top:-12px;
+      left:50%;
+      transform:translateX(-50%);
+      padding:4px 18px;
+      background:#2b1409;
+      border:1px solid rgba(255,200,120,0.4);
+      border-radius:12px;
+      font-size:18px;
+      font-weight:800;
+      color:#fff;
+      z-index:10;
+    `;
+    container.appendChild(title);
+
+    /* ─── لمعان الشريط ─── */
     const shine = document.createElement("div");
     shine.style.cssText = `
       position:absolute;
       top:0;
       left:-50%;
-      width:50%;
+      width:40%;
       height:100%;
       background:linear-gradient(
         to right,
         transparent,
-        rgba(255,200,120,0.35),
+        rgba(255,200,120,0.30),
         transparent
       );
       animation:shineMove 3s linear infinite;
+      z-index:1;
     `;
-    wrapper.appendChild(shine);
+    container.appendChild(shine);
 
-    /* ───── كلمة OFFER LIST في أعلى الشريط ───── */
-    const header = document.createElement("div");
-    header.textContent = "OFFER LIST";
-    header.style.cssText = `
-      position:absolute;
-      top:-12px;
-      left:50%;
-      transform:translateX(-50%);
-      background:#2b1409;
-      padding:4px 14px;
-      font-size:18px;
-      font-weight:800;
-      color:white;
-      border-radius:10px;
-      border:1px solid rgba(255,200,120,0.35);
-      z-index:20;
-    `;
-    wrapper.appendChild(header);
+    offersBox.appendChild(container);
 
-    offersBox.appendChild(wrapper);
-
-    /* ───── تحقق من البيانات ───── */
+    /* لم توجد عروض */
     if (!Array.isArray(data) || data.length === 0) {
-      wrapper.innerHTML += "<p style='color:#e7c8a2;text-align:center'>No offers available</p>";
+      container.innerHTML += "<p style='text-align:center;color:#e7c8a2'>No offers available</p>";
       return;
     }
 
-    /* ───── 3 عروض فقط ───── */
+    /* ─── 3 عروض فقط ─── */
     data.slice(0, 3).forEach(offer => {
       const item = document.createElement("div");
-
       item.style.cssText = `
         background:rgba(0,0,0,0.25);
         border:1px solid rgba(255,200,120,0.18);
-        padding:10px 12px;
-        border-radius:14px;
-        cursor:pointer;
-        display:flex;
-        gap:10px;
-        align-items:center;
+        padding:12px;
         margin-bottom:12px;
-        transition:transform .15s ease, box-shadow .18s ease;
+        border-radius:14px;
+        display:flex;
+        gap:12px;
+        cursor:pointer;
+        align-items:center;
+        transition:0.15s ease;
+        z-index:20;
+        position:relative;
       `;
 
-      item.onmouseover = () => {
+      item.onmouseenter = () => {
         item.style.transform = "scale(1.02)";
         item.style.boxShadow = "0 6px 18px rgba(0,0,0,.45)";
       };
-
-      item.onmouseout = () => {
+      item.onmouseleave = () => {
         item.style.transform = "scale(1)";
         item.style.boxShadow = "none";
       };
 
       item.innerHTML = `
-        <img src="${offer.network_icon || offer.icon}"
-            width="40" height="40"
-            style="border-radius:12px;object-fit:cover">
+        <img src="${offer.icon}" 
+             style="width:42px;height:42px;border-radius:12px;object-fit:cover">
 
         <div style="flex:1;">
-          <div style="font-size:14px;font-weight:700;color:white;">
+          <div style="font-size:15px;font-weight:700;color:white;">
             ${offer.anchor || offer.name}
           </div>
           <div style="font-size:12px;color:#e7c8a2;margin-top:3px;">
@@ -1267,13 +1283,13 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 
       item.onclick = () => openOffer(offer);
 
-      wrapper.appendChild(item);
+      container.appendChild(item);
     });
 
   } catch (err) {
-    console.error("Error loading offers:", err);
+    console.error("offer load error:", err);
     document.getElementById("offersBox").innerHTML =
-      "<p style='color:red;text-align:center'>Failed to load offers.</p>";
+      "<p style='color:red;text-align:center'>Error loading offers.</p>";
   }
 }
   
