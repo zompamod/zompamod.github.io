@@ -157,25 +157,7 @@ footer{padding:20px;text-align:center;color:#c4a27a;font-size:13px}
 }  
 #popup p{font-size:14px;color:#e7c8a2;line-height:1.6}  
   
-/* ===== VERIFY BUTTON (NEW ANIMATION) ===== */  
-#offerLink{  
-  display:block;  
-  margin-top:16px;  
-  padding:14px;  
-  background:linear-gradient(90deg,var(--accent),var(--accent2));  
-  border-radius:16px;  
-  color:#1b0f09;  
-  font-weight:800;  
-  text-decoration:none;  
-  cursor:pointer;  
-  text-align:center;  
-  animation:pulseGlow 2.2s infinite;  
-  transition:transform 0.2s ease, box-shadow 0.2s ease;  
-}  
-#offerLink:hover{  
-  transform:scale(1.05);  
-  box-shadow:0 0 30px rgba(255,138,42,.8);  
-}  
+
   
 #popup button{  
   margin-top:12px;  
@@ -1197,4 +1179,55 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     document.getElementById(tab.dataset.target).classList.add("active");
   });
 });
+
+  async function loadAdBlueOffers() {
+  const url = `https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json(); // ← الآن data هي المصفوفة نفسها
+
+    const offersBox = document.getElementById("offersBox");
+    offersBox.innerHTML = "";
+
+    // استخدام data مباشرة
+    if (!Array.isArray(data) || data.length === 0) {
+      offersBox.innerHTML = "<p style='color:#e7c8a2;text-align:center'>No offers available</p>";
+      return;
+    }
+
+    // نعرض 3 عروض فقط
+    data.slice(0, 3).forEach(offer => {
+      const item = document.createElement("div");
+
+      item.style.cssText = `
+        background:linear-gradient(180deg,#221108,#120805);
+        border:1px solid var(--border);
+        padding:14px;
+        border-radius:14px;
+        cursor:pointer;
+        display:flex;
+        gap:12px;
+        align-items:center;
+      `;
+
+      item.innerHTML = `
+        <img src="${offer.network_icon || offer.icon}" width="54" height="54"
+             style="border-radius:14px;object-fit:cover">
+        <div style="flex:1;">
+          <div style="font-size:15px;font-weight:700;">${offer.anchor || offer.name}</div>
+          <div style="font-size:13px;color:#e7c8a2">${offer.description || ""}</div>
+        </div>
+      `;
+
+      item.onclick = () => openOffer(offer);
+      offersBox.appendChild(item);
+    });
+
+  } catch (err) {
+    console.error("Error loading offers:", err);
+    document.getElementById("offersBox").innerHTML =
+      "<p style='color:red;text-align:center'>Failed to load offers.</p>";
+  }
+}
  </script>
