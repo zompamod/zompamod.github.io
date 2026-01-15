@@ -158,6 +158,7 @@ footer{padding:20px;text-align:center;color:#c4a27a;font-size:13px}
 #popup p{font-size:14px;color:#e7c8a2;line-height:1.6}  
   
 
+
   
 #popup button{  
   margin-top:12px;  
@@ -601,6 +602,7 @@ complete one simple step to confirme you are not a Robot.<br><br>
 >
   <source src="/assets/verify.mp4" type="video/mp4">
 </video>
+
  <div id="offersBox" style="margin-top:18px;display:flex;flex-direction:column;gap:14px;">
   <!-- Offers will load here -->
  </div>
@@ -611,7 +613,8 @@ complete one simple step to confirme you are not a Robot.<br><br>
 </div>
 <div id="popupError" class="popup-status error">The verification was not completed successfully, please Try again.</div>    
 <div id="popupSuccess" class="popup-status success">✅ Verification completed successfully.<br>Download will start shortly…</div>    
-   
+  
+
 <button onclick="closePopup()">Cancel</button>    
 </div>    
 </div>    
@@ -694,7 +697,7 @@ const popupError = document.getElementById("popupError");
 const popupSuccess = document.getElementById("popupSuccess");
 
 
-const offerLink = document.getElementById("offerLink");
+
 const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
@@ -707,6 +710,7 @@ window.addEventListener("pageshow", () => {
 
   overlay.style.display = "flex";
   showChecking();
+  loadAdBlueOffers();
   tryStartVerifyPolling();
 });
 /* =============================
@@ -740,36 +744,16 @@ function cleanURL(url) {
 function createSubid() {
   subid = "rbx_" + Math.random().toString(36).slice(2, 10);
   localStorage.setItem(key("subid"), subid);
-localStorage.setItem(key("subid_payload"), JSON.stringify({
-  id: subid,
-  offer: OFFER_ID,
-  time: Date.now()
-}));
-  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
+
+  localStorage.setItem(key("subid_payload"), JSON.stringify({
+    id: subid,
+    offer: "adbluemedia",
+    time: Date.now()
+  }));
 }
 
 
-function trackOfferClick() {
-  if (offerLink.dataset.locked === "1") return;
 
-  localStorage.setItem(key("verify_clicked"), "1");
-localStorage.setItem(key("offer_opened"), Date.now());
-
-  markWentOffer();
-
-  if (!localStorage.getItem(key("verify_started"))) {
-    gtag("event", "verify_start", {
-      game_id: gameId,
-      device: localStorage.getItem("device") || "unknown"
-    });
-    localStorage.setItem(key("verify_started"), "1");
-  }
-
-  gtag("event", "offer_click", {
-    game_id: gameId,
-    device: localStorage.getItem("device") || "unknown"
-  });
-}
  function tryStartVerifyPolling() {
   const verifyClicked = localStorage.getItem(key("verify_clicked")) === "1";
   const sid = localStorage.getItem(key("subid"));
@@ -779,14 +763,7 @@ localStorage.setItem(key("offer_opened"), Date.now());
 
   startVerifyPolling();
 }
-  // ✅ دالة مستقلة
- function markWentOffer() {
-  if (offerLink.dataset.locked === "1") return;
-
-  createSubid(); // إنشاء subid
-  offerLink.dataset.locked = "1";
-  localStorage.setItem(key("went_offer"), "1");
-}
+  
 
 function isSubidExpired() {
   const raw = localStorage.getItem(key("subid_payload"));
@@ -1037,6 +1014,7 @@ overlay.style.display = "flex";
 
 // ✅ أظهر checking فورًا
 showChecking();
+loadAdBlueOffers(); 
 
 // ⏳ انتظر قليلًا لضمان وجود subid
 tryStartVerifyPolling();
@@ -1103,8 +1081,7 @@ localStorage.removeItem(key("verify_clicked"));
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
-  offerLink.dataset.locked = "0";
-  offerLink.style.pointerEvents = "auto";
+  
 
   resetDownloader();
 
@@ -1127,11 +1104,7 @@ document.addEventListener("visibilitychange", () => {
 
 
 
-function resetVerifyText() {
-  offerLink.textContent = "Verify & Continue";
-  offerLink.style.background =
-    "linear-gradient(90deg,var(--accent),var(--accent2))";
-}
+
    
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -1181,8 +1154,6 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     document.getElementById(tab.dataset.target).classList.add("active");
   });
 });
-  
-
   async function loadAdBlueOffers() {
   const url = `https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f`;
 
@@ -1233,6 +1204,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
 }
+  
   function openOffer(offer) {
 
 
