@@ -520,14 +520,7 @@ button{will-change:transform,box-shadow}
   pointer-events: auto !important;
 }
 
-/* اجعل overlay لا يمنع الضغط على العروض */
-#overlay {
-  pointer-events: none !important;
-}
 
-#popup {
-  pointer-events: auto !important;
- }
   
 </style>  
 </head>  
@@ -1163,6 +1156,7 @@ localStorage.removeItem(key("subid_payload"));
 localStorage.removeItem(key("went_offer"));
 localStorage.removeItem(key("verify_clicked"));
   localStorage.removeItem("device");
+  localStorage.removeItem(key("apiOffers"));
 
   overlay.style.display = "none";
   popupChecking.style.display = "none";
