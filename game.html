@@ -1168,62 +1168,59 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* ==========================
-       الإطار الرئيسي EXACT LIKE IMAGE
-    ========================== */
+    /* ===== الإطار الرئيسي (أصغر + أقرب للأعلى) ===== */
     const frame = document.createElement("div");
     frame.style.cssText = `
-      margin-top: 40px;
-      padding: 40px 18px 22px 18px;
+      margin-top: 25px;              /* ⬅️ بدل 40 */
+      padding: 32px 14px 18px 14px;  /* ⬅️ أصغر */
       background: linear-gradient(180deg,#2b1409,#140a05);
-      border-radius: 22px;
+      border-radius: 18px;           /* ⬅️ أصغر */
       border: 2px solid rgba(255,200,120,0.25);
       position: relative;
+      transform: scale(0.93);        /* ⬅️ تصغير الإطار كله */
+      transform-origin: top;
     `;
 
-    /* ==========================
-       العنوان داخل الإطار
-       يقطع البوردر تمامًا مثل الصورة
-    ========================== */
+    /* ===== عنوان OFFERS LIST (مناسب للمقاس الجديد) ===== */
     const title = document.createElement("div");
     title.innerText = "OFFERS LIST";
     title.style.cssText = `
       position: absolute;
-      top: -16px;
+      top: -15px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 4px 16px;
+      padding: 3px 14px;
       background: linear-gradient(180deg,#2b1409,#140a05);
       border: 2px solid rgba(255,200,120,0.25);
       border-radius: 10px;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 800;
       color: #fff;
     `;
 
     frame.appendChild(title);
 
-    /* ==========================
-       عرض العروض داخل الإطار
-    ========================== */
+    /* ===== كروت العروض (أصغر) ===== */
     data.slice(0, 3).forEach((offer) => {
       const item = document.createElement("div");
       item.style.cssText = `
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 14px;
-        margin-bottom: 12px;
-        border-radius: 14px;
+        gap: 10px;
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 12px;
         background: rgba(255,255,255,0.07);
         border: 1px solid rgba(255,200,120,0.18);
         cursor: pointer;
+        transform: scale(.92);       /* ⬅️ تصغير الكرت */
+        transform-origin: left;
       `;
 
       item.innerHTML = `
         <img src="${offer.network_icon || offer.icon}"
-             style="width:45px;height:45px;border-radius:10px;object-fit:cover;">
-        <div style="color:white;font-size:14px;font-weight:700;">
+             style="width:40px;height:40px;border-radius:10px;object-fit:cover;">
+        <div style="color:white;font-size:13px;font-weight:700;">
           ${offer.anchor || offer.name}
         </div>
       `;
@@ -1233,15 +1230,13 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     });
 
     offersBox.appendChild(frame);
+
   } catch (err) {
     console.error("Offer Load Error:", err);
     offersBox.innerHTML =
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
 }
-    
-        
-        
     
   
   function openOffer(offer) {
