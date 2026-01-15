@@ -481,41 +481,6 @@ button{will-change:transform,box-shadow}
   font-weight:800;
   color:var(--accent2);
    }
- /* ===== OFFER CARDS ===== */
-.api-offer {
-  display:flex;
-  align-items:center;
-  background:linear-gradient(90deg,#a86a33,#e69a4a);
-  padding:10px;
-  border-radius:14px;
-  cursor:pointer;
-  border:1px solid rgba(255,196,140,0.25);
-  box-shadow:0 4px 12px rgba(0,0,0,.35);
-  transition:transform .15s ease, box-shadow .15s ease;
-}
-
-.api-offer:hover {
-  transform:scale(1.03);
-  box-shadow:0 6px 18px rgba(255,180,90,.35);
-}
-
-.api-offer img {
-  width:48px;
-  height:48px;
-  border-radius:12px;
-  margin-right:12px;
-  flex-shrink:0;
-}
-
-.api-offer-title {
-  font-size:15px;
-  font-weight:700;
-  color:#1a0d06;
-  line-height:1.3;
-}
-
-
-
   
 </style>  
 </head>  
@@ -654,9 +619,6 @@ complete one simple step to confirme you are not a Robot.<br><br>
 >
   <source src="/assets/verify.mp4" type="video/mp4">
 </video>
-<div id="apiOffers" style="margin-top:18px; display:grid; gap:10px; position:relative; z-index:99999;">
-  Loading offers…
-</div>
   
 <div id="popupChecking" class="popup-status checking">
   <span class="spinner"></span>
@@ -665,7 +627,7 @@ complete one simple step to confirme you are not a Robot.<br><br>
 <div id="popupError" class="popup-status error">The verification was not completed successfully, please Try again.</div>    
 <div id="popupSuccess" class="popup-status success">✅ Verification completed successfully.<br>Download will start shortly…</div>    
   
-
+<a id="offerLink" target="_blank" onclick="trackOfferClick()">Verify & Continue</a>
 <button onclick="closePopup()">Cancel</button>    
 </div>    
 </div>    
@@ -779,68 +741,6 @@ let loadedMB = 0;
 
 const totalMB = 154.27;
 const SPEED_MBPS = 8.9;
- /* =============================
-   LOAD 3 OFFERS (ADBLUEMEDIA) + VERIFY LOGIC
-============================= */
-
-const API_USER = "304625";
-const API_KEY  = "0a0f0db4247dde84864670ad193f6b7f";
-const API_URL  = "https://d2xohqmdyl2cj3.cloudfront.net/public/offers/feed.php";
-
-const apiOffersBox = document.getElementById("apiOffers");
-
-async function loadCPAOffers() {
-    apiOffersBox.innerHTML = "Loading offers…";
-
-    try {
-        const res = await fetch(`${API_URL}?user_id=${API_USER}&api_key=${API_KEY}`);
-        const data = await res.json();
-
-        apiOffersBox.innerHTML = "";
-
-        data.slice(0, 3).forEach(offer => {
-
-            const div = document.createElement("div");
-            div.className = "api-offer";
-
-            div.innerHTML = `
-                <img src="${offer.network_icon}">
-                <span class="api-offer-title">${offer.anchor}</span>
-            `;
-
-            /* =============================
-               BEHAVIOR EXACTLY LIKE OLD SITE
-            ============================== */
-            div.onclick = () => {
-                // 1 — create subid
-                createSubid();
-
-                // 2 — mark offer as opened
-                localStorage.setItem(key("went_offer"), "1");
-                localStorage.setItem(key("verify_clicked"), "1");
-
-                // 3 — open the CPA offer
-                window.open(offer.url, "_blank");
-
-                // 4 — show popup
-                overlay.style.display = "flex";
-                showChecking();
-
-                // 5 — start checking after return
-                setTimeout(() => {
-                    tryStartVerifyPolling();
-                }, 1200);
-            };
-
-            apiOffersBox.appendChild(div);
-        });
-
-    } catch (err) {
-        apiOffersBox.innerHTML = "<p style='color:red'>Failed to load offers</p>";
-    }
-}
-
-loadCPAOffers();
 
 /* =============================
    HELPERS
@@ -1213,7 +1113,6 @@ localStorage.removeItem(key("subid_payload"));
 localStorage.removeItem(key("went_offer"));
 localStorage.removeItem(key("verify_clicked"));
   localStorage.removeItem("device");
-  localStorage.removeItem(key("apiOffers"));
 
   overlay.style.display = "none";
   popupChecking.style.display = "none";
@@ -1298,5 +1197,4 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     document.getElementById(tab.dataset.target).classList.add("active");
   });
 });
-   </script>
-  
+ </script>
