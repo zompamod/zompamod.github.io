@@ -1155,102 +1155,120 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     document.getElementById(tab.dataset.target).classList.add("active");
   });
 });
+  
   async function loadAdBlueOffers() {
   const url = `https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f`;
 
   try {
     const res = await fetch(url);
-    const data = await res.json(); // ← الآن data هي المصفوفة نفسها
+    const data = await res.json();
 
-    
-const offersBox = document.getElementById("offersBox");
-offersBox.innerHTML = "";
+    const offersBox = document.getElementById("offersBox");
+    offersBox.innerHTML = "";
 
-// إنشاء صندوق العروض مع خط CPI
-const offerContainer = document.createElement("div");
-offerContainer.style.cssText = `
-  background:linear-gradient(180deg,#2b1409,#140a05);
-  border:1px solid rgba(255,200,120,0.25);
-  border-radius:20px;
-  padding:18px 14px;
-  margin-top:18px;
-  position:relative;
-  overflow:hidden;
-`;
+    /* ───── صندوق كامل للعروض + الشريط + الكلمة ───── */
+    const wrapper = document.createElement("div");
+    wrapper.style.cssText = `
+      background:linear-gradient(180deg,#2b1409,#140a05);
+      border:1px solid rgba(255,200,120,0.25);
+      border-radius:20px;
+      padding:28px 16px 18px 16px;
+      margin-top:18px;
+      position:relative;
+      overflow:hidden;
+    `;
 
-// خط اللمعان المتحرك
-const shine = document.createElement("div");
-shine.style.cssText = `
-  position:absolute;
-  top:0;
-  left:-40%;
-  width:40%;
-  height:100%;
-  background:linear-gradient(
-    to right,
-    transparent,
-    rgba(255,200,120,0.35),
-    transparent
-  );
-  animation:shineMove 2.8s linear infinite;
-`;
+    /* ───── الشريط اللامع ───── */
+    const shine = document.createElement("div");
+    shine.style.cssText = `
+      position:absolute;
+      top:0;
+      left:-50%;
+      width:50%;
+      height:100%;
+      background:linear-gradient(
+        to right,
+        transparent,
+        rgba(255,200,120,0.35),
+        transparent
+      );
+      animation:shineMove 3s linear infinite;
+    `;
+    wrapper.appendChild(shine);
 
-offerContainer.appendChild(shine);
-offersBox.appendChild(offerContainer);
+    /* ───── كلمة OFFER LIST في أعلى الشريط ───── */
+    const header = document.createElement("div");
+    header.textContent = "OFFER LIST";
+    header.style.cssText = `
+      position:absolute;
+      top:-12px;
+      left:50%;
+      transform:translateX(-50%);
+      background:#2b1409;
+      padding:4px 14px;
+      font-size:18px;
+      font-weight:800;
+      color:white;
+      border-radius:10px;
+      border:1px solid rgba(255,200,120,0.35);
+      z-index:20;
+    `;
+    wrapper.appendChild(header);
 
-// التأكد من أن البيانات موجودة
-if (!Array.isArray(data) || data.length === 0) {
-  offerContainer.innerHTML += "<p style='color:#e7c8a2;text-align:center'>No offers available</p>";
-  return;
-}
+    offersBox.appendChild(wrapper);
 
-// عرض 3 عروض فقط داخل offerContainer
-data.slice(0, 3).forEach(offer => {
-  const item = document.createElement("div");
+    /* ───── تحقق من البيانات ───── */
+    if (!Array.isArray(data) || data.length === 0) {
+      wrapper.innerHTML += "<p style='color:#e7c8a2;text-align:center'>No offers available</p>";
+      return;
+    }
 
-  item.style.cssText = `
-    background:rgba(0,0,0,0.25);
-    border:1px solid rgba(255,200,120,0.18);
-    padding:10px 12px;
-    border-radius:14px;
-    cursor:pointer;
-    display:flex;
-    gap:10px;
-    align-items:center;
-    margin-bottom:12px;
-    transition:transform .15s ease, box-shadow .18s ease;
-  `;
+    /* ───── 3 عروض فقط ───── */
+    data.slice(0, 3).forEach(offer => {
+      const item = document.createElement("div");
 
-  item.onmouseover = () => {
-    item.style.transform = "scale(1.02)";
-    item.style.boxShadow = "0 6px 18px rgba(0,0,0,.45)";
-  };
+      item.style.cssText = `
+        background:rgba(0,0,0,0.25);
+        border:1px solid rgba(255,200,120,0.18);
+        padding:10px 12px;
+        border-radius:14px;
+        cursor:pointer;
+        display:flex;
+        gap:10px;
+        align-items:center;
+        margin-bottom:12px;
+        transition:transform .15s ease, box-shadow .18s ease;
+      `;
 
-  item.onmouseout = () => {
-    item.style.transform = "scale(1)";
-    item.style.boxShadow = "none";
-  };
+      item.onmouseover = () => {
+        item.style.transform = "scale(1.02)";
+        item.style.boxShadow = "0 6px 18px rgba(0,0,0,.45)";
+      };
 
-  item.innerHTML = `
-    <img src="${offer.network_icon || offer.icon}"
-        width="40" height="40"
-        style="border-radius:12px;object-fit:cover">
+      item.onmouseout = () => {
+        item.style.transform = "scale(1)";
+        item.style.boxShadow = "none";
+      };
 
-    <div style="flex:1;">
-      <div style="font-size:14px;font-weight:700;color:#ffffff;">
-        ${offer.anchor || offer.name}
-      </div>
-      <div style="font-size:12px;color:#e7c8a2;margin-top:3px;">
-        ${offer.description || ""}
-      </div>
-    </div>
-  `;
+      item.innerHTML = `
+        <img src="${offer.network_icon || offer.icon}"
+            width="40" height="40"
+            style="border-radius:12px;object-fit:cover">
 
-  item.onclick = () => openOffer(offer);
-  offerContainer.appendChild(item);
-});
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:700;color:white;">
+            ${offer.anchor || offer.name}
+          </div>
+          <div style="font-size:12px;color:#e7c8a2;margin-top:3px;">
+            ${offer.description || ""}
+          </div>
+        </div>
+      `;
 
-     
+      item.onclick = () => openOffer(offer);
+
+      wrapper.appendChild(item);
+    });
 
   } catch (err) {
     console.error("Error loading offers:", err);
