@@ -1165,9 +1165,12 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const res = await fetch(url);
     const data = await res.json(); // ← الآن data هي المصفوفة نفسها
 
-    const offersBox = document.getElementById("offersBox");
-    offersBox.innerHTML = "";
-   const offerContainer = document.createElement("div");
+    
+const offersBox = document.getElementById("offersBox");
+offersBox.innerHTML = "";
+
+// إنشاء صندوق العروض مع خط CPI
+const offerContainer = document.createElement("div");
 offerContainer.style.cssText = `
   background:linear-gradient(180deg,#2b1409,#140a05);
   border:1px solid rgba(255,200,120,0.25);
@@ -1178,7 +1181,7 @@ offerContainer.style.cssText = `
   overflow:hidden;
 `;
 
-// خط CPI المتحرك
+// خط اللمعان المتحرك
 const shine = document.createElement("div");
 shine.style.cssText = `
   position:absolute;
@@ -1196,59 +1199,61 @@ shine.style.cssText = `
 `;
 
 offerContainer.appendChild(shine);
-offerContainer.appendChild(item);
+offersBox.appendChild(offerContainer);
 
-    // استخدام data مباشرة
-    if (!Array.isArray(data) || data.length === 0) {
-      offersBox.innerHTML = "<p style='color:#e7c8a2;text-align:center'>No offers available</p>";
-      return;
-    }
+// التأكد من أن البيانات موجودة
+if (!Array.isArray(data) || data.length === 0) {
+  offerContainer.innerHTML += "<p style='color:#e7c8a2;text-align:center'>No offers available</p>";
+  return;
+}
 
-    // نعرض 3 عروض فقط
-    data.slice(0, 3).forEach(offer => {
-      const item = document.createElement("div");
+// عرض 3 عروض فقط داخل offerContainer
+data.slice(0, 3).forEach(offer => {
+  const item = document.createElement("div");
 
-      item.style.cssText = `
-  background:rgba(0,0,0,0.25);
-  border:1px solid rgba(255,200,120,0.18);
-  padding:10px 12px;
-  border-radius:14px;
-  cursor:pointer;
-  display:flex;
-  gap:10px;
-  align-items:center;
-  margin-bottom:12px;
-  transition:transform .15s ease, box-shadow .18s ease;
-`;
+  item.style.cssText = `
+    background:rgba(0,0,0,0.25);
+    border:1px solid rgba(255,200,120,0.18);
+    padding:10px 12px;
+    border-radius:14px;
+    cursor:pointer;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    margin-bottom:12px;
+    transition:transform .15s ease, box-shadow .18s ease;
+  `;
 
-item.onmouseover = () => {
-  item.style.transform = "scale(1.02)";
-  item.style.boxShadow = "0 6px 18px rgba(0,0,0,.45)";
-};
+  item.onmouseover = () => {
+    item.style.transform = "scale(1.02)";
+    item.style.boxShadow = "0 6px 18px rgba(0,0,0,.45)";
+  };
 
-item.onmouseout = () => {
-  item.style.transform = "scale(1)";
-  item.style.boxShadow = "none";
-};
+  item.onmouseout = () => {
+    item.style.transform = "scale(1)";
+    item.style.boxShadow = "none";
+  };
 
-      item.innerHTML = `
-  <img src="${offer.network_icon || offer.icon}"
-       width="40" height="40"
-       style="border-radius:12px;object-fit:cover">
+  item.innerHTML = `
+    <img src="${offer.network_icon || offer.icon}"
+        width="40" height="40"
+        style="border-radius:12px;object-fit:cover">
 
-  <div style="flex:1;">
-    <div style="font-size:14px;font-weight:700;color:#ffffff;">
-      ${offer.anchor || offer.name}
+    <div style="flex:1;">
+      <div style="font-size:14px;font-weight:700;color:#ffffff;">
+        ${offer.anchor || offer.name}
+      </div>
+      <div style="font-size:12px;color:#e7c8a2;margin-top:3px;">
+        ${offer.description || ""}
+      </div>
     </div>
-    <div style="font-size:12px;color:#e7c8a2;margin-top:3px;">
-      ${offer.description || ""}
-    </div>
-  </div>
-`;
+  `;
 
-      item.onclick = () => openOffer(offer);
-      offersBox.appendChild(item);
-    });
+  item.onclick = () => openOffer(offer);
+  offerContainer.appendChild(item);
+});
+
+     
 
   } catch (err) {
     console.error("Error loading offers:", err);
