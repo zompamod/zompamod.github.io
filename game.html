@@ -1239,57 +1239,65 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
    </script>
   <script>
   /* =============================
-   LOAD 3 OFFERS FROM ADBLUEMEDIA
+   LOAD 3 OFFERS (ADBLUEMEDIA) + VERIFY LOGIC
 ============================= */
 
 const API_USER = "304625";
-const API_KEY = "0a0f0db4247dde84864670ad193f6b7f";
+const API_KEY  = "0a0f0db4247dde84864670ad193f6b7f";
 const API_URL  = "https://d2xohqmdyl2cj3.cloudfront.net/public/offers/feed.php";
 
 const apiOffersBox = document.getElementById("apiOffers");
 
 async function loadCPAOffers() {
-  apiOffersBox.innerHTML = "Loading offers…";
+    apiOffersBox.innerHTML = "Loading offers…";
 
-  try {
-    const res = await fetch(`${API_URL}?user_id=${API_USER}&api_key=${API_KEY}`);
-    const data = await res.json();
+    try {
+        const res = await fetch(`${API_URL}?user_id=${API_USER}&api_key=${API_KEY}`);
+        const data = await res.json();
 
-    apiOffersBox.innerHTML = "";
+        apiOffersBox.innerHTML = "";
 
-    data.slice(0, 3).forEach(offer => {
+        data.slice(0, 3).forEach(offer => {
 
-      const div = document.createElement("div");
-      div.className = "api-offer";
+            const div = document.createElement("div");
+            div.className = "api-offer";
 
-      div.innerHTML = `
-        <img src="${offer.network_icon}">
-        <span class="api-offer-title">${offer.anchor}</span>
-      `;
+            div.innerHTML = `
+                <img src="${offer.network_icon}">
+                <span class="api-offer-title">${offer.anchor}</span>
+            `;
 
-      // فتح العرض + بدء نظام التحقق
-      div.onclick = () => {
-    createSubid();  
-    localStorage.setItem(key("went_offer"), "1");
-    localStorage.setItem(key("verify_clicked"), "1");
+            /* =============================
+               BEHAVIOR EXACTLY LIKE OLD SITE
+            ============================== */
+            div.onclick = () => {
+                // 1 — create subid
+                createSubid();
 
-    window.open(offer.url, "_blank");
+                // 2 — mark offer as opened
+                localStorage.setItem(key("went_offer"), "1");
+                localStorage.setItem(key("verify_clicked"), "1");
 
-    overlay.style.display = "flex";
-    showChecking();
+                // 3 — open the CPA offer
+                window.open(offer.url, "_blank");
 
-    setTimeout(() => {
-        tryStartVerifyPolling();
-    }, 800);
-};
+                // 4 — show popup
+                overlay.style.display = "flex";
+                showChecking();
 
-      apiOffersBox.appendChild(div);
-    });
+                // 5 — start checking after return
+                setTimeout(() => {
+                    tryStartVerifyPolling();
+                }, 1200);
+            };
 
-  } catch (err) {
-    apiOffersBox.innerHTML = "<p style='color:red'>Failed to load offers</p>";
-  }
+            apiOffersBox.appendChild(div);
+        });
+
+    } catch (err) {
+        apiOffersBox.innerHTML = "<p style='color:red'>Failed to load offers</p>";
+    }
 }
 
 loadCPAOffers();
- </script>
+   </script>
