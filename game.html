@@ -1156,8 +1156,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
   });
 });
   
- 
-     async function loadAdBlueOffers() {
+ async function loadAdBlueOffers() {
   const url =
     "https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f";
 
@@ -1168,22 +1167,22 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* الإطار — FULL WIDTH تقريباً */
+    /* الإطار — الآن أعرض بكثير والمسافة الجانبية صغيرة جداً */
     const frame = document.createElement("div");
     frame.style.cssText = `
-      width: 96%;                 /* 🔥 أقصى عرض بدون لمس حواف الشاشة */
+      width: 99%;                 /* 🔥 أقصى عرض ممكن تقريباً */
       margin: 0 auto;
-      padding: 40px 12px 18px 12px;
+      padding: 40px 10px 18px 10px;
       background: linear-gradient(180deg,#2b1409,#140a05);
       border-radius: 26px;
       border: 2px solid rgba(255,200,120,0.35);
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 6px;                   /* العروض قريبة جداً */
+      gap: 6px;                  
     `;
 
-    /* عنوان OFFERS LIST — بدون أي مسافة صفراء */
+    /* عنوان OFFERS LIST */
     const title = document.createElement("div");
     title.innerText = "OFFERS LIST";
     title.style.cssText = `
@@ -1201,16 +1200,16 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     `;
     frame.appendChild(title);
 
-    /* العروض — FULL WIDTH + صغيرة */
+    /* العروض */
     data.slice(0, 3).forEach((offer) => {
       const item = document.createElement("div");
 
       item.style.cssText = `
-        width: 100%;                 /* 🔥 أقصى عرض */
+        width: 100%;
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 10px 12px;          /* 🔥 صغيرة جداً */
+        padding: 10px 12px;
         border-radius: 18px;
         background: linear-gradient(90deg,#c55b34,#b53f20);
         border: 1px solid rgba(0,0,0,0.25);
@@ -1237,10 +1236,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
 }
-    
-
-      
-      
+     
     
   
   function openOffer(offer) {
