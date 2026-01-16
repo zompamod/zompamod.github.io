@@ -1168,27 +1168,27 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* الإطار — عريض ولكن ليس قريب من الـ popup */
+    /* الإطار — FULL WIDTH تقريباً */
     const frame = document.createElement("div");
     frame.style.cssText = `
-      width: 88%;                  /* ✨ أصبح عريض بدون لمس popup */
+      width: 96%;                 /* 🔥 أقصى عرض بدون لمس حواف الشاشة */
       margin: 0 auto;
-      padding: 45px 18px 20px 18px;
+      padding: 40px 12px 18px 12px;
       background: linear-gradient(180deg,#2b1409,#140a05);
-      border-radius: 24px;
+      border-radius: 26px;
       border: 2px solid rgba(255,200,120,0.35);
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 8px;                    /* العروض قريبة */
+      gap: 6px;                   /* العروض قريبة جداً */
     `;
 
-    /* العنوان — حذف المسافة الصفراء */
+    /* عنوان OFFERS LIST — بدون أي مسافة صفراء */
     const title = document.createElement("div");
     title.innerText = "OFFERS LIST";
     title.style.cssText = `
       position: absolute;
-      top: -16px;
+      top: -17px;
       left: 50%;
       transform: translateX(-50%);
       padding: 3px 14px;
@@ -1201,16 +1201,16 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     `;
     frame.appendChild(title);
 
-    /* العروض — صغيرة جداً ومرتبة */
+    /* العروض — FULL WIDTH + صغيرة */
     data.slice(0, 3).forEach((offer) => {
       const item = document.createElement("div");
 
       item.style.cssText = `
-        width: 100%;
+        width: 100%;                 /* 🔥 أقصى عرض */
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 12px 14px;
+        padding: 10px 12px;          /* 🔥 صغيرة جداً */
         border-radius: 18px;
         background: linear-gradient(90deg,#c55b34,#b53f20);
         border: 1px solid rgba(0,0,0,0.25);
@@ -1219,8 +1219,8 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 
       item.innerHTML = `
         <img src="${offer.network_icon || offer.icon}"
-             style="width:50px;height:50px;border-radius:12px;background:white;padding:4px;object-fit:cover;">
-        <div style="color:white;font-size:15px;font-weight:700;line-height:20px;">
+             style="width:45px;height:45px;border-radius:10px;background:white;padding:4px;object-fit:cover;">
+        <div style="color:white;font-size:14px;font-weight:700;line-height:18px;">
           ${offer.anchor || offer.name}
         </div>
       `;
