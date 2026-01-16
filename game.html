@@ -1168,30 +1168,30 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* 🟨 الإطار عريييض + قريب جداً من الـ popup */
+    /* الإطار — عريض ولكن ليس قريب من الـ popup */
     const frame = document.createElement("div");
     frame.style.cssText = `
-      width: 99%;
-      margin: 3px auto 0 auto;        /* أقل من 1mm */
-      padding: 60px 20px 25px 20px;
+      width: 88%;                  /* ✨ أصبح عريض بدون لمس popup */
+      margin: 0 auto;
+      padding: 45px 18px 20px 18px;
       background: linear-gradient(180deg,#2b1409,#140a05);
-      border-radius: 26px;
-      border: 2px solid rgba(255,200,120,0.30);
+      border-radius: 24px;
+      border: 2px solid rgba(255,200,120,0.35);
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;                    /* العروض قريبة */
     `;
 
-    /* 🟨 عنوان صغير */
+    /* العنوان — حذف المسافة الصفراء */
     const title = document.createElement("div");
     title.innerText = "OFFERS LIST";
     title.style.cssText = `
       position: absolute;
-      top: -18px;
+      top: -16px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 4px 16px;
+      padding: 3px 14px;
       background: linear-gradient(180deg,#2b1409,#140a05);
       border: 2px solid rgba(255,200,120,0.35);
       border-radius: 10px;
@@ -1201,7 +1201,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     `;
     frame.appendChild(title);
 
-    /* 🟨 العروض — صغيرة | عريضة جداً | احترافية */
+    /* العروض — صغيرة جداً ومرتبة */
     data.slice(0, 3).forEach((offer) => {
       const item = document.createElement("div");
 
@@ -1209,19 +1209,18 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 14px;
-        padding: 12px 16px;
+        gap: 12px;
+        padding: 12px 14px;
         border-radius: 18px;
-        background: linear-gradient(90deg,#cd6540,#b53b1f);
+        background: linear-gradient(90deg,#c55b34,#b53f20);
         border: 1px solid rgba(0,0,0,0.25);
         cursor: pointer;
-        min-height: 65px;     /* ⬅️ هنا الحجم الصغير */
       `;
 
       item.innerHTML = `
         <img src="${offer.network_icon || offer.icon}"
              style="width:50px;height:50px;border-radius:12px;background:white;padding:4px;object-fit:cover;">
-        <div style="color:white;font-size:16px;font-weight:700;line-height:20px;">
+        <div style="color:white;font-size:15px;font-weight:700;line-height:20px;">
           ${offer.anchor || offer.name}
         </div>
       `;
