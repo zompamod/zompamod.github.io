@@ -1170,17 +1170,17 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     /* الإطار — الآن أعرض بكثير والمسافة الجانبية صغيرة جداً */
     const frame = document.createElement("div");
     frame.style.cssText = `
-      width: 100%;                 /* 🔥 أقصى عرض ممكن تقريباً */
-      margin: 0 auto;
-      padding: 40px 10px 18px 10px;
-      background: linear-gradient(180deg,#2b1409,#140a05);
-      border-radius: 26px;
-      border: 2px solid rgba(255,200,120,0.35);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;                  
-    `;
+  width: calc(100% - 22px);   /* الآن الإطار محاذي تماماً للخط */
+  margin: 0 auto;
+  padding: 40px 10px 18px 10px;
+  background: linear-gradient(180deg,#2b1409,#140a05);
+  border-radius: 26px;
+  border: 2px solid rgba(255,200,120,0.35);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
 
     /* عنوان OFFERS LIST */
     const title = document.createElement("div");
