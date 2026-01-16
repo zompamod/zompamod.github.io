@@ -1168,23 +1168,23 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* ========== إطار عريض جدًا ومتناسق ========== */
+    /* ========== إطار عريض جدًا ========== */
     const frame = document.createElement("div");
     frame.style.cssText = `
-      width: 96%;                      /* ⬅️ أعرض */
-      margin: 38px auto 0 auto;
-      padding: 48px 18px 20px 18px;
+      width: 98%;                            /* ⬅️ أوسع */
+      margin: 45px auto 0 auto;
+      padding: 55px 15px 24px 15px;
       background: linear-gradient(180deg,#2b1409,#140a05);
-      border-radius: 22px;
-      border: 2px solid rgba(255,200,120,0.25);
+      border-radius: 25px;
+      border: 2px solid rgba(255,200,120,0.28);
       position: relative;
       display: flex;
       flex-direction: column;
-      align-items: center;             /* ⬅️ كل شيء في المنتصف */
-      gap: 10px;
+      align-items: center;                   /* ⬅️ وسط */
+      gap: 14px;
     `;
 
-    /* ========== ترويسة الإطار ========== */
+    /* ========== عنوان صغير ========== */
     const title = document.createElement("div");
     title.innerText = "OFFERS LIST";
     title.style.cssText = `
@@ -1192,27 +1192,27 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       top: -18px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 6px 20px;
+      padding: 4px 14px;
       background: linear-gradient(180deg,#2b1409,#140a05);
-      border: 2px solid rgba(255,200,120,0.25);
-      border-radius: 12px;
-      font-size: 16px;
+      border: 2px solid rgba(255,200,120,0.28);
+      border-radius: 10px;
+      font-size: 13px;                       /* ⬅️ أصغر */
       font-weight: 800;
       color: #fff;
     `;
     frame.appendChild(title);
 
-    /* ========== كروت العروض - أصغر + أعرض ========== */
+    /* ========== العروض — أوسع وأصغر ========== */
     data.slice(0, 3).forEach((offer) => {
       const item = document.createElement("div");
       item.style.cssText = `
-        width: 95%;                      /* ⬅️ عريض */
-        max-width: 450px;                /* ⬅️ ولكن لا يتجاوز هذا الحجم */
+        width: 92%;                           /* ⬅️ أعرض */
+        max-width: 520px;                     /* ⬅️ حد أقصى */
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 10px;                   /* ⬅️ أصغر قليلاً */
-        border-radius: 14px;
+        gap: 14px;
+        padding: 12px;                        /* ⬅️ أصغر قليلاً */
+        border-radius: 18px;
         background: rgba(255,255,255,0.07);
         border: 1px solid rgba(255,200,120,0.18);
         cursor: pointer;
@@ -1220,8 +1220,8 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 
       item.innerHTML = `
         <img src="${offer.network_icon || offer.icon}"
-             style="width:40px;height:40px;border-radius:10px;object-fit:cover;"> 
-        <div style="color:white;font-size:14px;font-weight:700;line-height:1.3;">
+             style="width:48px;height:48px;border-radius:12px;object-fit:cover;"> 
+        <div style="color:white;font-size:15px;font-weight:700;line-height:1.3;">
           ${offer.anchor || offer.name}
         </div>
       `;
@@ -1237,8 +1237,8 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     offersBox.innerHTML =
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
-}   
-
+}
+      
       
     
   
