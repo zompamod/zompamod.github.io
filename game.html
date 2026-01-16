@@ -1246,8 +1246,9 @@ async function loadAdBlueOffers() {
         align-items: center;
         gap: 12px;
 
-        padding: 14px 16px;
-        border-radius: 20px;
+        padding: 10px 12px;
+        border-radius: 16px;
+        margin-bottom: 6px; 
 
         background: linear-gradient(90deg,#ff8b2c,#ffb45c); /* ⬅ اللون الذهبي */
         border: 1px solid rgba(255,200,120,0.45);
@@ -1262,20 +1263,20 @@ async function loadAdBlueOffers() {
       item.innerHTML = `
         <img src="${offer.network_icon || offer.icon}"
              style="
-               width:48px;
-               height:48px;
-               border-radius:12px;
+               width:40px;
+               height:40px;
+               border-radius:10px;
                border:1px solid rgba(255,200,120,0.45);
                background:#000;
-               padding:4px;
+               padding:3px;
                object-fit:cover;
              ">
 
         <div style="
               color:#1b0f09;
-              font-size:14px;
+              font-size:13px;
               font-weight:800;
-              line-height:18px;
+              line-height:16px;
              ">
           ${offer.anchor || offer.name}
         </div>
