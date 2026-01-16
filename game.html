@@ -1168,22 +1168,22 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* 🟧 الإطار (عريض جداً + قريب من الحواف 1mm = 4px) */
+    /* 🟨 الإطار عريييض + قريب جداً من الـ popup */
     const frame = document.createElement("div");
     frame.style.cssText = `
-      width: 98%;
-      margin: 4px auto 0 auto;
-      padding: 55px 22px 30px 22px;
+      width: 99%;
+      margin: 3px auto 0 auto;        /* أقل من 1mm */
+      padding: 60px 20px 25px 20px;
       background: linear-gradient(180deg,#2b1409,#140a05);
       border-radius: 26px;
-      border: 2px solid rgba(255,200,120,0.35);
+      border: 2px solid rgba(255,200,120,0.30);
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 10px;
     `;
 
-    /* 🟧 عنوان küçük */
+    /* 🟨 عنوان صغير */
     const title = document.createElement("div");
     title.innerText = "OFFERS LIST";
     title.style.cssText = `
@@ -1201,26 +1201,27 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     `;
     frame.appendChild(title);
 
-    /* 🟧 العروض — أصغر ولكن أعرض */
+    /* 🟨 العروض — صغيرة | عريضة جداً | احترافية */
     data.slice(0, 3).forEach((offer) => {
       const item = document.createElement("div");
+
       item.style.cssText = `
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 16px;
-        padding: 14px 18px;
+        gap: 14px;
+        padding: 12px 16px;
         border-radius: 18px;
-        background: linear-gradient(90deg,#c55b34,#b53f20);
+        background: linear-gradient(90deg,#cd6540,#b53b1f);
         border: 1px solid rgba(0,0,0,0.25);
         cursor: pointer;
-        min-height: 75px;     /* ⬅️ العرض أصبح صغيراً */
+        min-height: 65px;     /* ⬅️ هنا الحجم الصغير */
       `;
 
       item.innerHTML = `
         <img src="${offer.network_icon || offer.icon}"
-             style="width:55px;height:55px;border-radius:14px;background:white;padding:5px;object-fit:cover;">
-        <div style="color:white;font-size:17px;font-weight:700;line-height:22px;">
+             style="width:50px;height:50px;border-radius:12px;background:white;padding:4px;object-fit:cover;">
+        <div style="color:white;font-size:16px;font-weight:700;line-height:20px;">
           ${offer.anchor || offer.name}
         </div>
       `;
@@ -1237,7 +1238,8 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
 }
-   
+    
+
       
       
     
