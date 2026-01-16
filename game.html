@@ -1156,7 +1156,8 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
   });
 });
   
- async function loadAdBlueOffers() {
+ 
+     async function loadAdBlueOffers() {
   const url =
     "https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f";
 
@@ -1167,33 +1168,33 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* ========== إطار عريــض جدًا مثل الصورة ========== */
+    /* ========== إطــار عــريــض جــداً ========== */
     const frame = document.createElement("div");
     frame.style.cssText = `
-      width: 96%;                    /* ⬅️ أكبر */
+      width: 98%;                   /* ⬅️ أعرض ما يمكن */
       margin: 40px auto 0 auto;
-      padding: 60px 20px 30px 20px;
+      padding: 70px 25px 40px 25px;
       background: linear-gradient(180deg,#2b1409,#140a05);
-      border-radius: 28px;
-      border: 2px solid rgba(255,200,120,0.32);
+      border-radius: 30px;
+      border: 2px solid rgba(255,200,120,0.35);
       position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 18px;
+      gap: 22px;
     `;
 
-    /* ========== عنوان صغير ========== */
+    /* ========== عنوان صغير في الوسط ========== */
     const title = document.createElement("div");
     title.innerText = "OFFERS LIST";
     title.style.cssText = `
       position: absolute;
-      top: -18px;
+      top: -20px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 4px 16px;
+      padding: 5px 20px;
       background: linear-gradient(180deg,#2b1409,#140a05);
-      border: 2px solid rgba(255,200,120,0.32);
+      border: 2px solid rgba(255,200,120,0.35);
       border-radius: 10px;
       font-size: 12px;
       font-weight: 800;
@@ -1201,16 +1202,16 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     `;
     frame.appendChild(title);
 
-    /* ========== العروض (عرض كبير مثل الصورة 100%) ========== */
+    /* ========== العــروض أعــرض مـــمــكـــن ========== */
     data.slice(0, 3).forEach((offer) => {
       const item = document.createElement("div");
       item.style.cssText = `
-        width: 100%;                 /* ⬅️ نفس عرض الإطار */
+        width: 100%;                 /* ⬅️ عـرض كامل */
         display: flex;
         align-items: center;
-        gap: 18px;
-        padding: 18px;
-        border-radius: 20px;
+        gap: 20px;
+        padding: 20px;
+        border-radius: 22px;
         background: linear-gradient(90deg,#c55b34,#b53f20);
         border: 1px solid rgba(0,0,0,0.25);
         cursor: pointer;
@@ -1219,8 +1220,8 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 
       item.innerHTML = `
         <img src="${offer.network_icon || offer.icon}"
-             style="width:60px;height:60px;border-radius:14px;background:white;padding:4px;object-fit:cover;">
-        <div style="color:white;font-size:18px;font-weight:700;">
+             style="width:70px;height:70px;border-radius:16px;background:white;padding:6px;object-fit:cover;">
+        <div style="color:white;font-size:20px;font-weight:800;line-height:26px;">
           ${offer.anchor || offer.name}
         </div>
       `;
@@ -1236,7 +1237,9 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     offersBox.innerHTML =
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
-}  
+} 
+
+      
    
       
       
