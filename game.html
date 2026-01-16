@@ -1199,24 +1199,24 @@ async function loadAdBlueOffers() {
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* ===== الإطار الذهبي ===== */
+    /* ===== الإطار الخارجي بلون الـ POPUP ===== */
     const frame = document.createElement("div");
     frame.style.cssText = `
       width: 100%;
       margin: -5px auto 0 auto;
-      padding: 40px 10px 18px 10px;
+      padding: 40px 12px 20px 12px;
 
-      background: linear-gradient(180deg,#ff9a34,#ffca6a);
+      background: linear-gradient(180deg,#2a1409,#140a05);  /* ⬅ لون popup */
       border-radius: 26px;
-      border: 2px solid rgba(255,180,90,0.7);
+      border: 1px solid rgba(255,200,120,0.25);
 
       position: relative;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
     `;
 
-    /* ===== عنوان OFFERS LIST ===== */
+    /* ===== العنوان في الأعلى ===== */
     const title = document.createElement("div");
     title.innerText = "OFFERS LIST";
     title.style.cssText = `
@@ -1226,17 +1226,17 @@ async function loadAdBlueOffers() {
       transform: translateX(-50%);
 
       padding: 4px 16px;
-      background: linear-gradient(180deg,#ff9a34,#ffca6a);
-      border: 2px solid rgba(255,180,90,0.7);
+      background: linear-gradient(180deg,#2a1409,#140a05);
+      border: 1px solid rgba(255,200,120,0.35);
       border-radius: 12px;
 
-      color: #1b0f09;
-      font-weight: 900;
       font-size: 12px;
+      font-weight: 900;
+      color: white;
     `;
     frame.appendChild(title);
 
-    /* ===== عروض API — نفس التصميم الذهبي ===== */
+    /* ===== العروض فقط بلون ذهبي ===== */
     data.slice(0, 3).forEach((offer) => {
       const item = document.createElement("div");
 
@@ -1246,17 +1246,17 @@ async function loadAdBlueOffers() {
         align-items: center;
         gap: 12px;
 
-        padding: 12px 14px;
+        padding: 14px 16px;
         border-radius: 20px;
 
-        background: linear-gradient(90deg,#ff8b2c,#ffb45c);
-        border: 1px solid rgba(255,180,90,0.7);
+        background: linear-gradient(90deg,#ff8b2c,#ffb45c); /* ⬅ اللون الذهبي */
+        border: 1px solid rgba(255,200,120,0.45);
 
         cursor: pointer;
         transition: .2s ease;
       `;
 
-      item.onmouseenter = () => item.style.transform = "scale(1.03)";
+      item.onmouseenter = () => item.style.transform = "scale(1.02)";
       item.onmouseleave = () => item.style.transform = "scale(1)";
 
       item.innerHTML = `
@@ -1266,7 +1266,7 @@ async function loadAdBlueOffers() {
                height:48px;
                border-radius:12px;
                border:1px solid rgba(255,200,120,0.45);
-               background:#fff;
+               background:#000;
                padding:4px;
                object-fit:cover;
              ">
@@ -1282,7 +1282,6 @@ async function loadAdBlueOffers() {
       `;
 
       item.onclick = () => openOffer(offer);
-
       frame.appendChild(item);
     });
 
@@ -1294,7 +1293,8 @@ async function loadAdBlueOffers() {
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
 }
-    
+        
+      
     
   
   function openOffer(offer) {
