@@ -1187,7 +1187,8 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
   });
 });
   
- async function loadAdBlueOffers() {
+
+async function loadAdBlueOffers() {
   const url =
     "https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f";
 
@@ -1198,15 +1199,13 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     const offersBox = document.getElementById("offersBox");
     offersBox.innerHTML = "";
 
-    /* ===============================
-       🔥 إطار OFFERS — تصميم الموقع
-       =============================== */
+    /* الإطار العام */
     const frame = document.createElement("div");
     frame.style.cssText = `
       width: 100%;
       margin: -5px auto 0 auto;
-      padding: 42px 12px 18px 12px;
-      background: linear-gradient(180deg,#2a1409,#140a05);
+      padding: 40px 10px 18px 10px;
+      background: linear-gradient(180deg,#2b1409,#140a05);
       border-radius: 26px;
       border: 2px solid rgba(255,200,120,0.35);
       position: relative;
@@ -1215,44 +1214,25 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
       gap: 10px;
     `;
 
-    /* ===============================
-       🔥 الخط الأوسط الذهبي
-       =============================== */
-    const line = document.createElement("div");
-    line.style.cssText = `
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      transform: translateY(-50%);
-      background: rgba(255,200,120,0.28);
-    `;
-    frame.appendChild(line);
-
-    /* ===============================
-       🔥 عنوان OFFERS LIST
-       =============================== */
+    /* عنوان OFFERS LIST */
     const title = document.createElement("div");
     title.innerText = "OFFERS LIST";
     title.style.cssText = `
       position: absolute;
-      top: -14px;
+      top: -12px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 4px 14px;
+      padding: 4px 16px;
       background: linear-gradient(180deg,#2b1409,#140a05);
-      border: 2px solid rgba(255,200,120,0.40);
+      border: 2px solid rgba(255,200,120,0.35);
       border-radius: 12px;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 900;
-      color: #ffcc88;
+      color: #ffd8a6;
     `;
     frame.appendChild(title);
 
-    /* ===============================
-       🔥 عناصر العروض (Brown Cards)
-       =============================== */
+    /* عرض 3 عروض فقط */
     data.slice(0, 3).forEach((offer) => {
       const item = document.createElement("div");
 
@@ -1260,26 +1240,49 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
         width: 100%;
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 12px 12px;
-        border-radius: 16px;
-        background: linear-gradient(180deg,#241208,#150903);
-        border: 1px solid rgba(255,200,120,0.25);
+        gap: 14px;
+        padding: 12px 14px;
+        border-radius: 20px;
+
+        background: linear-gradient(180deg,#2a1409,#140a05);
+        border: 1px solid rgba(255,200,120,0.35);
+
+        box-shadow: inset 0 0 12px rgba(255,138,42,0.07),
+                    0 6px 22px rgba(0,0,0,0.55);
+
         cursor: pointer;
+        transition: .25s ease;
       `;
+
+      item.onmouseenter = () => {
+        item.style.transform = "scale(1.03)";
+        item.style.boxShadow =
+          "inset 0 0 20px rgba(255,138,42,0.12), 0 8px 26px rgba(255,200,120,0.25)";
+      };
+      item.onmouseleave = () => {
+        item.style.transform = "scale(1)";
+        item.style.boxShadow =
+          "inset 0 0 12px rgba(255,138,42,0.07), 0 6px 22px rgba(0,0,0,0.55)";
+      };
 
       item.innerHTML = `
         <img src="${offer.network_icon || offer.icon}"
              style="
-               width:42px;
-               height:42px;
-               border-radius:10px;
-               background:#2a1409;
+               width:48px;
+               height:48px;
+               border-radius:12px;
                border:1px solid rgba(255,200,120,0.35);
+               background:linear-gradient(180deg,#2b1409,#140a05);
                padding:4px;
                object-fit:cover;
              ">
-        <div style="color:#ffddb0;font-size:14px;font-weight:700;line-height:18px;">
+
+        <div style="
+              color:#ffd8a6;
+              font-size:15px;
+              font-weight:800;
+              line-height:18px;
+             ">
           ${offer.anchor || offer.name}
         </div>
       `;
@@ -1289,14 +1292,15 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     });
 
     offersBox.appendChild(frame);
-
   } catch (err) {
     console.error("Offer Load Error:", err);
     offersBox.innerHTML =
       "<p style='color:red;text-align:center'>Failed to load offers.</p>";
   }
 }
-    
+
+      
+        
   
   function openOffer(offer) {
 
