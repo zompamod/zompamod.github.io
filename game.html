@@ -500,17 +500,33 @@ button{will-change:transform,box-shadow}
 }
 
 .offer-badge {
-  margin-left: auto;
-  padding: 5px 12px;
-  font-size: 12px;
-  font-weight: 700;
-  border-radius: 12px;
+  position: absolute;
+  top: -6px;
+  right: 0;
+
+  padding: 6px 18px;
+  font-size: 15px;
+  font-weight: 800;
   color: #fff;
+
+  border-radius: 0 16px 16px 0;
+  z-index: 10;
+
+  pointer-events: none;
 }
 
-.badge-easy { background: #22c55e; }
-.badge-medium { background: #facc15; color:#000; }
-.badge-hard { background: #ef4444; }
+.badge-easy {
+  background: #10b981; /* أخضر */
+}
+
+.badge-medium {
+  background: #fbbf24; /* أصفر */
+  color: #000;
+}
+
+.badge-hard {
+  background: #ef4444; /* أحمر */
+}
   
 </style>  
 </head>  
@@ -1253,63 +1269,60 @@ async function loadAdBlueOffers() {
     data.slice(0, 3).forEach((offer, index) => {
 
   let level = "Easy";
-let badgeClass = "badge-easy";
+  let badgeClass = "badge-easy";
 
-if (index === 1) {
-  level = "Medium";
-  badgeClass = "badge-medium";
-}
-if (index === 2) {
-  level = "Hard";
-  badgeClass = "badge-hard";
-}
-      const item = document.createElement("div");
+  if (index === 1) {
+    level = "Medium";
+    badgeClass = "badge-medium";
+  }
+  if (index === 2) {
+    level = "Hard";
+    badgeClass = "badge-hard";
+  }
 
-      item.style.cssText = `
-        width: 100%;
-        display: flex;
-        align-items: center;
-        gap: 12px;
+  const item = document.createElement("div");
+  item.style.cssText = `
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-        padding: 10px 12px;
-        border-radius: 16px;
-        margin-bottom: 8px; 
+    padding: 10px 12px;
+    border-radius: 16px;
+    margin-bottom: 8px;
 
-        background: linear-gradient(90deg,#ff8b2c,#ffb45c); /* ⬅ اللون الذهبي */
-        border: 1px solid rgba(255,200,120,0.45);
+    background: linear-gradient(90deg,#ff8b2c,#ffb45c);
+    border: 1px solid rgba(255,200,120,0.45);
 
-        cursor: pointer;
-        transition: .2s ease;
-      `;
+    cursor: pointer;
+    transition: .2s ease;
+    position: relative;
+  `;
 
-      item.onmouseenter = () => item.style.transform = "scale(1.02)";
-      item.onmouseleave = () => item.style.transform = "scale(1)";
+  item.innerHTML = `
+    <div class="offer-badge ${badgeClass}">${level}</div>
 
-      
-      item.innerHTML = `
-  <img src="${offer.network_icon || offer.icon}"
-       style="
-         width:50px;
-         height:50px;
-         border-radius:12px;
-         object-fit:cover;
-       ">
+    <img src="${offer.icon || offer.network_icon}"
+         style="
+           width:40px;
+           height:40px;
+           border-radius:10px;
+           background:#000;
+           border:1px solid rgba(255,200,120,.4);
+           padding:3px;
+         ">
 
-  <div style="display:flex;flex-direction:column;">
-    <div style="font-size:16px;font-weight:700;color:#1b0f09;">
+    <div style="color:#1b0f09;font-size:13px;font-weight:800;line-height:16px;">
       ${offer.anchor || offer.name}
+      <div style="font-size:11px;color:#3b2a1d;font-weight:400;">
+        Complete with valid information
+      </div>
     </div>
-    <div style="font-size:13px;color:#3b2a1d;">
-      Complete with valid information
-    </div>
-  </div>
+  `;
 
-  <span class="offer-badge ${badgeClass}">${level}</span>
-`;
-
-      item.onclick = () => openOffer(offer);
-      frame.appendChild(item);
-    });
+  item.onclick = () => openOffer(offer);
+  frame.appendChild(item);
+});
 
     offersBox.appendChild(frame);
 
