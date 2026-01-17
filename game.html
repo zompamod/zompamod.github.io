@@ -502,30 +502,32 @@ button{will-change:transform,box-shadow}
 .offer-badge {
   position: absolute;
   top: -6px;
-  right: 0;
+  right: 12px;
 
-  padding: 6px 18px;
-  font-size: 15px;
+  padding: 4px 14px 6px 14px;
+  font-size: 13px;
   font-weight: 800;
-  color: #fff;
+  color: white;
 
-  border-radius: 0 16px 16px 0;
-  z-index: 10;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 
-  pointer-events: none;
+  z-index: 3;
 }
 
+/* الألوان */
 .badge-easy {
-  background: #10b981; /* أخضر */
+  background: #17a673;
 }
 
 .badge-medium {
-  background: #fbbf24; /* أصفر */
-  color: #000;
+  background: linear-gradient(180deg,#f5b041,#d68910);
 }
 
 .badge-hard {
-  background: #ef4444; /* أحمر */
+  background: #c0392b;
 }
   
 </style>  
@@ -1265,22 +1267,11 @@ async function loadAdBlueOffers() {
     `;
     frame.appendChild(title);
 
+    
     /* ===== العروض فقط بلون ذهبي ===== */
-    data.slice(0, 3).forEach((offer, index) => {
-
-  let level = "Easy";
-  let badgeClass = "badge-easy";
-
-  if (index === 1) {
-    level = "Medium";
-    badgeClass = "badge-medium";
-  }
-  if (index === 2) {
-    level = "Hard";
-    badgeClass = "badge-hard";
-  }
-
+data.slice(0, 3).forEach((offer, index) => {
   const item = document.createElement("div");
+
   item.style.cssText = `
     width: 100%;
     display: flex;
@@ -1289,7 +1280,7 @@ async function loadAdBlueOffers() {
 
     padding: 10px 12px;
     border-radius: 16px;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 
     background: linear-gradient(90deg,#ff8b2c,#ffb45c);
     border: 1px solid rgba(255,200,120,0.45);
@@ -1299,24 +1290,42 @@ async function loadAdBlueOffers() {
     position: relative;
   `;
 
-  item.innerHTML = `
-    <div class="offer-badge ${badgeClass}">${level}</div>
+  /* 🔥 إضافة مستوى الصعوبة مثل الصورة */
+  const badge = document.createElement("div");
+  badge.classList.add("offer-badge");
 
-    <img src="${offer.icon || offer.network_icon}"
+  if (index === 0) {
+    badge.classList.add("badge-easy");
+    badge.textContent = "Easy";
+  } else if (index === 1) {
+    badge.classList.add("badge-medium");
+    badge.textContent = "Medium";
+  } else {
+    badge.classList.add("badge-hard");
+    badge.textContent = "Hard";
+  }
+
+  item.appendChild(badge);
+
+  item.innerHTML += `
+    <img src="${offer.network_icon || offer.icon}"
          style="
            width:40px;
            height:40px;
            border-radius:10px;
+           border:1px solid rgba(255,200,120,0.45);
            background:#000;
-           border:1px solid rgba(255,200,120,.4);
            padding:3px;
+           object-fit:cover;
          ">
 
-    <div style="color:#1b0f09;font-size:13px;font-weight:800;line-height:16px;">
+    <div style="
+          color:#1b0f09;
+          font-size:13px;
+          font-weight:800;
+          line-height:16px;
+         ">
       ${offer.anchor || offer.name}
-      <div style="font-size:11px;color:#3b2a1d;font-weight:400;">
-        Complete with valid information
-      </div>
     </div>
   `;
 
