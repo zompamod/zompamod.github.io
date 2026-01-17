@@ -469,32 +469,32 @@ button{will-change:transform,box-shadow}
 /* زر إغلاق popup */
 .popup-close {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 16px;
+  right: 16px;
 
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
 
-  background: linear-gradient(180deg,#281508,#120905); 
-  border: 2px solid rgba(255,200,120,0.28);  /* نفس الخط الموجود بالصورة */
+  background: rgba(32, 20, 11, 1); /* نفس الخلفية الداكنة */
   
-  border-radius: 22px; /* نفس انحناء الصورة */
+  border: 1px solid rgba(255, 214, 153, 0.28); /* نفس الإطار الرفيع EXACT */
+  border-radius: 16px;  /* نفس الانحناء الموجود بالصورة */
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  color: #e8c999;   /* لون X مطابق */
-  font-size: 28px;  /* نفس حجم السهم */
-  font-weight: 700; /* نفس السماكة */
-  
+  color: #f5d7a0; /* نفس اللون الذهبي */
+  font-size: 26px; /* X صغيرة نفس حجم السهم */
+  font-weight: 500;
+
   cursor: pointer;
-  transition: 0.25s ease;
+  transition: 0.2s ease-out;
 }
 
 .popup-close:hover {
-  transform: scale(1.06);
-  background: linear-gradient(180deg,#341d0b,#1a0c06);
+  background: rgba(40, 25, 14, 1);
+  transform: scale(1.05);
 }
 
 .popup-close:active {
