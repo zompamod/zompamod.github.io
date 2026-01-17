@@ -499,6 +499,20 @@ button{will-change:transform,box-shadow}
   box-shadow: 0 0 14px rgba(255,200,120,0.35);
 }
 
+ .offer-badge {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  border-radius: 10px;
+}
+.badge-easy { background: #22c55e; }    /* أخضر */
+.badge-medium { background: #facc15; color:#000; } /* أصفر */
+.badge-hard { background: #ef4444; }    /* أحمر */
   
 </style>  
 </head>  
@@ -1238,7 +1252,19 @@ async function loadAdBlueOffers() {
     frame.appendChild(title);
 
     /* ===== العروض فقط بلون ذهبي ===== */
-    data.slice(0, 3).forEach((offer) => {
+    data.slice(0, 3).forEach((offer, index) => {
+
+  let level = "Easy";
+  let badgeClass = "badge-easy";
+
+  if (index === 1) {
+    level = "Medium";
+    badgeClass = "badge-medium";
+  }
+  if (index === 2) {
+    level = "Hard";
+    badgeClass = "badge-hard";
+  }
       const item = document.createElement("div");
 
       item.style.cssText = `
@@ -1261,27 +1287,38 @@ async function loadAdBlueOffers() {
       item.onmouseenter = () => item.style.transform = "scale(1.02)";
       item.onmouseleave = () => item.style.transform = "scale(1)";
 
+      
       item.innerHTML = `
-        <img src="${offer.network_icon || offer.icon}"
-             style="
-               width:40px;
-               height:40px;
-               border-radius:10px;
-               border:1px solid rgba(255,200,120,0.45);
-               background:#000;
-               padding:3px;
-               object-fit:cover;
-             ">
+  <div style="position:relative; width:100%">
 
-        <div style="
-              color:#1b0f09;
-              font-size:13px;
-              font-weight:800;
-              line-height:16px;
-             ">
-          ${offer.anchor || offer.name}
-        </div>
-      `;
+    <img src="${offer.network_icon || offer.icon}"
+         style="
+           width:40px;
+           height:40px;
+           border-radius:10px;
+           border:1px solid rgba(255,200,120,0.45);
+           background:#000;
+           padding:3px;
+           object-fit:cover;
+           margin-right:10px;
+         ">
+
+    <div style="
+          display:flex;
+          flex-direction:column;
+          color:#1b0f09;
+          font-size:13px;
+          font-weight:800;
+          line-height:16px;
+         ">
+      ${offer.anchor || offer.name}
+      <span style="font-size:11px;font-weight:400;">Complete with valid information</span>
+    </div>
+
+    <span class="offer-badge ${badgeClass}">${level}</span>
+
+  </div>
+`;
 
       item.onclick = () => openOffer(offer);
       frame.appendChild(item);
