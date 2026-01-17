@@ -472,28 +472,29 @@ button{will-change:transform,box-shadow}
   top: 14px;
   right: 14px;
 
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
+  width: 52px;
+  height: 52px;
 
-  background: linear-gradient(180deg,#2d150a,#150a05);
-  border: 1.8px solid rgba(255, 200, 120, 0.30);
+  border-radius: 18px; /* نفس الانحناء الدائري بالصورة */
+
+  background: linear-gradient(180deg,#2a1409,#140a05);
+  border: 2px solid rgba(255, 200, 120, 0.32);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 22px;
-  font-weight: 700;
-  color: #f0d8b0;
+  font-size: 28px;        /* حجم X مطابق للصورة */
+  font-weight: 800;
+  color: #e8c99a;         /* نفس لون السهم في الصورة */
 
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: 0.20s ease;
 }
 
 .popup-close:hover {
-  transform: scale(1.07);
-  background: linear-gradient(180deg,#3a1c12,#1a0c06);
+  transform: scale(1.06);
+  background: linear-gradient(180deg,#33190d,#1a0c06);
 }
 
 .popup-close:active {
