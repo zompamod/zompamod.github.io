@@ -469,34 +469,37 @@ button{will-change:transform,box-shadow}
 /* زر إغلاق popup */
 .popup-close {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 14px;
+  right: 14px;
 
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  border-radius: 18px;
 
-  background: linear-gradient(180deg,#2b1409,#140a05);
-  border: 2px solid rgba(255,200,120,0.35);
+  background: linear-gradient(180deg, #2b1409, #140a05); 
+  border: 2px solid rgba(255, 200, 120, 0.28);
 
-  color: #ffcc88;
-  font-size: 20px;
-  font-weight: 900;
+  color: #f6d9a3;
+  font-size: 26px;
+  font-weight: 700;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   cursor: pointer;
-  transition: .25s ease;
-
-  z-index: 5; /* داخل popup فقط */
+  transition: 0.25s ease;
+  z-index: 10;
 }
 
 .popup-close:hover {
-  transform: scale(1.12);
-  background: linear-gradient(180deg,#3a1c12,#1a0c06);
-  box-shadow: 0 0 14px rgba(255,200,120,0.35);
+  transform: scale(1.1);
+  background: linear-gradient(180deg, #3a1c12, #1a0c06);
+  box-shadow: 0 0 18px rgba(255, 200, 120, 0.35);
+}
+
+.popup-close:active {
+  transform: scale(0.92);
 }
 
   
