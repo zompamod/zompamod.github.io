@@ -1233,3 +1233,109 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
   });
 });
  </script>
+ <script>
+(async function () {
+
+    /* ================================
+       1 — كشف دولة الزائر (IP → COUNTRY)
+       ================================ */
+    let lang = "en";
+
+    try {
+        const r = await fetch("https://ipapi.co/country/");
+        const country = (await r.text()).trim().toUpperCase();
+
+        const arabCountries = [
+            "SA","AE","QA","KW","OM","BH",
+            "JO","IQ","EG","LY","DZ","MA",
+            "TN","SD","SY","LB","PS","YE",
+            "MR","SO","DJ","KM"
+        ];
+
+        if (arabCountries.includes(country)) {
+            lang = "ar";
+        }
+
+    } catch (e) {
+        lang = "en";
+    }
+
+    /* ================================
+       2 — ترجمة popup فقط
+       ================================ */
+    function translatePopup() {
+
+        const title = document.querySelector("#popup h2");
+        const text = document.querySelector("#popup p");
+
+        const checking = document.getElementById("popupChecking");
+        const error = document.getElementById("popupError");
+        const success = document.getElementById("popupSuccess");
+        const verifyBtn = document.getElementById("offerLink");
+
+        if (!title || !text) return;
+
+        /* ================================
+           🇸🇦 النصوص العربية (فقط الدول العربية)
+           ================================ */
+        if (lang === "ar") {
+
+            title.textContent = "التحقق البشري";
+
+            text.innerHTML = `
+            أكمل خطوة بسيطة واحدة للتأكد من أنك لست روبوتًا.<br><br>
+            1: اضغط على "تحقق واستمر" وقم بإكمال استبيان سريع.<br>
+            2: عد إلى هذه الصفحة وسيبدأ التحميل تلقائيًا.
+            `;
+
+            checking.innerHTML = `
+                <span class="spinner"></span>
+                جارٍ انتظار التحقق...
+            `;
+
+            error.textContent = "فشل التحقق، يرجى المحاولة مرة أخرى.";
+
+            success.innerHTML = `
+                ✅ تم التحقق بنجاح.<br>
+                سيبدأ التحميل قريبًا…
+            `;
+
+            verifyBtn.textContent = "تحقق واستمر";
+
+        }
+
+        /* ================================
+           🇬🇧 النصوص الإنجليزية (باقي دول العالم)
+           ================================ */
+        else {
+
+            title.textContent = "Human Verification";
+
+            text.innerHTML = `
+            complete one simple step to confirme you are not a Robot.<br><br>
+            1: Click "Verify & Continue" and complete a Quick survey.<br>
+            2: Return To this page and your download will start automatically.
+            `;
+
+            checking.innerHTML = `
+                <span class="spinner"></span>
+                Waiting for verification...
+            `;
+
+            error.textContent =
+                "The verification was not completed successfully, please Try again.";
+
+            success.innerHTML = `
+                ✅ Verification completed successfully.<br>
+                Download will start shortly…
+            `;
+
+            verifyBtn.textContent = "Verify & Continue";
+        }
+    }
+
+    // تشغيل الترجمة بعد تحميل الـ popup
+    setTimeout(translatePopup, 600);
+
+})();
+ </script>
