@@ -1341,53 +1341,34 @@ async function loadAdBlueOffers() {
     offersObserver.observe(overlay, { attributes: true, attributeFilter: ["style"] });
 });
  </script>
-<!-- عنصر الترجمة المخفي -->
-<div id="google_translate_element"></div>
-
 <script>
-function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-        pageLanguage: "en",
-        autoDisplay: false
-    }, "google_translate_element");
-}
-</script>
-
-<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-<script>
-// 🌍 اختيار اللغة حسب الدولة فقط (الخيار B)
 (async function() {
+    let lang = "en";
 
-  let finalLang = "en"; // الافتراضي
+    try {
+        // الحصول على بيانات الدولة
+        const res = await fetch("https://ipapi.co/json/");
+        const data = await res.json();
 
-  try {
-      const res = await fetch("https://ipapi.co/json/");
-      const data = await res.json();
-      const country = data.country || "";
+        // ipapi يعطينا: "ar", "fr", "es", "de", "tr", ...
+        if (data.languages) {
+            lang = data.languages.split(",")[0].trim().substring(0, 2);
+        }
 
-      if (country === "MA") finalLang = "ar";
-      else if (country === "DZ") finalLang = "ar";
-      else if (country === "TN") finalLang = "ar";
-      else if (country === "FR") finalLang = "fr";
-      else if (country === "ES") finalLang = "es";
-      else if (country === "DE") finalLang = "de";
-      else if (country === "TR") finalLang = "tr";
-      else finalLang = "en";
+        // لغات غير مدعومة → نجعلها EN
+        const supported = ["en","ar","fr","es","de","tr","pt","it","ru","nl","pl","ja","zh"];
+        if (!supported.includes(lang)) lang = "en";
 
-  } catch (e) {
-      finalLang = "en"; // في حال فشل API
-  }
+    } catch(e) { lang = "en"; }
 
-  // تطبيق الترجمة
-  const interval = setInterval(() => {
-      const select = document.querySelector("select.goog-te-combo");
-      if (select) {
-          select.value = finalLang;
-          select.dispatchEvent(new Event("change"));
-          clearInterval(interval);
-      }
-  }, 500);
-
+    // تطبيق الترجمة
+    const check = setInterval(() => {
+        const select = document.querySelector(".goog-te-combo");
+        if (select) {
+            select.value = lang;
+            select.dispatchEvent(new Event("change"));
+            clearInterval(check);
+        }
+    }, 300);
 })();
 </script>
