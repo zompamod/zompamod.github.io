@@ -1233,7 +1233,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
   });
 });
  </script>
- <script>
+<script>
 (async function () {
 
     /* ================================
@@ -1283,9 +1283,9 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
             title.textContent = "التحقق البشري";
 
             text.innerHTML = `
-            .أكمل خطوة بسيطة واحدة للتأكد من أنك لست روبوتًا<br><br>
-             .إضغط على "تحقق" وقم بإكمال استبيان سريع مع التسجيل <br>
-             .عد إلى هذه الصفحة وسيبدأ التحميل تلقائيًا
+            أكمل خطوة بسيطة واحدة للتأكد من أنك لست روبوتًا.<br><br>
+            1: اضغط على "تحقق" وقم بإكمال استبيان سريع.<br>
+            2: عد إلى هذه الصفحة وسيبدأ التحميل تلقائيًا.
             `;
 
             checking.innerHTML = `
@@ -1297,7 +1297,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 
             success.innerHTML = `
                 ✅ تم التحقق بنجاح.<br>
-                ...سيبدأ التحميل قريبًا
+                …سيبدأ التحميل قريبًا
             `;
 
             verifyBtn.textContent = "تحقق";
@@ -1313,7 +1313,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 
             text.innerHTML = `
             complete one simple step to confirme you are not a Robot.<br><br>
-            1: Click "Verify & Continue" and complete a Quick survey.<br>
+            1: Click "Verify" and complete a Quick survey.<br>
             2: Return To this page and your download will start automatically.
             `;
 
@@ -1338,4 +1338,4 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     setTimeout(translatePopup, 600);
 
 })();
- </script>
+</script>
