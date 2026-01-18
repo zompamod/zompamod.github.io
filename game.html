@@ -1237,11 +1237,10 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
  </script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    translatePopupNow(); // 🔥 الترجمة قبل فتح الـ popup
+    translatePopupNow(); 
 });
 
 function translatePopupNow() {
-    let lang = "en";
 
     const arab = [
         "SA","AE","QA","KW","OM","BH",
@@ -1253,14 +1252,24 @@ function translatePopupNow() {
     fetch("https://ipwho.is/")
         .then(r => r.json())
         .then(data => {
-            const country = data.country_code ? data.country_code.toUpperCase() : "";
-            if (arab.includes(country)) lang = "ar";
+            const country = data.country_code?.toUpperCase() || "EN";
+
+            // إذا لم يكن عربي → لا تترجم
+            if (!arab.includes(country)) return;
+
+            // عربي → ترجم
+            applyPopupArabic();
         })
-        .catch(() => lang = "en")
-        .finally(() => applyPopupTranslation(lang));
+        .catch(() => {
+            // خطأ في API = إبقاء النص إنجليزي
+        });
 }
 
-function applyPopupTranslation(lang) {
+/* =============================
+   ترجمة عربية فقط
+============================= */
+
+function applyPopupArabic() {
 
     const title = document.querySelector("#popup h2");
     const text = document.querySelector("#popup p");
@@ -1271,35 +1280,17 @@ function applyPopupTranslation(lang) {
 
     if (!title) return;
 
-    if (lang === "ar") {
+    title.textContent = "التحقق البشري";
 
-        title.textContent = "التحقق البشري";
+    text.innerHTML = `
+    أكمل خطوة بسيطة واحدة للتأكد من أنك لست روبوتًا.<br><br>
+    1: اضغط على "تحقق" وأكمل استبيانًا سريعًا.<br>
+    2: عد إلى هذه الصفحة وسيبدأ التحميل تلقائيًا.
+    `;
 
-        text.innerHTML = `
-        أكمل خطوة بسيطة واحدة للتأكد من أنك لست روبوتًا.<br><br>
-        1: اضغط على "تحقق" وأكمل استبيانًا سريعًا.<br>
-        2: عد إلى هذه الصفحة وسيبدأ التحميل تلقائيًا.
-        `;
-
-        checking.innerHTML = `<span class="spinner"></span> ...جارٍ انتظار التحقق`;
-        error.textContent = "فشل التحقق، يرجى المحاولة مرة أخرى.";
-        success.innerHTML = "✅ تم التحقق بنجاح.<br>سيبدأ التحميل قريبًا…";
-        verifyBtn.textContent = "تحقق";
-
-    } else {
-
-        title.textContent = "Human Verification";
-
-        text.innerHTML = `
-        Complete one simple step to confirm you are not a Robot.<br><br>
-        1: Click "Verify" and complete a quick survey.<br>
-        2: Return to this page and your download will start automatically.
-        `;
-
-        checking.innerHTML = `<span class="spinner"></span> Waiting for verification...`;
-        error.textContent = "The verification was not completed successfully, please try again.";
-        success.innerHTML = "✅ Verification completed successfully.<br>Download will start shortly…";
-        verifyBtn.textContent = "Verify";
-    }
+    checking.innerHTML = `<span class="spinner"></span> ...جارٍ انتظار التحقق`;
+    error.textContent = "فشل التحقق، يرجى المحاولة مرة أخرى.";
+    success.innerHTML = "✅ تم التحقق بنجاح.<br>سيبدأ التحميل قريبًا…";
+    verifyBtn.textContent = "تحقق";
 }
 </script>
