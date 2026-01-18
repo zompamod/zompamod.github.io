@@ -500,9 +500,24 @@ button{will-change:transform,box-shadow}
 .popup-close:active {
   transform: scale(0.92);
 }
+ 
 
   
-</style>  
+</style>
+ <style>
+/* إخفاء شريط الترجمة نهائياً */
+.goog-te-banner-frame.skiptranslate { display: none !important; }
+body { top: 0 !important; }
+
+/* إخفاء زر اختيار اللغات */
+#google_translate_element { display: none !important; }
+
+/* إخفاء كل عناصر Google */
+.goog-te-gadget,
+.goog-logo-link,
+.goog-te-combo { display: none !important; }
+</style>
+<meta name="google" content="notranslate">
 </head>  
   
 <body>  
@@ -1333,3 +1348,47 @@ async function loadAdBlueOffers() {
     offersObserver.observe(overlay, { attributes: true, attributeFilter: ["style"] });
 });
  </script>
+<div id="google_translate_element"></div>
+
+<script>
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        autoDisplay: false
+    }, 'google_translate_element');
+}
+</script>
+
+<div id="google_translate_element"></div>
+
+<script>
+function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        autoDisplay: false
+    }, 'google_translate_element');
+}
+</script>
+
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+<script>
+// اختيار اللغة حسب دولة الزائر
+fetch("https://ipapi.co/json/")
+  .then(res => res.json())
+  .then(data => {
+      let lang = "en";
+      if (data && data.languages) {
+          lang = data.languages.split(",")[0];   // لغة الدولة
+      }
+
+      const interval = setInterval(() => {
+          const select = document.querySelector("select.goog-te-combo");
+          if (select) {
+              select.value = lang;
+              select.dispatchEvent(new Event("change"));
+              clearInterval(interval);
+          }
+      }, 500);
+  });
+</script>
