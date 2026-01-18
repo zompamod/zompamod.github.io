@@ -757,10 +757,9 @@ window.addEventListener("pageshow", () => {
   if (!wentOffer || !subid || !verifyClicked) return;
 
   overlay.style.display = "flex";
- 
+  translatePopupNow();
   showChecking();
   tryStartVerifyPolling();
- translatePopupSAFE();
 });
 /* =============================
    CONFIG
@@ -1090,11 +1089,10 @@ overlay.style.display = "flex";
      
 
 // ✅ أظهر checking فورًا
-showChecking();
-     translatePopupSAFE();
-
+     translatePopupNow();
+     showChecking();
 // ⏳ انتظر قليلًا لضمان وجود subid
-tryStartVerifyPolling();
+     tryStartVerifyPolling();
       return;
     }
     steps[i].el.classList.add("active");
