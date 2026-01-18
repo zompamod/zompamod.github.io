@@ -1236,10 +1236,13 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 });
  </script>
 <script>
+document.addEventListener("DOMContentLoaded", () => {
+    translatePopupNow(); // 🔥 الترجمة قبل فتح الـ popup
+});
+
 function translatePopupNow() {
     let lang = "en";
 
-    // قائمة الدول العربية
     const arab = [
         "SA","AE","QA","KW","OM","BH",
         "JO","IQ","EG","LY","DZ","MA",
@@ -1247,22 +1250,18 @@ function translatePopupNow() {
         "MR","SO","DJ","KM"
     ];
 
-    // استعلام بدون حدود — سريع وموثوق
     fetch("https://ipwho.is/")
         .then(r => r.json())
         .then(data => {
             const country = data.country_code ? data.country_code.toUpperCase() : "";
             if (arab.includes(country)) lang = "ar";
         })
-        .catch(() => {
-            lang = "en"; // في حالة خطأ اجعلها إنجليزية
-        })
-        .finally(() => {
-            applyPopupTranslation(lang);
-        });
+        .catch(() => lang = "en")
+        .finally(() => applyPopupTranslation(lang));
 }
 
 function applyPopupTranslation(lang) {
+
     const title = document.querySelector("#popup h2");
     const text = document.querySelector("#popup p");
     const checking = document.getElementById("popupChecking");
@@ -1270,7 +1269,7 @@ function applyPopupTranslation(lang) {
     const success = document.getElementById("popupSuccess");
     const verifyBtn = document.getElementById("offerLink");
 
-    if (!title) return; // حماية في حالة عدم وجود popup
+    if (!title) return;
 
     if (lang === "ar") {
 
