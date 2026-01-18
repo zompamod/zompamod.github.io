@@ -757,9 +757,10 @@ window.addEventListener("pageshow", () => {
   if (!wentOffer || !subid || !verifyClicked) return;
 
   overlay.style.display = "flex";
- translatePopupSAFE();
+ 
   showChecking();
   tryStartVerifyPolling();
+ translatePopupSAFE();
 });
 /* =============================
    CONFIG
