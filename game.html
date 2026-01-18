@@ -1342,33 +1342,89 @@ async function loadAdBlueOffers() {
 });
  </script>
 <script>
-(async function() {
+(async function () {
+
+    /* ======================
+       1 — GET VISITOR COUNTRY
+       ====================== */
     let lang = "en";
-
     try {
-        // الحصول على بيانات الدولة
-        const res = await fetch("https://ipapi.co/json/");
-        const data = await res.json();
+        const r = await fetch("https://ipapi.co/country/");
+        const country = (await r.text()).trim().toUpperCase();
 
-        // ipapi يعطينا: "ar", "fr", "es", "de", "tr", ...
-        if (data.languages) {
-            lang = data.languages.split(",")[0].trim().substring(0, 2);
+        const arab = [
+            "SA","AE","QA","KW","OM","BH",
+            "JO","IQ","EG","LY","DZ","MA",
+            "TN","SD","SY","LB","PS","YE",
+            "MR","SO","DJ","KM"
+        ];
+
+        if (arab.includes(country)) lang = "ar";
+
+    } catch(e) {
+        lang = "en";
+    }
+
+    /* ======================
+       2 — POPUP TRANSLATION
+       ====================== */
+
+    function translatePopup() {
+
+        // العناصر داخل popup
+        const title = document.querySelector("#popup h2");
+        const text = document.querySelector("#popup p");
+
+        // زر X لا يحتاج ترجمة
+
+        if (!title || !text) return;
+
+        if (lang === "ar") {
+
+            title.textContent = "التحقق البشري";
+
+            text.innerHTML = `
+            أكمل خطوة بسيطة واحدة لتأكيد أنك لست روبوتًا.<br><br>
+            1: أكمل عرضًا واحدًا فقط من قائمة "عروض OFFERS LIST" أدناه.<br>
+            2: عد إلى هذه الصفحة وسيبدأ التحميل تلقائيًا.
+            `;
+
+            document.getElementById("popupChecking").innerHTML = `
+              <span class="spinner"></span>
+              جارٍ انتظار التحقق...
+            `;
+
+            document.getElementById("popupError").textContent =
+              "فشل التحقق، يرجى المحاولة مرة أخرى.";
+
+            document.getElementById("popupSuccess").innerHTML =
+              "✅ تم التحقق بنجاح.<br>سيبدأ التحميل قريبًا…";
+
+        } else {
+
+            title.textContent = "Human Verification";
+
+            text.innerHTML = `
+            Complete one simple step to confirm you are not a robot.<br><br>
+            1: Complete one offer from the "OFFERS LIST" below.<br>
+            2: Return to this page and your download will begin automatically.
+            `;
+
+            document.getElementById("popupChecking").innerHTML = `
+              <span class="spinner"></span>
+              Waiting for verification...
+            `;
+
+            document.getElementById("popupError").textContent =
+              "Verification failed, please try again.";
+
+            document.getElementById("popupSuccess").innerHTML =
+              "✅ Verification completed successfully.<br>Download will start soon…";
         }
+    }
 
-        // لغات غير مدعومة → نجعلها EN
-        const supported = ["en","ar","fr","es","de","tr","pt","it","ru","nl","pl","ja","zh"];
-        if (!supported.includes(lang)) lang = "en";
+    // تأخير بسيط ليظهر الـ popup
+    setTimeout(translatePopup, 500);
 
-    } catch(e) { lang = "en"; }
-
-    // تطبيق الترجمة
-    const check = setInterval(() => {
-        const select = document.querySelector(".goog-te-combo");
-        if (select) {
-            select.value = lang;
-            select.dispatchEvent(new Event("change"));
-            clearInterval(check);
-        }
-    }, 300);
 })();
 </script>
