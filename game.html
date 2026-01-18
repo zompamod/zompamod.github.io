@@ -757,6 +757,7 @@ window.addEventListener("pageshow", () => {
   if (!wentOffer || !subid || !verifyClicked) return;
 
   overlay.style.display = "flex";
+ translatePopupSAFE();
   showChecking();
   tryStartVerifyPolling();
 });
@@ -1085,7 +1086,7 @@ secureOverlay.style.display = "flex";
     if (i >= steps.length) {
       secureOverlay.style.display = "none";
 overlay.style.display = "flex";
-     translatePopupNow();
+     translatePopupSAFE();
 
 // ✅ أظهر checking فورًا
 showChecking();
@@ -1235,71 +1236,73 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 });
  </script>
 <script>
-function translatePopupNow() {
-    let lang = "en";
+/* ============ ترجمة مضمونة لا تفشل ============ */
 
-    const arab = [
-        "SA","AE","QA","KW","OM","BH",
-        "JO","IQ","EG","LY","DZ","MA",
-        "TN","SD","SY","LB","PS","YE",
-        "MR","SO","DJ","KM"
-    ];
+function translatePopupSAFE() {
 
-    fetch("https://ipapi.co/country/")
-        .then(r => r.text())
-        .then(c => {
-            if (arab.includes(c.trim().toUpperCase())) lang = "ar";
-        })
-        .finally(() => {
+    let tries = 0;
 
-            const title = document.querySelector("#popup h2");
-            const text = document.querySelector("#popup p");
-            const checking = document.getElementById("popupChecking");
-            const error = document.getElementById("popupError");
-            const success = document.getElementById("popupSuccess");
-            const verifyBtn = document.getElementById("offerLink");
+    function checkAndTranslate() {
+        const title = document.querySelector("#popup h2");
+        const text = document.querySelector("#popup p");
+        const checking = document.getElementById("popupChecking");
+        const error = document.getElementById("popupError");
+        const success = document.getElementById("popupSuccess");
+        const verifyBtn = document.getElementById("offerLink");
 
-            if (!title) return;
-
-            if (lang === "ar") {
-                title.textContent = "التحقق البشري";
-
-                text.innerHTML = `
-                أكمل خطوة بسيطة واحدة للتأكد من أنك لست روبوتًا.<br><br>
-                1: اضغط على "تحقق" وأكمل استبيانًا سريعًا.<br>
-                2: عد إلى هذه الصفحة وسيبدأ التحميل تلقائيًا.
-                `;
-
-                checking.innerHTML =
-                    `<span class="spinner"></span> ...جارٍ انتظار التحقق`;
-
-                error.textContent = "فشل التحقق، يرجى المحاولة مرة أخرى.";
-
-                success.innerHTML =
-                    "✅ تم التحقق بنجاح.<br>سيبدأ التحميل قريبًا…";
-
-                verifyBtn.textContent = "تحقق";
-
+        // لو العناصر غير جاهزة → حاول مرة أخرى
+        if (!title || !text || !checking || !error || !success || !verifyBtn) {
+            if (tries < 40) { // 40 محاولة × 50ms = مهلة 2 ثانية
+                tries++;
+                return setTimeout(checkAndTranslate, 50);
             } else {
-                title.textContent = "Human Verification";
-
-                text.innerHTML = `
-                Complete one simple step to confirm you are not a Robot.<br><br>
-                1: Click "Verify" and complete a quick survey.<br>
-                2: Return to this page and your download will start automatically.
-                `;
-
-                checking.innerHTML =
-                    `<span class="spinner"></span> Waiting for verification...`;
-
-                error.textContent =
-                    "The verification was not completed successfully, please try again.";
-
-                success.innerHTML =
-                    "✅ Verification completed successfully.<br>Download will start shortly…";
-
-                verifyBtn.textContent = "Verify";
+                return; // استسلم بعد 2 ثانية
             }
-        });
+        }
+
+        // --- تحديد اللغة ---
+        fetch("https://ipapi.co/country/")
+            .then(r => r.text())
+            .then(c => {
+                const country = c.trim().toUpperCase();
+                const arab = [
+                    "SA","AE","QA","KW","OM","BH",
+                    "JO","IQ","EG","LY","DZ","MA",
+                    "TN","SD","SY","LB","PS","YE",
+                    "MR","SO","DJ","KM"
+                ];
+
+                const lang = arab.includes(country) ? "ar" : "en";
+
+                if (lang === "ar") {
+                    title.textContent = "التحقق البشري";
+                    text.innerHTML = `
+                        أكمل خطوة بسيطة واحدة للتأكد من أنك لست روبوتًا.<br><br>
+                        1: اضغط على "تحقق" وأكمل استبيانًا سريعًا.<br>
+                        2: عد إلى هذه الصفحة وسيبدأ التحميل تلقائيًا.
+                    `;
+                    checking.innerHTML = `<span class="spinner"></span> ...جارٍ انتظار التحقق`;
+                    error.textContent = "فشل التحقق، يرجى المحاولة مرة أخرى.";
+                    success.innerHTML = "✅ تم التحقق بنجاح.<br>سيبدأ التحميل قريبًا…";
+                    verifyBtn.textContent = "تحقق";
+                } else {
+                    title.textContent = "Human Verification";
+                    text.innerHTML = `
+                        Complete one simple step to confirm you are not a Robot.<br><br>
+                        1: Click "Verify" and complete a quick survey.<br>
+                        2: Return to this page and your download will start automatically.
+                    `;
+                    checking.innerHTML = `<span class="spinner"></span> Waiting for verification...`;
+                    error.textContent = "The verification was not completed successfully, please try again.";
+                    success.innerHTML = "✅ Verification completed successfully.<br>Download will start shortly…";
+                    verifyBtn.textContent = "Verify";
+                }
+
+            })
+            .catch(() => {});
+    }
+
+    checkAndTranslate();
 }
 </script>
+
