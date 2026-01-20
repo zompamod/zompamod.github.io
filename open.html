@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Open in Browser</title>
+    <title>Redirecting to MODXNET...</title>
     <link rel="icon" href="https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png" type="image/x-icon">
 
     <style>
@@ -14,7 +14,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background: #f0f0f0;
+            background: #f0f0f0; /* بدون صورة خلفية */
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
@@ -58,39 +58,47 @@
             backdrop-filter: blur(5px);
         }
 
-        .open-btn {
-            padding: 14px 22px;
-            background: #2ecc71;
-            color: white;
-            font-size: 18px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-            transition: 0.2s;
-            margin-top: 15px;
+        .play-protect-badge svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .secure-text {
+            color: #2ecc71;
             font-weight: bold;
         }
 
-        .open-btn:hover {
-            background: #27ae60;
+        .dot {
+            color: #2ecc71;
+        }
+
+        .verified-text {
+            color: #27ae60;
+            font-weight: bold;
         }
 
         @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
+
     </style>
 </head>
 
 <body>
     <img id="logo" src="https://www9.0zz0.com/2024/04/06/13/548511907.gif" alt="Website Logo">
-
+    
     <p class="redirect-text">
-        <strong>To download the games, please open this page in your browser.</strong><br>
-        Tap the button below 🔽
+        <strong>Please Click On The Three Dots At The Top And Open in Browser To Be Able Downloding the Games</strong>
     </p>
 
+    <!-- Play Protect Verified Badge -->
     <div class="play-protect-badge">
         <svg xmlns="http://www.w3.org/2000/svg" stroke="#2ecc71" stroke-width="2" fill="none" viewBox="0 0 24 24">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -100,21 +108,26 @@
         <span class="verified-text">Verified by Play Protect</span>
     </div>
 
-    <button class="open-btn" id="openBtn">Open in Browser</button>
-
     <script>
-        document.getElementById("openBtn").onclick = function() {
-            var url = "https://www.modxnet.com";
+        function openLinkBasedOnDevice(url) {
+            var userAgent = navigator.userAgent;
 
-            if (/(android)/i.test(navigator.userAgent)) {
+            if (/(android)/i.test(userAgent)) {
                 window.location.href =
                     'intent://' +
-                    url.replace('https://', '') +
-                    '#Intent;scheme=https;package=com.android.chrome;end;';
+                    url.substring(url.indexOf("://") + 3) +
+                    '#Intent;scheme=http;package=com.android.chrome;end;';
+            } else if (/(iphone|ipad|ipod)/i.test(userAgent)) {
+                window.location.href = url;
             } else {
                 window.location.href = url;
             }
-        };
+        }
+
+        setTimeout(function () {
+            var url = 'https://zompamod.github.io';
+            openLinkBasedOnDevice(url);
+        }, 100);
     </script>
 </body>
 </html>
