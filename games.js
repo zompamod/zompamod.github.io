@@ -7,8 +7,8 @@ const GAMES = [
     stars:"★★★★☆",
     rating:"★★★★☆ 4.8 (241,332 reviews)",
     description:"Experience the legendary open-world action of GTA 5 optimized for mobile. Enjoy missions, free roaming, vehicles, and enhanced graphics.",
-    android:"#",
-    ios:"#"
+    android:"https://www.mediafire.com/file_premium/tuul6uefy9gyp9n/gta_v_.apk/file",
+    ios:"https://www.mediafire.com/file_premium/tuul6uefy9gyp9n/gta_v_.apk/file"
   },
   {
     id:"GTAViceCity",
