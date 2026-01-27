@@ -284,5 +284,16 @@ const GAMES = [
     description:"Competitive online football game with skill-based gameplay and ranked matches.",
     android:"#",
     ios:"#"
-  }
+  },
+  {
+    id:"DemonSlayerOnline",
+    title:"Demon Slayer: Blade Battle",
+    image:"https://example.com/images/demon-slayer-blade-battle.png",
+    version:"v1.8.2",
+    stars:"★★★★★",
+    rating:"★★★★★ 4.8 (256,734 reviews)",
+    description:"Epic action RPG based on Demon Slayer, featuring fast-paced combat and stunning anime graphics.",
+    android:"#",
+    ios:"#"
+}
 ];
