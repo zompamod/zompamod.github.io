@@ -288,7 +288,7 @@ const GAMES = [
   {
     id:"DemonSlayerOnline",
     title:"Demon Slayer: Blade Battle",
-    image:"https://i.imgur.com/NQ5hPnw.png",
+    image:"https://i.imgur.com/Gh8ucXw.jpeg",
     version:"v1.8.2",
     stars:"★★★★★",
     rating:"★★★★★ 4.8 (256,734 reviews)",
