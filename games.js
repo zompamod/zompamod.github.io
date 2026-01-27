@@ -277,7 +277,7 @@ const GAMES = [
   {
     id:"ProSoccerOnline",
     title:"Pro Soccer Online",
-    image:"https://www.mandatory.gg/wp-content/uploads/mandatory-zlan-2022-pro-soccer-online-meta.png",
+    image:"https://i.imgur.com/caqAdh3.jpeg",
     version:"v2.5.1",
     stars:"★★★★☆",
     rating:"★★★★☆ 4.5 (188,992 reviews)",
