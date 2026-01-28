@@ -277,7 +277,7 @@ const GAMES = [
   {
     id:"ProSoccerOnline",
     title:"Pro Soccer Online",
-    image:"https://i.imgur.com/caqAdh3.jpeg",
+    image:"https://i.postimg.cc/GpLzYkk9/caq_Adh3.jpg",
     version:"v2.5.1",
     stars:"★★★★☆",
     rating:"★★★★☆ 4.5 (188,992 reviews)",
