@@ -145,22 +145,37 @@ footer{padding:20px;text-align:center;color:#c4a27a;font-size:13px}
   align-items:center;  
   z-index:9999  
 }  
-#popup {
-  position: relative;        /* مهم جداً */
-  background: linear-gradient(180deg,#2a1409,#140a05);
-  width: 92%;
-  max-width: 420px;
-  border-radius: 22px;
-  padding: 24px;
-  text-align: center;
-  border: 1px solid var(--border);
-  animation: popupIn .35s ease-out;
-  z-index: 999;              /* فوق overlay */
-}
+#popup{  
+  background:linear-gradient(180deg,#2a1409,#140a05);  
+  width:92%;  
+  max-width:420px;  
+  border-radius:22px;  
+  padding:24px;  
+  text-align:center;  
+  border:1px solid var(--border);  
+  animation:popupIn .35s ease-out;  
+}  
 #popup p{font-size:14px;color:#e7c8a2;line-height:1.6}  
   
-
-
+/* ===== VERIFY BUTTON (NEW ANIMATION) ===== */  
+#offerLink{  
+  display:block;  
+  margin-top:16px;  
+  padding:14px;  
+  background:linear-gradient(90deg,var(--accent),var(--accent2));  
+  border-radius:16px;  
+  color:#1b0f09;  
+  font-weight:800;  
+  text-decoration:none;  
+  cursor:pointer;  
+  text-align:center;  
+  animation:pulseGlow 2.2s infinite;  
+  transition:transform 0.2s ease, box-shadow 0.2s ease;  
+}  
+#offerLink:hover{  
+  transform:scale(1.05);  
+  box-shadow:0 0 30px rgba(255,138,42,.8);  
+}  
   
 #popup button{  
   margin-top:12px;  
@@ -215,7 +230,7 @@ footer{padding:20px;text-align:center;color:#c4a27a;font-size:13px}
 *{  
   -webkit-tap-highlight-color: transparent;  
 }  
-taskrendering:auto;backface-visibility:hidden}  
+img{image-rendering:auto;backface-visibility:hidden}  
 button{will-change:transform,box-shadow}  
 .hero img,.download-box,.feature{transform:translateZ(0);}  
   
@@ -227,7 +242,6 @@ button{will-change:transform,box-shadow}
   object-fit:contain;
   max-width:76px;
   max-height:76px;
-  border-radius:18px;
 }
     
 /* ===== SECURE CHECK FLOW ===== */  
@@ -467,41 +481,6 @@ button{will-change:transform,box-shadow}
   font-weight:800;
   color:var(--accent2);
    }
-/* زر إغلاق popup */
-.popup-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-
-  width: 40px;
-  height: 40px;
-
-  background: rgba(32, 20, 11, 1); /* نفس الخلفية الداكنة */
-  
-  border: 1px solid rgba(255, 214, 153, 0.28); /* نفس الإطار الرفيع EXACT */
-  border-radius: 16px;  /* نفس الانحناء الموجود بالصورة */
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #f5d7a0; /* نفس اللون الذهبي */
-  font-size: 26px; /* X صغيرة نفس حجم السهم */
-  font-weight: 500;
-
-  cursor: pointer;
-  transition: 0.2s ease-out;
-}
-
-.popup-close:hover {
-  background: rgba(40, 25, 14, 1);
-  transform: scale(1.05);
-}
-
-.popup-close:active {
-  transform: scale(0.92);
-}
-
   
 </style>  
 </head>  
@@ -617,17 +596,15 @@ button{will-change:transform,box-shadow}
 <footer>© 2026 zompamod.com — All rights reserved</footer>    
   
 <div id="overlay">    
-<div id="popup">
- <div class="popup-close" onclick="closePopup()">×</div>
- 
+<div id="popup">    
   
   <!-- Logo القفل -->  
-  <img id="popupGameIcon" class="popup-lock" alt="Game Icon">
+  <img src="https://i.imgur.com/f0RrI6E.png" alt="Secure Lock" class="popup-lock">  
 <h2>Human Verification</h2>    
 <p>  
-complete this simple step to confirme you are not a Robot.<br><br>  
-1: Just complete one quick task from the list below.<br>  
-2: after finished, Return here and your game will download automatically.
+complete one simple step to confirme you are not a Robot.<br><br>  
+1: Click "Verify&Continue" and complete a Quick survey.<br>  
+2: Return To this page and your download will start automatically.  
 </p>  
 
  <!-- 🎥 VERIFY VIDEO -->
@@ -642,10 +619,6 @@ complete this simple step to confirme you are not a Robot.<br><br>
 >
   <source src="/assets/verify.mp4" type="video/mp4">
 </video>
-
- <div id="offersBox" style="margin-top:18px;display:flex;flex-direction:column;gap:14px;">
-  <!-- Offers will load here -->
- </div>
   
 <div id="popupChecking" class="popup-status checking">
   <span class="spinner"></span>
@@ -654,6 +627,10 @@ complete this simple step to confirme you are not a Robot.<br><br>
 <div id="popupError" class="popup-status error">The verification was not completed successfully, please Try again.</div>    
 <div id="popupSuccess" class="popup-status success">✅ Verification completed successfully.<br>Download will start shortly…</div>    
   
+<a id="offerLink" target="_blank" onclick="trackOfferClick()">Verify & Continue</a>
+<button onclick="closePopup()">Cancel</button>    
+</div>    
+</div>    
   
 <div id="closeNotice" class="toast-notice">  
 Please complete the verification process and the download will be completed automatically⚠️.  
@@ -733,7 +710,7 @@ const popupError = document.getElementById("popupError");
 const popupSuccess = document.getElementById("popupSuccess");
 
 
-
+const offerLink = document.getElementById("offerLink");
 const closeNotice = document.getElementById("closeNotice");
 
 /* 🔔 إشعار الرجوع بدون إكمال التحقق */
@@ -746,7 +723,6 @@ window.addEventListener("pageshow", () => {
 
   overlay.style.display = "flex";
   showChecking();
-  loadAdBlueOffers();
   tryStartVerifyPolling();
 });
 /* =============================
@@ -780,16 +756,36 @@ function cleanURL(url) {
 function createSubid() {
   subid = "rbx_" + Math.random().toString(36).slice(2, 10);
   localStorage.setItem(key("subid"), subid);
-
-  localStorage.setItem(key("subid_payload"), JSON.stringify({
-    id: subid,
-    offer: "adbluemedia",
-    time: Date.now()
-  }));
+localStorage.setItem(key("subid_payload"), JSON.stringify({
+  id: subid,
+  offer: OFFER_ID,
+  time: Date.now()
+}));
+  offerLink.href = cleanURL(OFFER) + "?ml_sub1=" + subid;
 }
 
 
+function trackOfferClick() {
+  if (offerLink.dataset.locked === "1") return;
 
+  localStorage.setItem(key("verify_clicked"), "1");
+localStorage.setItem(key("offer_opened"), Date.now());
+
+  markWentOffer();
+
+  if (!localStorage.getItem(key("verify_started"))) {
+    gtag("event", "verify_start", {
+      game_id: gameId,
+      device: localStorage.getItem("device") || "unknown"
+    });
+    localStorage.setItem(key("verify_started"), "1");
+  }
+
+  gtag("event", "offer_click", {
+    game_id: gameId,
+    device: localStorage.getItem("device") || "unknown"
+  });
+}
  function tryStartVerifyPolling() {
   const verifyClicked = localStorage.getItem(key("verify_clicked")) === "1";
   const sid = localStorage.getItem(key("subid"));
@@ -799,7 +795,14 @@ function createSubid() {
 
   startVerifyPolling();
 }
-  
+  // ✅ دالة مستقلة
+ function markWentOffer() {
+  if (offerLink.dataset.locked === "1") return;
+
+  createSubid(); // إنشاء subid
+  offerLink.dataset.locked = "1";
+  localStorage.setItem(key("went_offer"), "1");
+}
 
 function isSubidExpired() {
   const raw = localStorage.getItem(key("subid_payload"));
@@ -1050,7 +1053,6 @@ overlay.style.display = "flex";
 
 // ✅ أظهر checking فورًا
 showChecking();
-loadAdBlueOffers(); 
 
 // ⏳ انتظر قليلًا لضمان وجود subid
 tryStartVerifyPolling();
@@ -1117,7 +1119,8 @@ localStorage.removeItem(key("verify_clicked"));
   popupError.style.display = "none";
   popupSuccess.style.display = "none";
 
-  
+  offerLink.dataset.locked = "0";
+  offerLink.style.pointerEvents = "auto";
 
   resetDownloader();
 
@@ -1140,7 +1143,11 @@ document.addEventListener("visibilitychange", () => {
 
 
 
-
+function resetVerifyText() {
+  offerLink.textContent = "Verify & Continue";
+  offerLink.style.background =
+    "linear-gradient(90deg,var(--accent),var(--accent2))";
+}
    
 
   document.addEventListener("DOMContentLoaded", () => {
@@ -1171,11 +1178,6 @@ document.addEventListener("visibilitychange", () => {
   if (ratingEl) {
     ratingEl.textContent = game.rating || "";
   }
-   /* ===== POPUP ICON ===== */
-  const popupIcon = document.getElementById("popupGameIcon");
-  if (popupIcon && game && game.image) {
-      popupIcon.src = game.image;
-  }
 
   /* ===== DESCRIPTION ===== */
   const descEl = document.getElementById("gameDescription");
@@ -1185,7 +1187,7 @@ document.addEventListener("visibilitychange", () => {
 
 });
 </script>
-<script>
+ <script>
 document.querySelectorAll(".install-tab").forEach(tab=>{
   tab.addEventListener("click",()=>{
     document.querySelectorAll(".install-tab").forEach(t=>t.classList.remove("active"));
@@ -1194,148 +1196,5 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
     tab.classList.add("active");
     document.getElementById(tab.dataset.target).classList.add("active");
   });
-});
-  
-
-async function loadAdBlueOffers() {
-  const url =
-    "https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f";
-
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
-
-    const offersBox = document.getElementById("offersBox");
-    offersBox.innerHTML = "";
-
-    /* ===== الإطار الخارجي بلون الـ POPUP ===== */
-    const frame = document.createElement("div");
-    frame.style.cssText = `
-      width: 100%;
-      margin: -5px auto 0 auto;
-      padding: 22px 12px 6px 12px;
-
-      background: linear-gradient(180deg,#2a1409,#140a05);  /* ⬅ لون popup */
-      border-radius: 26px;
-      border: 1px solid rgba(255,200,120,0.25);
-
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      
-    `;
-
-    /* ===== العنوان في الأعلى ===== */
-    const title = document.createElement("div");
-    title.innerText = "Task List";
-    title.style.cssText = `
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-
-      padding: 4px 16px;
-      background: linear-gradient(180deg,#2a1409,#140a05);
-      border: 1px solid rgba(255,200,120,0.35);
-      border-radius: 12px;
-
-      font-size: 12px;
-      font-weight: 900;
-      color: white;
-    `;
-    frame.appendChild(title);
-
-    /* ===== العروض فقط بلون ذهبي ===== */
-    data.slice(0, 2).forEach((offer) => {
-      const item = document.createElement("div");
-
-      item.style.cssText = `
-        width: 100%;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-
-        padding: 10px 12px;
-        border-radius: 16px;
-        margin-bottom: 8px; 
-
-        background: linear-gradient(90deg,#ff8b2c,#ffb45c); /* ⬅ اللون الذهبي */
-        border: 1px solid rgba(255,200,120,0.45);
-
-        cursor: pointer;
-        transition: .2s ease;
-      `;
-
-      item.onmouseenter = () => item.style.transform = "scale(1.02)";
-      item.onmouseleave = () => item.style.transform = "scale(1)";
-
-      item.innerHTML = `
-        <img src="${offer.network_icon || offer.icon}"
-             style="
-               width:40px;
-               height:40px;
-               border-radius:10px;
-               border:1px solid rgba(255,200,120,0.45);
-               background:#fff;
-               padding:3px;
-               object-fit:cover;
-             ">
-
-        <div style="
-              color:#1b0f09;
-              font-size:13px;
-              font-weight:800;
-              line-height:16px;
-             ">
-          ${offer.anchor || offer.name}
-        </div>
-      `;
-
-      item.onclick = () => openOffer(offer);
-      frame.appendChild(item);
-    });
-
-    offersBox.appendChild(frame);
-
-  } catch (err) {
-    console.error("Offer Load Error:", err);
-    offersBox.innerHTML =
-      "<p style='color:red;text-align:center'>Failed to load offers.</p>";
-  }
-}
-        
-      
-    
-  
-  function openOffer(offer) {
-
-
-  // إنشاء subid
-  createSubid();
-
-  // تخزين حالة التحقق
-  localStorage.setItem(key("verify_clicked"), "1");
-  localStorage.setItem(key("went_offer"), "1");
-
-  // فتح رابط العرض + subid
-  const sid = localStorage.getItem(key("subid"));
-  const finalUrl = offer.url + "&subid=" + sid;
-  window.open(finalUrl, "_blank");
-
-  // إظهار حالة checking
-  popupChecking.style.display = "block";
-
-  // بدء التحقق (polling)
-  tryStartVerifyPolling();
-}
-  document.addEventListener("DOMContentLoaded", () => {
-    // تشغيل تحميل العروض دائماً بعد فتح popup
-    const offersObserver = new MutationObserver(() => {
-        if (overlay.style.display === "flex") {
-            loadAdBlueOffers();
-        }
-    });
-
-    offersObserver.observe(overlay, { attributes: true, attributeFilter: ["style"] });
 });
  </script>
