@@ -1199,7 +1199,7 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
 
 async function loadAdBlueOffers() {
   const url =
-    "https://young-grass-5f62.yoursnagh.workers.dev?user_id=1&api_key=A9F3K7M2QX8R5LZC4W1E6T0YHDUJBNPVSI";
+    "https://d1y3y09sav47f5.cloudfront.net/public/offers/feed.php?user_id=304625&api_key=0a0f0db4247dde84864670ad193f6b7f";
 
   try {
     const res = await fetch(url);
@@ -1213,7 +1213,7 @@ async function loadAdBlueOffers() {
     frame.style.cssText = `
       width: 100%;
       margin: -5px auto 0 auto;
-      padding: 20px 12px 6px 12px;
+      padding: 22px 12px 6px 12px;
 
       background: linear-gradient(180deg,#2a1409,#140a05);  /* ⬅ لون popup */
       border-radius: 26px;
@@ -1246,7 +1246,7 @@ async function loadAdBlueOffers() {
     frame.appendChild(title);
 
     /* ===== العروض فقط بلون ذهبي ===== */
-    (data.offers || []).slice(0, 2).forEach((offer) => {
+    data.slice(0, 2).forEach((offer) => {
       const item = document.createElement("div");
 
       item.style.cssText = `
