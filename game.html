@@ -145,7 +145,8 @@ footer{padding:20px;text-align:center;color:#c4a27a;font-size:13px}
   align-items:center;  
   z-index:9999  
 }  
-#popup{  
+#popup{
+   position:relative; /* زر الإغلاق يتموضع داخل النافذة */  
   background:linear-gradient(180deg,#2a1409,#140a05);  
   width:92%;  
   max-width:420px;  
@@ -246,7 +247,7 @@ button{will-change:transform,box-shadow}
 }
 
 /* Popup close button — matched to game2 */
-.popup-close {
+#popup .popup-close {
   position:absolute;
   top:12px;
   right:12px;
