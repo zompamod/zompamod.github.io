@@ -481,6 +481,32 @@ button{will-change:transform,box-shadow}
   font-weight:800;
   color:var(--accent2);
    }
+ /* ===== POPUP CLOSE BUTTON - MATCH SCREENSHOT ===== */
+#popup {
+  position: relative;
+}
+
+#popup .popup-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 72px;
+  height: 72px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(255,213,138,.35);
+  border-radius: 28px;
+  background: transparent;
+  color: var(--gold);
+  font-size: 38px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: none;
+  animation: none;
+ }
   
 </style>  
 </head>  
@@ -628,7 +654,9 @@ complete this simple step to confirme you are not a Robot.<br><br>
 <div id="popupSuccess" class="popup-status success">✅ Verification completed successfully.<br>Download will start shortly…</div>    
   
 <a id="offerLink" target="_blank" onclick="trackOfferClick()">Verify&Continue</a>
-<button onclick="closePopup()">Cancel</button>    
+<button class="popup-close"
+        onclick="closePopup()"
+        aria-label="Close">×</button>    
 </div>    
 </div>    
   
