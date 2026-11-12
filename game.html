@@ -242,6 +242,37 @@ button{will-change:transform,box-shadow}
   object-fit:contain;
   max-width:76px;
   max-height:76px;
+  border-radius:18px;
+}
+
+/* Popup close button — matched to game2 */
+.popup-close {
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:40px;
+  height:40px;
+  padding:0;
+  margin:0;
+  background:rgba(32,20,11,1);
+  border:1px solid rgba(255,214,153,.28);
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#f5d7a0;
+  font-size:26px;
+  font-weight:500;
+  line-height:1;
+  cursor:pointer;
+  transition:.2s ease-out;
+}
+.popup-close:hover {
+  background:rgba(40,25,14,1);
+  transform:scale(1.05);
+}
+.popup-close:active {
+  transform:scale(.92);
 }
     
 /* ===== SECURE CHECK FLOW ===== */  
@@ -481,32 +512,6 @@ button{will-change:transform,box-shadow}
   font-weight:800;
   color:var(--accent2);
    }
- /* ===== POPUP CLOSE BUTTON - MATCH SCREENSHOT ===== */
-#popup {
-  position: relative;
-}
-
-#popup .popup-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 72px;
-  height: 72px;
-  margin: 0;
-  padding: 0;
-  border: 1px solid rgba(255,213,138,.35);
-  border-radius: 28px;
-  background: transparent;
-  color: var(--gold);
-  font-size: 38px;
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: none;
-  animation: none;
- }
   
 </style>  
 </head>  
@@ -624,8 +629,9 @@ button{will-change:transform,box-shadow}
 <div id="overlay">    
 <div id="popup">    
   
-  <!-- Logo القفل -->  
-  <img src="https://i.imgur.com/f0RrI6E.png" alt="Secure Lock" class="popup-lock">  
+  <button type="button" class="popup-close" onclick="closePopup()" aria-label="Close popup">×</button>
+  <!-- Game icon, matching game2 -->
+  <img id="popupGameIcon" class="popup-lock" alt="Game Icon">  
 <h2>Human Verification</h2>    
 <p>  
 complete this simple step to confirme you are not a Robot.<br><br>  
@@ -654,9 +660,7 @@ complete this simple step to confirme you are not a Robot.<br><br>
 <div id="popupSuccess" class="popup-status success">✅ Verification completed successfully.<br>Download will start shortly…</div>    
   
 <a id="offerLink" target="_blank" onclick="trackOfferClick()">Verify&Continue</a>
-<button class="popup-close"
-        onclick="closePopup()"
-        aria-label="Close">×</button>    
+<button onclick="closePopup()">Cancel</button>    
 </div>    
 </div>    
   
@@ -1189,6 +1193,12 @@ function resetVerifyText() {
     titleEl.textContent = game.title;
   }
 
+  /* ===== POPUP ICON (MATCH GAME2) ===== */
+  const popupIcon = document.getElementById("popupGameIcon");
+  if (popupIcon && game && game.image) {
+    popupIcon.src = game.image;
+  }
+
   /* ===== IMAGE (NO FLICKER) ===== */
   const imgEl = document.querySelector(".hero-image");
   if (imgEl && game.image) {
@@ -1226,3 +1236,6 @@ document.querySelectorAll(".install-tab").forEach(tab=>{
   });
 });
  </script>
+
+</body>
+</html>
